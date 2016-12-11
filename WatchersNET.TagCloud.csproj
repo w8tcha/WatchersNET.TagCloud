@@ -220,6 +220,8 @@
     <Compile Include="VRK.Controls\CloudItemClickEventArgs.cs" />
     <Compile Include="VRK.Controls\SR.Designer.cs" />
     <Compile Include="VRK.Controls\Statistics.cs" />
+    <Content Include="Installation\License.html" />
+    <Content Include="Installation\ReleaseNotes.html" />
     <Content Include="Settings.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
@@ -293,7 +295,7 @@
     <None Include="Installation\01.00.00.SqlDataProvider" />
     <None Include="Installation\01.01.00.SqlDataProvider" />
     <None Include="Installation\01.02.00.SqlDataProvider" />
-    <None Include="Installation\TagCloud-DNN7.dnn">
+    <None Include="Installation\TagCloud.dnn">
       <SubType>Designer</SubType>
     </None>
     <None Include="Installation\Uninstall.SqlDataProvider" />
@@ -333,7 +335,7 @@
   </ProjectExtensions>
   <PropertyGroup>
     <Extension>zip</Extension>
-    <DNNFileName>TagCloud-DNN7</DNNFileName>
+    <DNNFileName>TagCloud</DNNFileName>
     <PackageName>WatchersNET.TagCloud</PackageName>
     <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\BuildScripts</MSBuildCommunityTasksPath>
   </PropertyGroup>

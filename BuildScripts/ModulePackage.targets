@@ -28,7 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <InstallInclude Include="$(MSBuildProjectDirectory)\..\Resources\**\*.*" Exclude="$(MSBuildProjectDirectory)\..\Resources\**\Thumbs.db;$(MSBuildProjectDirectory)\..\Resources\**\*.zip;" />
+      <InstallInclude Include="$(MSBuildProjectDirectory)\Resources\**\*.*" Exclude="$(MSBuildProjectDirectory)\Resources\**\Thumbs.db;$(MSBuildProjectDirectory)\Resources\**\*.zip;" />
       <InstallInclude Include="**\App_LocalResources\*.*" />
     </ItemGroup>
 
@@ -68,7 +68,7 @@
     <!-- Create the Install package -->
     <Zip Files="@(OutputContent)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)_$(Version).$(Extension)" />
     <!-- Copy the Install package to the Packages folder -->
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)_$(Version).$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/../packages/" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)_$(Version).$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/packages/" />
 
     <RemoveDir Directories ="$(MSBuildProjectDirectory)\Package" />
     <RemoveDir Directories ="$(MSBuildProjectDirectory)\ResourcesZip" />
