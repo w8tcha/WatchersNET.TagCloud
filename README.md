@@ -2,13 +2,8 @@
 This Module displays a Tag as an HTML5 Canvas 3D Cloud, 3D Flash Cloud, WordCloud ("Wordle" inspired Tag Cloud), or as Plain HTML with Skinning as an list of hyper links in varying styles depending on a weight (Like a Standard Web 2.0 Tag Cloud). 
 
 The Tags are generated from...
-* The most frequently used words (Tags) of your Portal
 * An List of Custom (Localized) Tags you can define
-* From the Dnn Taxonomy Terms (only DotNetNuke 5.3.0 or higher)
-* Show All Terms(Tags) of Active Tab
-* Show All Available Terms (Tag)
-* Choose Vocabularie(s) manually
-* Search Referrals (Shows Search Tags From Google, Ask, Bing, Yahoo and the Dnn Site Search)
+* From the Dnn Taxonomy Terms
 * Show Tags from Ventrian NewsArticles Module
 * Show Tags from Ventrian SimpleGallery Module
 * Show Tags from ActiveForums Module
