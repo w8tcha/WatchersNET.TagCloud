@@ -1,0 +1,18 @@
+/* Skin Blue */
+
+.TagCloud-Blue {word-wrap: break-word;white-space: pre; white-space: pre-wrap;white-space: pre-line;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: -moz-pre-wrap;white-space: -hp-pre-wrap;word-wrap: break-word;}
+
+.TagCloud-Blue,
+.TagCloud-Blue ul {margin: 0;padding: 0;
+           font-style: normal;font-variant: normal;font-weight: 400;font-size: 100%;text-align: center;}
+		   
+.TagCloud-Blue span a,
+.TagCloud-Blue ul li a {margin-top: 0px;margin-right: 5px;margin-bottom: 0px;margin-left: 5px;
+                  text-transform: capitalize;color: #2175bd;font-family: "Georgia", "Times New Roman", "Times", serif;}
+				  
+.TagCloud-Blue span a:hover,
+.TagCloud-Blue ul li a:hover {color:#d54e21;text-decoration:none}
+
+/* UL MODE */
+.TagCloud-Blue ul {list-style:none}
+.TagCloud-Blue li {display:inline;}

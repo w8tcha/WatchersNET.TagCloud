@@ -1,0 +1,142 @@
+﻿if not exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}TagCloudExcludeWords') and OBJECTPROPERTY(id, N'IsTable') = 1)
+	CREATE TABLE {databaseOwner}{objectQualifier}TagCloudExcludeWords (
+		 [Word] ntext NOT NULL,
+		 [ExcludeWordType] nvarchar(200) NOT NULL,
+		 [ModuleID] int NOT NULL,
+		 [WordID] int IDENTITY (1, 1) NOT NULL
+	) ON [PRIMARY]
+GO
+
+if not exists (select * from dbo.sysobjects where id = object_id(N'PK_{objectQualifier}TagCloudExcludeWords') and OBJECTPROPERTY(id, N'IsPrimaryKey') = 1)
+	ALTER TABLE {databaseOwner}{objectQualifier}TagCloudExcludeWords ADD CONSTRAINT 
+		PK_{objectQualifier}TagCloudExcludeWords PRIMARY KEY CLUSTERED (WordID, ModuleID) ON [PRIMARY]
+GO
+
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'{databaseOwner}{objectQualifier}TagCloudExcludeWordAdd') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+DROP PROCEDURE {databaseOwner}{objectQualifier}TagCloudExcludeWordAdd
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}TagCloudExcludeWordAdd
+		@Word ntext,
+		@ExcludeWordType nvarchar(200),
+		@ModuleID int,
+		@WordID int out
+	AS
+	SET NOCOUNT ON
+	INSERT INTO {databaseOwner}{objectQualifier}TagCloudExcludeWords
+		(Word,ExcludeWordType,ModuleID)
+		VALUES
+		(@Word,@ExcludeWordType,@ModuleID)
+
+    SELECT SCOPE_IDENTITY()
+
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 
+GO
+
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'{databaseOwner}{objectQualifier}TagCloudExcludeWordUpdate') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+DROP PROCEDURE {databaseOwner}{objectQualifier}TagCloudExcludeWordUpdate
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}TagCloudExcludeWordUpdate
+		@Word ntext,
+		@ExcludeWordType nvarchar(200),
+		@ModuleID int,
+		@WordID int
+	AS
+	SET NOCOUNT ON
+	UPDATE {databaseOwner}{objectQualifier}TagCloudExcludeWords SET 
+		Word=@Word,
+		ExcludeWordType=@ExcludeWordType
+	WHERE
+		WordID=@WordID AND ModuleID=@ModuleID
+
+
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 
+GO
+
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'{databaseOwner}{objectQualifier}TagCloudExcludeWordDelete') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+DROP PROCEDURE {databaseOwner}{objectQualifier}TagCloudExcludeWordDelete
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}TagCloudExcludeWordDelete
+		@ModuleID int,
+		@WordID int
+	AS
+	SET NOCOUNT ON
+	DELETE FROM {databaseOwner}{objectQualifier}TagCloudExcludeWords WHERE
+		WordID=@WordID AND ModuleID=@ModuleID
+
+
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 
+GO
+
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'{databaseOwner}{objectQualifier}TagCloudExcludeWordsGetByModule') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+DROP PROCEDURE {databaseOwner}{objectQualifier}TagCloudExcludeWordsGetByModule
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}TagCloudExcludeWordsGetByModule
+		@ModuleID int
+	AS
+	SET NOCOUNT ON
+	SELECT
+		Word, ExcludeWordType, WordID
+	FROM {databaseOwner}{objectQualifier}TagCloudExcludeWords
+	WHERE ModuleID=@ModuleID
+
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 
+
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'{databaseOwner}{objectQualifier}TagCloudExcludeWordsGetWord') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+DROP PROCEDURE {databaseOwner}{objectQualifier}TagCloudExcludeWordsGetWord
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}TagCloudExcludeWordsGetWord
+		@ModuleID int,
+		@WordID int
+	AS
+	SET NOCOUNT ON
+	SELECT
+		Word, ExcludeWordType
+	FROM {databaseOwner}{objectQualifier}TagCloudExcludeWords
+	WHERE ModuleID=@ModuleID AND WordID=@WordID
+
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 

@@ -1,0 +1,29 @@
+﻿/** Drop Existing Stored Procedures **/
+
+
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'{databaseOwner}{objectQualifier}TagCloud_GetSearchWords') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+DROP PROCEDURE {databaseOwner}{objectQualifier}TagCloud_GetSearchWords
+GO
+
+/** Create Stored Procedures **/
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}TagCloud_GetSearchWords
+		@PortalID int
+	AS
+	SELECT 
+       sw.Word, 
+	   sw.SearchWordsID
+    FROM    {databaseOwner}{objectQualifier}SearchWord sw
+        INNER JOIN {databaseOwner}{objectQualifier}SearchItemWord siw ON siw.SearchWordsID = sw.SearchWordsID
+	    Inner JOIN {databaseOwner}{objectQualifier}SearchItem si ON si.SearchItemID = siw.SearchItemID
+	    INNER JOIN {databaseOwner}{objectQualifier}Modules m ON si.ModuleId = m.ModuleID
+	    LEFT OUTER JOIN {databaseOwner}{objectQualifier}TabModules tm ON si.ModuleId = tm.ModuleID
+	    INNER JOIN {databaseOwner}{objectQualifier}Tabs t ON tm.TabID = t.TabID
+    WHERE 
+	    si.SearchItemID = si.SearchItemID
+	   AND t.PortalID = @PortalID
+	     
+    GROUP BY sw.Word, sw.SearchWordsID
+	ORDER BY NEWID()
+
+GO

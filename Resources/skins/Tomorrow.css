@@ -1,0 +1,16 @@
+/* Skin Tomorrow */
+.TagCloud-Tomorrow {word-wrap: break-word;white-space: pre; white-space: pre-wrap;white-space: pre-line;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: -moz-pre-wrap;white-space: -hp-pre-wrap;word-wrap: break-word;}
+
+.TagCloud-Tomorrow,
+.TagCloud-Tomorrow ul {margin: 0;padding: 0;
+           font-style: normal;font-variant: normal;font-weight: 400;font-size: 100%;text-align: center;}
+.TagCloud-Tomorrow span a,
+.TagCloud-Tomorrow li a {margin-top: 0px;margin-right: 5px;margin-bottom: 0px;margin-left: 5px;
+                  text-transform: capitalize;color: black;font-family: 'NB55RMS', 'Courier New';}
+				  
+.TagCloud-Tomorrow span a:hover,
+.TagCloud-Tomorrow li a:hover {background-color:black;color:white;text-decoration:none}
+
+/* UL MODE */
+.TagCloud-Tomorrow ul {list-style:none}
+.TagCloud-Tomorrow li {display:inline;}

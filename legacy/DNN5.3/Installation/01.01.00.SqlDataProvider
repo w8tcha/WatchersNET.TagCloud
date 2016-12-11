@@ -1,0 +1,128 @@
+﻿/** Drop Existing Stored Procedures **/
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}TagCloudItemsAdd') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}TagCloudItemsAdd
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}TagCloudItemsUpdate') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}TagCloudItemsUpdate
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}TagCloudItemsDelete') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}TagCloudItemsDelete
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}TagCloudItemsGetByModule') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}TagCloudItemsGetByModule
+GO
+
+-- *** Create tables ***
+
+if not exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}TagCloudItems') and OBJECTPROPERTY(id, N'IsTable') = 1)
+	CREATE TABLE {databaseOwner}{objectQualifier}TagCloudItems (
+		 [TagID] int NOT NULL,
+		 [Weight] int NOT NULL,
+		 [Tag] nvarchar(500) NULL,
+		 [ModuleID] int NOT NULL
+	) ON [PRIMARY]
+GO
+
+if not exists (select * from dbo.sysobjects where id = object_id(N'PK_{objectQualifier}TagCloudItems') and OBJECTPROPERTY(id, N'IsPrimaryKey') = 1)
+	ALTER TABLE {databaseOwner}{objectQualifier}TagCloudItems ADD CONSTRAINT 
+		PK_{objectQualifier}TagCloudItems PRIMARY KEY CLUSTERED (TagID, ModuleID) ON [PRIMARY]
+GO
+
+
+
+/** Create Stored Procedures **/
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}TagCloudItemsAdd
+		@TagID int,
+		@Weight int,
+		@Tag nvarchar(500),
+		@ModuleID int
+	AS
+	SET NOCOUNT ON
+	INSERT INTO {databaseOwner}{objectQualifier}TagCloudItems
+		(TagID,Weight,Tag,ModuleID)
+		VALUES
+		(@TagID,@Weight,@Tag,@ModuleID)
+
+
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}TagCloudItemsDelete
+		@TagID int,
+		@ModuleID int
+	AS
+	SET NOCOUNT ON
+	DELETE FROM {databaseOwner}{objectQualifier}TagCloudItems WHERE
+		TagID=@TagID AND ModuleID=@ModuleID
+
+
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}TagCloudItemsGetByModule
+		@ModuleID int
+	AS
+	SET NOCOUNT ON
+	SELECT
+		TagID, Weight, Tag
+	FROM {databaseOwner}{objectQualifier}TagCloudItems
+	WHERE ModuleID=@ModuleID
+
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 
+GO
+
+
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}TagCloudItemsUpdate
+		@TagID int,
+		@Weight int,
+		@Tag nvarchar(500),
+		@ModuleID int
+	AS
+	SET NOCOUNT ON
+	UPDATE {databaseOwner}{objectQualifier}TagCloudItems SET 
+		Weight=@Weight,
+		Tag=@Tag
+	WHERE
+		TagID=@TagID AND ModuleID=@ModuleID
+
+
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 
+GO

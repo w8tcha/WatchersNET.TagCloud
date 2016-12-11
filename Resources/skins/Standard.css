@@ -1,0 +1,19 @@
+/* Standard Skin */
+.TagCloud-Standard {word-wrap: break-word;white-space: pre; white-space: pre-wrap;white-space: pre-line;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: -moz-pre-wrap;white-space: -hp-pre-wrap;word-wrap: break-word;}
+
+.TagCloud-Standard,
+.TagCloud-Standard ul {margin: 0;padding: 0;
+           font-style: normal;font-variant: normal;font-weight: 400;font-size: 100%;text-align: center;}
+		   
+.TagCloud-Standard span a,
+.TagCloud-Standard li a {margin-top: 0px;margin-right: 5px;margin-bottom: 0px;margin-left: 5px;
+                 text-transform: capitalize;color: #763712;font-family: "Georgia", "Times New Roman", "Times", serif;}
+				  
+.TagCloud-Standard span a:hover,
+.TagCloud-Standard li a:hover {background-color:#763712;color:white;text-decoration:none}
+
+/**********************/
+
+/* UL MODE */
+.TagCloud-Standard ul {list-style:none;}
+.TagCloud-Standard li {display:inline;}

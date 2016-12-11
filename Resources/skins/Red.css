@@ -1,0 +1,16 @@
+/* Skin Red */
+.TagCloud-Red {word-wrap: break-word;white-space: pre; white-space: pre-wrap;white-space: pre-line;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: -moz-pre-wrap;white-space: -hp-pre-wrap;word-wrap: break-word;}
+
+.TagCloud-Red,
+.TagCloud-Red ul {margin: 0;padding: 0;
+           font-style: normal;font-variant: normal;font-weight: 400;font-size: 100%;text-align: center;background-color:#f2f2f1}
+.TagCloud-Red span a,
+.TagCloud-Red li a {font-family: "Arial", "Helvetica", sans-serif;margin-top: 0px;margin-right: 5px;margin-bottom: 0px;margin-left: 5px;
+                  text-transform: capitalize;color: black}
+				  
+.TagCloud-Red span a:hover,
+.TagCloud-Red li a:hover {background-color:#e00814;color:white;text-decoration:none}
+
+/* UL MODE */
+.TagCloud-Red ul {list-style:none;padding-top:10px}
+.TagCloud-Red li {display:inline;}

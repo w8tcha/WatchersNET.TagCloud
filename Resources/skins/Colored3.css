@@ -1,0 +1,32 @@
+/* Skin COLORED3 TAGS */
+.TagCloud-Colored3 {word-wrap: break-word;white-space: pre; white-space: pre-wrap;white-space: pre-line;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: -moz-pre-wrap;white-space: -hp-pre-wrap;word-wrap: break-word;}
+
+.TagCloud-Colored3,
+.TagCloud-Colored3 ul {margin: 0;padding: 0;
+           font-style: normal;font-variant: normal;font-weight: 400;font-size: 100%;text-align: center;}
+		   
+.TagCloud-Colored3 span a,
+.TagCloud-Colored3 li a {margin-top: 0px;margin-right: 5px;margin-bottom: 0px;margin-left: 5px;
+                  text-transform: capitalize;color: #763712;font-family: "Georgia", "Times New Roman", "Times", serif;}
+				  
+.TagCloud-Colored3 span a:hover,
+.TagCloud-Colored3 li a:hover {background-color:black;color:white;text-decoration:none}
+
+.TagCloud-Colored3 span .CloudItem-Colored3_0,
+.TagCloud-Colored3 .CloudItem-Colored3_0 a {color:#6e869e;}
+.TagCloud-Colored3 span .CloudItem-Colored3_1,
+.TagCloud-Colored3 .CloudItem-Colored3_1 a {color:#848f9b;}
+.TagCloud-Colored3 span .CloudItem-Colored3_2,
+.TagCloud-Colored3 .CloudItem-Colored3_2 a {color:#125ca7;}
+.TagCloud-Colored3 span .CloudItem-Colored3_3,
+.TagCloud-Colored3 .CloudItem-Colored3_3 a {color:#6e869e;} 
+.TagCloud-Colored3 span .CloudItem-Colored3_4,
+.TagCloud-Colored3 .CloudItem-Colored3_4 a {color:#848f9b;}
+.TagCloud-Colored3 span .CloudItem-Colored3_5,
+.TagCloud-Colored3 .CloudItem-Colored3_5 a {color:#848f9b;}
+.TagCloud-Colored3 span .CloudItem-Colored3_6,
+.TagCloud-Colored3 .CloudItem-Colored3_6 a {color:#125ca7;}
+
+/* UL MODE */
+.TagCloud-Colored3 ul {list-style:none;padding-top:10px}
+.TagCloud-Colored3 li {display:inline;}

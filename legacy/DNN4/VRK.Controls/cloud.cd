@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Font Name="Tahoma" Size="8.25" />
+  <Class Name="VRK.Controls.Cloud">
+    <Position X="1" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Cloud.cs</FileName>
+      <HashCode>ACQAAAAAAAQESDAAAAQIhAiAAJACIACEBBAEBAAACII=</HashCode>
+    </TypeIdentifier>
+    <Members>
+      <Method Name="CreateChildControls" Hidden="true" />
+      <Method Name="CreateItemsFromData" Hidden="true" />
+      <Method Name="NormalizeWeight" Hidden="true" />
+      <Method Name="Render" Hidden="true" />
+      <Method Name="ShouldSerializeDataHrefField" Hidden="true" />
+      <Method Name="ShouldSerializeDataHrefFormatString" Hidden="true" />
+      <Method Name="ShouldSerializeDataTextField" Hidden="true" />
+      <Method Name="ShouldSerializeDataTextFormatString" Hidden="true" />
+      <Method Name="ShouldSerializeDataTitleField" Hidden="true" />
+      <Method Name="ShouldSerializeDataTitleFormatString" Hidden="true" />
+      <Method Name="ShouldSerializeDataWeightField" Hidden="true" />
+      <Method Name="ShouldSerializeItemCssClassPrefix" Hidden="true" />
+      <Method Name="ShouldSerializeItemSeparator" Hidden="true" />
+      <Method Name="ShouldSerializeItemRenderAsUl" Hidden="true" />
+      <Property Name="TagKey" Hidden="true" />
+    </Members>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="System.Web.UI.WebControls.DataBoundControl" Collapsed="true">
+    <Position X="5" Y="2.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Web.UI.WebControls.BaseDataBoundControl" Collapsed="true">
+    <Position X="5" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Web.UI.WebControls.WebControl" Collapsed="true">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="VRK.Controls.CloudItem">
+    <Position X="2.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>CloudItem.cs</FileName>
+      <HashCode>AAAFAAAAAIAABEAAAAAAAAIAACDAAABIAAAACAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+</ClassDiagram>

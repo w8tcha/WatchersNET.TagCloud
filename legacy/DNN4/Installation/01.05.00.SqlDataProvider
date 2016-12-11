@@ -1,0 +1,75 @@
+﻿if not exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}TagCloudItemsMl') and OBJECTPROPERTY(id, N'IsTable') = 1)
+	CREATE TABLE {databaseOwner}{objectQualifier}TagCloudItemsMl (
+		 [TagID] int NOT NULL,
+		 [Tag] nvarchar(500) NOT NULL,
+		 [Locale] nvarchar(10) NOT NULL,
+		 [ModuleID] int NOT NULL,
+		 [TagUrl] nvarchar(500) NULL
+	) ON [PRIMARY]
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}TagCloudItemsAddMl
+		@TagID int,
+		@Locale nvarchar(10),
+		@Tag nvarchar(500),
+		@ModuleID int,
+		@TagUrl nvarchar(500)
+	AS
+	SET NOCOUNT ON
+	INSERT INTO {databaseOwner}{objectQualifier}TagCloudItemsMl
+		(TagID,Locale,Tag,ModuleID,TagUrl)
+		VALUES
+		(@TagID,@Locale,@Tag,@ModuleID,@TagUrl)
+
+
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}TagCloudItemsDeleteMl
+		@TagID int,
+		@ModuleID int,
+		@Locale nvarchar(10)
+	AS
+	SET NOCOUNT ON
+	DELETE FROM {databaseOwner}{objectQualifier}TagCloudItemsMl WHERE
+		TagID=@TagID AND ModuleID=@ModuleID AND Locale=@Locale
+
+
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}TagCloudItemsGetByLocale
+		@ModuleID int,
+		@TagID int
+	AS
+	SET NOCOUNT ON
+	SELECT
+		TagID, Locale, Tag, TagUrl
+	FROM {databaseOwner}{objectQualifier}TagCloudItemsMl
+	WHERE TagID=@TagID AND ModuleID=@ModuleID
+
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 

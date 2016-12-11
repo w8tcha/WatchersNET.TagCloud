@@ -1,0 +1,16 @@
+/* Skin Orange */
+.TagCloud-Orange {word-wrap: break-word;white-space: pre; white-space: pre-wrap;white-space: pre-line;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: -moz-pre-wrap;white-space: -hp-pre-wrap;word-wrap: break-word;}
+
+.TagCloud-Orange,
+.TagCloud-Orange ul {margin: 0;padding: 0;
+           font-style: normal;font-variant: normal;font-weight: 400;font-size: 100%;text-align: center;background-color:faf7f3}
+.TagCloud-Orange span a,
+.TagCloud-Orange li a {font-family: "Georgia", "Times New Roman", "Times", serif;margin-top: 0px;margin-right: 5px;margin-bottom: 0px;margin-left: 5px;
+                  text-transform: capitalize;color: #ef5308;text-decoration:underline}
+				  
+.TagCloud-Orange span a:hover,
+.TagCloud-Orange li a:hover {background-color:#b11500;color:#fee468;text-decoration:none;}
+
+/* UL MODE */
+.TagCloud-Orange ul {list-style:none;padding-top:10px}
+.TagCloud-Orange li {display:inline;}

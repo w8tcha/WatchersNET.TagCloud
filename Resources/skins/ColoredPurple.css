@@ -1,0 +1,37 @@
+/* Skin Colored Purple */
+.TagCloud-ColoredPurple {word-wrap: break-word;white-space: pre; white-space: pre-wrap;white-space: pre-line;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: -moz-pre-wrap;white-space: -hp-pre-wrap;word-wrap: break-word;}
+
+
+.TagCloud-ColoredPurple,
+.TagCloud-ColoredPurple ul {margin: 0;padding: 0;background-color:#333;border:2px solid #ccc;
+           font-style: normal;font-variant: normal;font-weight: 400;font-size: 100%;text-align: center;}
+		   
+.TagCloud-ColoredPurple span a,
+.TagCloud-ColoredPurple li a {margin-top: 0px;margin-right: 5px;margin-bottom: 0px;margin-left: 5px;
+                  text-transform: capitalize;color: #ccc;font-family: "Lucida Sans Unicode";}
+				  
+.TagCloud-ColoredPurple span a:hover,
+.TagCloud-ColoredPurple li a:hover {text-decoration:underline}
+
+
+.TagCloud-ColoredPurple span .CloudItem-ColoredPurple_0,
+.TagCloud-ColoredPurple .CloudItem-ColoredPurple_0 a {color:#ff42a5;}
+.TagCloud-ColoredPurple span .CloudItem-ColoredPurple_1,
+.TagCloud-ColoredPurple .CloudItem-ColoredPurple_1 a {color:#ffc4e2;}
+.TagCloud-ColoredPurple span .CloudItem-ColoredPurple_2,
+.TagCloud-ColoredPurple .CloudItem-ColoredPurple_2 a {color:#ccc;}
+.TagCloud-ColoredPurple span .CloudItem-ColoredPurple_3,
+.TagCloud-ColoredPurple .CloudItem-ColoredPurple_3 a {color:#ff84c5;} 
+.TagCloud-ColoredPurple span .CloudItem-ColoredPurple_4,
+.TagCloud-ColoredPurple .CloudItem-ColoredPurple_4 a {color:#ff0084;}
+.TagCloud-ColoredPurple span .CloudItem-ColoredPurple_5,
+.TagCloud-ColoredPurple .CloudItem-ColoredPurple_5 a {color:#ff42a5;}
+.TagCloud-ColoredPurple span .CloudItem-ColoredPurple_6,
+.TagCloud-ColoredPurple .CloudItem-ColoredPurple_6 a {color:#ffc4e2;}
+
+.TagCloud-ColoredPurple hr {display:none;}
+
+
+/* UL MODE */
+.TagCloud-ColoredPurple ul {list-style:none;padding-top:10px}
+.TagCloud-ColoredPurple li {display:inline;}

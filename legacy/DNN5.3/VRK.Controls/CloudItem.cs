@@ -1,0 +1,228 @@
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CloudItem.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The cloud item.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace VRK.Controls
+{
+    #region
+
+    using System;
+
+    #endregion
+
+    /// <summary>
+    /// The cloud item.
+    /// </summary>
+    public class CloudItem
+    {
+        #region Constants and Fields
+
+        /// <summary>
+        ///   The _href.
+        /// </summary>
+        private string href;
+
+        /// <summary>
+        ///   The _text.
+        /// </summary>
+        private string text;
+
+        /// <summary>
+        ///   The _title.
+        /// </summary>
+        private string title;
+
+        /// <summary>
+        ///   The _weight.
+        /// </summary>
+        private double weight;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///   Initializes a new instance of the <see cref = "CloudItem" /> class.
+        /// </summary>
+        public CloudItem()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CloudItem"/> class.
+        /// </summary>
+        /// <param name="text">
+        /// The text.
+        /// </param>
+        /// <param name="weight">
+        /// The weight.
+        /// </param>
+        public CloudItem(string text, double weight)
+        {
+            this.text = text;
+            this.weight = weight;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CloudItem"/> class.
+        /// </summary>
+        /// <param name="text">
+        /// The text.
+        /// </param>
+        /// <param name="weight">
+        /// The weight.
+        /// </param>
+        /// <param name="href">
+        /// The href.
+        /// </param>
+        public CloudItem(string text, double weight, string href)
+            : this(text, weight)
+        {
+            this.href = href;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CloudItem"/> class.
+        /// </summary>
+        /// <param name="text">
+        /// The text.
+        /// </param>
+        /// <param name="weight">
+        /// The weight.
+        /// </param>
+        /// <param name="href">
+        /// The href.
+        /// </param>
+        /// <param name="title">
+        /// The title.
+        /// </param>
+        public CloudItem(string text, double weight, string href, string title)
+            : this(text, weight, href)
+        {
+            this.title = title;
+        }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        ///   Gets or sets The address of the HTML anchor.
+        /// </summary>
+        public string Href
+        {
+            get
+            {
+                return this.href;
+            }
+
+            set
+            {
+                this.href = value;
+            }
+        }
+
+        /// <summary>
+        ///   Gets or sets the text for individual hyperlinks.
+        /// </summary>
+        public string Text
+        {
+            get
+            {
+                return this.text;
+            }
+
+            set
+            {
+                this.text = value;
+            }
+        }
+
+        /// <summary>
+        ///   Gets or sets the title (tooltip) of the HTML anchor.
+        /// </summary>
+        public string Title
+        {
+            get
+            {
+                return this.title;
+            }
+
+            set
+            {
+                this.title = value;
+            }
+        }
+
+        /// <summary>
+        ///   Gets or sets the weight of the item.
+        /// </summary>
+        public double Weight
+        {
+            get
+            {
+                return this.weight;
+            }
+
+            set
+            {
+                this.weight = value;
+            }
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// The should serialize href.
+        /// </summary>
+        /// <returns>
+        /// The should serialize href.
+        /// </returns>
+        private bool ShouldSerializeHref()
+        {
+            return !String.IsNullOrEmpty(this.href);
+        }
+
+        /// <summary>
+        /// The should serialize text.
+        /// </summary>
+        /// <returns>
+        /// The should serialize text.
+        /// </returns>
+        private bool ShouldSerializeText()
+        {
+            return !String.IsNullOrEmpty(this.text);
+        }
+
+        /// <summary>
+        /// The should serialize title.
+        /// </summary>
+        /// <returns>
+        /// The should serialize title.
+        /// </returns>
+        private bool ShouldSerializeTitle()
+        {
+            return !String.IsNullOrEmpty(this.title);
+        }
+
+        /// <summary>
+        /// The should serialize weight.
+        /// </summary>
+        /// <returns>
+        /// The should serialize weight.
+        /// </returns>
+        private bool ShouldSerializeWeight()
+        {
+            return this.weight != 0;
+        }
+
+        #endregion
+    }
+}

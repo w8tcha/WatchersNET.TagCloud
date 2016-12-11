@@ -1,0 +1,34 @@
+/* Skin Colored Wong */
+.TagCloud-ColoredWong {word-wrap: break-word;white-space: pre; white-space: pre-wrap;white-space: pre-line;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: -moz-pre-wrap;white-space: -hp-pre-wrap;word-wrap: break-word;}
+
+.TagCloud-ColoredWong,
+.TagCloud-ColoredWong ul {margin: 0;padding: 0;background-color:#990000;
+           font-style: normal;font-variant: normal;font-weight: 400;font-size: 100%;text-align: center;}
+		   
+.TagCloud-ColoredWong span a,
+.TagCloud-ColoredWong li a {margin-top: 0px;margin-right: 5px;margin-bottom: 0px;margin-left: 5px;
+                  text-transform: capitalize;color: white;font-family: "Georgia", "Times New Roman", "Times", serif;}
+				  
+.TagCloud-ColoredWong span a:hover,
+.TagCloud-ColoredWong li a:hover {background-color:white;color:#990000;text-decoration:none}
+
+.TagCloud-ColoredPurple span .CloudItem-ColoredWong_0,
+.TagCloud-ColoredPurple .CloudItem-ColoredWong_0 a {color:#d26666;}
+.TagCloud-ColoredPurple span .CloudItem-ColoredWong_1,
+.TagCloud-ColoredPurple .CloudItem-ColoredWong_1 a {color:#db8787;}
+.TagCloud-ColoredPurple span .CloudItem-ColoredWong_2,
+.TagCloud-ColoredPurple .CloudItem-ColoredWong_2 a {color:white;}
+.TagCloud-ColoredPurple span .CloudItem-ColoredWong_3,
+.TagCloud-ColoredPurple .CloudItem-ColoredWong_3 a {color:#d26666;} 
+.TagCloud-ColoredPurple span .CloudItem-ColoredWong_4,
+.TagCloud-ColoredPurple .CloudItem-ColoredWong_4 a {color:#db8787;}
+.TagCloud-ColoredPurple span .CloudItem-ColoredWong_5,
+.TagCloud-ColoredPurple .CloudItem-ColoredWong_5 a {color:white;}
+.TagCloud-ColoredPurple span .CloudItem-ColoredWong_6,
+.TagCloud-ColoredPurple .CloudItem-ColoredWong_6 a {color:#d26666;}
+
+.TagCloud-ColoredWong hr {display:none;}
+
+/* UL MODE */
+.TagCloud-ColoredWong ul {list-style:none;padding-top:10px}
+.TagCloud-ColoredWong li {display:inline;}

@@ -1,0 +1,134 @@
+<dotnetnuke type="Package" version="5.0">
+  <packages>
+    <package name="WatchersNET.TagCloud" type="Module" version="02.02.05">
+      <friendlyName>WatchersNET.TagCloud</friendlyName>
+      <description>
+        &lt;h1&gt;WatchersNET TagCloud &lt;/h1&gt;
+&lt;h2&gt;Copyright(c) Ingo Herbote. All rights reserved. (&lt;a href=&quot;http://www.watchersnet.de/TagCloud&quot;&gt;www.WatchersNET.de&lt;/a&gt;)&lt;/h2&gt; &lt;p&gt;This Module displays Tags from various sources  as a standard Web 2.0 Tag Cloud.  The Tags are links which linked to the Portal Search to  show all Pages with that Tag.&lt;/p&gt;
+&lt;p&gt; The Tag Cloud can be rendered as HTML5 Canvas 3D Cloud, or Flash 3D Cloud, or as Plain HTML with Skinning as a list of hyperlinks in varying styles depending on a weight.    This is similar to tag clouds in del.icio.us or Flickr.&lt;/p&gt;
+      </description>
+      <owner>
+        <name>Ingo Herbote</name>
+        <organization>WatchersNET</organization>
+        <url>http://www.watchersnet.de/TagCloud</url>
+        <email>thewatcher@watchersnet.de</email>
+      </owner>
+      <license src="License.html" />
+      <releaseNotes src="ReleaseNotes.html" />
+      <dependencies>
+        <dependency type="CoreVersion">05.01.00</dependency>
+      </dependencies>
+      <components>
+        <component type="Module">
+          <desktopModule>
+            <moduleName>WatchersNET.TagCoud</moduleName>
+            <foldername>WatchersNET.TagCoud</foldername>
+            <businessControllerClass>WatchersNET.DNN.Modules.TagCloud.Controller, WatchersNET.DNN.Modules.TagCloud</businessControllerClass>
+            <supportedFeatures>
+              <supportedFeature type="Portable" />
+              <supportedFeature type="Searchable" />
+            </supportedFeatures>
+            <moduleDefinitions>
+              <moduleDefinition>
+                <friendlyName>TagCloud</friendlyName>
+                <defaultCacheTime>0</defaultCacheTime>
+                <moduleControls>
+                  <moduleControl>
+                    <controlKey />
+                    <controlSrc>DesktopModules/WatchersNET.TagCloud/TagCloud.ascx</controlSrc>
+                    <supportsPartialRendering>False</supportsPartialRendering>
+                    <controlTitle></controlTitle>
+                    <controlType>View</controlType>
+                    <iconFile>~/images/icon_tag_32px.gif</iconFile>
+                    <helpUrl />
+                  </moduleControl>
+                  <moduleControl>
+                    <controlKey>Settings</controlKey>
+                    <controlSrc>DesktopModules/WatchersNET.TagCloud/Settings.ascx</controlSrc>
+                    <supportsPartialRendering>False</supportsPartialRendering>
+                    <controlTitle>TagCloud Settings</controlTitle>
+                    <controlType>Edit</controlType>
+                    <iconFile>~/images/icon_tag_32px.gif</iconFile>
+                    <helpUrl />
+                  </moduleControl>
+                </moduleControls>
+              </moduleDefinition>
+            </moduleDefinitions>
+          </desktopModule>
+        </component>
+        <component type="Assembly">
+          <assemblies>
+            <basePath>bin</basePath>
+            <assembly>
+              <path>bin</path>
+              <name>WatchersNET.DNN.Modules.TagCloud.dll</name>
+              <sourceFileName>WatchersNET.DNN.Modules.TagCloud.dll</sourceFileName>
+            </assembly>
+          </assemblies>
+        </component>
+        <component type="ResourceFile">
+          <resourceFiles>
+            <basePath>DesktopModules\WatchersNET.TagCloud</basePath>
+            <resourceFile>
+              <name>Resources.zip</name>
+            </resourceFile>
+          </resourceFiles>
+        </component>
+        <component type="File">
+          <files>
+            <basePath>DesktopModules\WatchersNET.TagCloud</basePath>
+            <file>
+              <name>TagCloud.ascx</name>
+              <sourceFileName>TagCloud.ascx</sourceFileName>
+            </file>
+            <file>
+              <name>Settings.ascx</name>
+              <sourceFileName>Settings.ascx</sourceFileName>
+            </file>
+          </files>
+        </component>
+        <component type="Cleanup" version="01.04.00">
+          <files>
+            <basePath>bin</basePath>
+            <file>
+              <name>VRK.Controls.dll</name>
+            </file>
+          </files>
+        </component>
+        <component type="Script">
+          <scripts>
+            <basePath>DesktopModules\WatchersNET.TagCloud</basePath>
+            <script type="Install">
+              <name>01.00.00.SqlDataProvider</name>
+              <version>01.00.00</version>
+            </script>
+            <script type="Install">
+              <name>01.01.00.SqlDataProvider</name>
+              <version>01.01.00</version>
+            </script>
+            <script type="Install">
+              <name>01.02.00.SqlDataProvider</name>
+              <version>01.02.00</version>
+            </script>
+            <script type="Install">
+              <name>01.05.00.SqlDataProvider</name>
+              <version>01.05.00</version>
+            </script>
+            <script type="Install">
+              <name>02.00.00.SqlDataProvider</name>
+              <version>02.00.00</version>
+            </script>
+            <script type="Install">
+              <name>02.02.03.SqlDataProvider</name>
+              <version>02.02.03</version>
+            </script>
+            <script type="UnInstall">
+              <name>Uninstall.SqlDataProvider</name>
+              <version>01.00.00</version>
+            </script>
+          </scripts>
+        </component>
+      </components>
+    </package>
+  </packages>
+</dotnetnuke>
