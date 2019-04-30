@@ -5,7 +5,10 @@
  <PropertyGroup>
    <MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">$(MSBuildProjectDirectory)\BuildScripts</MSBuildCommunityTasksPath>
    <MSBuildDnnBinPath Condition="'$(MSBuildDnnBinPath)' == ''">$(MSBuildProjectDirectory)\..\..\bin</MSBuildDnnBinPath>
-   <MSBuildCommunityTasksLib>$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
+   <!--<MSBuildCommunityTasksLib>$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>-->
+
+   <MSBuildCommunityTasksLib>$(SolutionDir)\packages\MSBuildTasks.1.4.0.128\tools\MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
+   
  </PropertyGroup>
 
  <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.AspNet.InstallAspNet" />

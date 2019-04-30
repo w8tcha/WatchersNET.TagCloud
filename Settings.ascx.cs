@@ -781,11 +781,11 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             //var objDesktopModuleInfo = DesktopModuleController.GetDesktopModuleByModuleName(sModuleName, this.PortalId);
             var objDesktopModuleController = new DesktopModuleController();
-            var objDesktopModuleInfo = objDesktopModuleController.GetDesktopModuleByModuleName(sModuleName);
+            var objDesktopModuleInfo = DesktopModuleController.GetDesktopModuleByModuleName(sModuleName, PortalId);
 
             if (objDesktopModuleInfo == null)
             {
-                objDesktopModuleInfo = objDesktopModuleController.GetDesktopModuleByName(sModuleName);
+                objDesktopModuleInfo = DesktopModuleController.GetDesktopModuleByFriendlyName(sModuleName);
 
                 if (objDesktopModuleInfo == null)
                 {

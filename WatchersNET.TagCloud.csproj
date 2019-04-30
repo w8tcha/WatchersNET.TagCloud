@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
@@ -31,7 +31,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <IsWebBootstrapper>true</IsWebBootstrapper>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <PublishUrl>http://localhost/WatchersNET.DNN.Modules.UserManager/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -53,6 +53,9 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\</OutputPath>
@@ -118,18 +121,16 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DotNetNuke, Version=8.0.0.809, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Dnn.Platform.8.0.0\lib\net40\DotNetNuke.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="DotNetNuke, Version=9.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\DotNetNuke.Core.9.3.1\lib\net45\DotNetNuke.dll</HintPath>
     </Reference>
     <Reference Include="DotNetNuke.Modules.ActiveForums, Version=6.2.8.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\DotNetNuke.Modules.ActiveForums.dll</HintPath>
+      <HintPath>..\..\bin\DotNetNuke.Modules.ActiveForums.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="DotNetNuke.Web, Version=8.0.0.809, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Dnn.Platform.8.0.0\lib\net40\DotNetNuke.Web.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="DotNetNuke.Web, Version=9.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\DotNetNuke.Web.9.3.1\lib\net45\DotNetNuke.Web.dll</HintPath>
     </Reference>
     <Reference Include="DotNetNuke.Web.Client, Version=8.0.0.809, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Dnn.Platform.8.0.0\lib\net40\DotNetNuke.Web.Client.dll</HintPath>
@@ -140,12 +141,10 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="DotNetNuke.WebUtility, Version=4.2.1.783, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Dnn.Platform.8.0.0\lib\net40\DotNetNuke.WebUtility.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>packages\DotNetNuke.Web.9.3.1\lib\net45\DotNetNuke.WebUtility.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Dnn.Platform.8.0.0\lib\net40\Microsoft.ApplicationBlocks.Data.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>packages\DotNetNuke.Core.9.3.1\lib\net45\Microsoft.ApplicationBlocks.Data.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -171,11 +170,11 @@
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Ventrian.NewsArticles">
-      <HintPath>bin\Ventrian.NewsArticles.dll</HintPath>
+      <HintPath>..\..\bin\Ventrian.NewsArticles.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Ventrian.SimpleGallery">
-      <HintPath>bin\Ventrian.SimpleGallery.dll</HintPath>
+      <HintPath>..\..\bin\Ventrian.SimpleGallery.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -256,13 +255,6 @@
     <Content Include="Installation\02.02.03.SqlDataProvider" />
     <Content Include="packages.config" />
     <None Include="VRK.Controls\cloud.cd" />
-    <Content Include="web.config" />
-    <Content Include="web.Debug.config">
-      <DependentUpon>web.config</DependentUpon>
-    </Content>
-    <Content Include="web.Release.config">
-      <DependentUpon>web.config</DependentUpon>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -337,9 +329,16 @@
     <Extension>zip</Extension>
     <DNNFileName>TagCloud</DNNFileName>
     <PackageName>WatchersNET.TagCloud</PackageName>
-    <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\BuildScripts</MSBuildCommunityTasksPath>
+    <MSBuildCommunityTasksPath>$(SolutionDir)\packages\MSBuildTasks.1.5.0.235\tools</MSBuildCommunityTasksPath>
   </PropertyGroup>
   <Import Project="BuildScripts\ModulePackage.Targets" />
   <Target Name="AfterBuild" DependsOnTargets="PackageModule">
+  </Target>
+  <Import Project="packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets" Condition="Exists('packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets'))" />
   </Target>
 </Project>
