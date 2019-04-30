@@ -1,6 +1,6 @@
 <dotnetnuke type="Package" version="5.0">
   <packages>
-    <package name="WatchersNET.TagCloud" type="Module" version="02.02.06">
+    <package name="WatchersNET.TagCloud" type="Module" version="02.02.07">
       <friendlyName>WatchersNET.TagCloud</friendlyName>
       <description>
         &lt;h1&gt;WatchersNET TagCloud &lt;/h1&gt;
@@ -17,7 +17,7 @@
       <license src="License.html" />
       <releaseNotes src="ReleaseNotes.html" />
       <dependencies>
-        <dependency type="CoreVersion">07.00.00</dependency>
+        <dependency type="CoreVersion">09.03.01</dependency>
       </dependencies>
       <components>
         <component type="Module">
