@@ -1,6 +1,0 @@
-﻿/** Drop Existing Stored Procedures **/
-
-
-IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'{databaseOwner}{objectQualifier}TagCloud_GetSearchWords') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
-DROP PROCEDURE {databaseOwner}{objectQualifier}TagCloud_GetSearchWords
-GO
