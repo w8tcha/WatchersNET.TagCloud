@@ -126,7 +126,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         {
             get
             {
-                ModuleActionCollection actions = new ModuleActionCollection
+                var actions = new ModuleActionCollection
                     {
                         {
                             this.GetNextActionID(), Localization.GetString("Manage.Text", this.LocalResourceFile),
@@ -162,7 +162,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </returns>
         public List<CloudItem> GetItems()
         {
-            string sLogCacheKey = string.Format("CloudItems{0}", this.TabModuleId);
+            var sLogCacheKey = string.Format("CloudItems{0}", this.TabModuleId);
 
             List<CloudItem> itemList;
 
@@ -216,7 +216,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </returns>
         public List<CloudItem> GetItemsFromDb()
         {
-            List<CloudItem> list = new List<CloudItem>();
+            var list = new List<CloudItem>();
 
             if (this.settings.ModeCustom)
             {
@@ -255,9 +255,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
             // Exclude Words
             if (this.settings.exlusionWords.Count > 0)
             {
-                foreach (ExcludeWord exWord in this.settings.exlusionWords)
+                foreach (var exWord in this.settings.exlusionWords)
                 {
-                    string value = exWord.Word.ToLower();
+                    var value = exWord.Word.ToLower();
 
                     switch (exWord.ExcludeWordType)
                     {
@@ -366,7 +366,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </returns>
         private static int NormalizeWeight(double weight, double mean, double stdDev)
         {
-            double factor = weight - mean;
+            var factor = weight - mean;
 
             if (factor != 0 && stdDev != 0)
             {
@@ -394,8 +394,8 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </returns>
         private static bool UserSeeTag(int iPortalId, string sWord)
         {
-            bool bCanSee = false;
-            SearchResultsInfoCollection results = SearchDataStoreProvider.Instance().GetSearchResults(iPortalId, sWord);
+            var bCanSee = false;
+            var results = SearchDataStoreProvider.Instance().GetSearchResults(iPortalId, sWord);
 
             if (results.Cast<SearchResultsInfo>().Select(
                 result => TabPermissionController.GetTabPermissions(result.TabId, iPortalId)).Any(tabPermissions => PortalSecurity.IsInRoles(tabPermissions.ToString("VIEW"))))
@@ -420,9 +420,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </returns>
         private static bool UserSeeTag(int iPortalId, int iTabId)
         {
-            bool bCanSee = false;
+            var bCanSee = false;
 
-            TabPermissionCollection tabPermissions = TabPermissionController.GetTabPermissions(iTabId, iPortalId);
+            var tabPermissions = TabPermissionController.GetTabPermissions(iTabId, iPortalId);
 
             // Get The Tab
             if (PortalSecurity.IsInRoles(tabPermissions.ToString("VIEW")))
@@ -600,15 +600,15 @@ namespace WatchersNET.DNN.Modules.TagCloud
             }
 
             double mean;
-            double stdDev = Statistics.StdDev(this.ItemWeights, out mean);
+            var stdDev = Statistics.StdDev(this.ItemWeights, out mean);
 
-            StringBuilder sBTags = new StringBuilder();
+            var sBTags = new StringBuilder();
 
             sBTags.AppendLine("<tags>");
 
-            foreach (CloudItem cloudItem in this.tagListItems)
+            foreach (var cloudItem in this.tagListItems)
             {
-                int normalWeight = NormalizeWeight(cloudItem.Weight, mean, stdDev);
+                var normalWeight = NormalizeWeight(cloudItem.Weight, mean, stdDev);
 
                 sBTags.AppendLine(
                     string.Format(
@@ -621,7 +621,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             sBTags.AppendLine("</tags>");
 
-            string sWmode = this.settings.Bgcolor.Contains("transparent")
+            var sWmode = this.settings.Bgcolor.Contains("transparent")
                                 ? "params.wmode = \"transparent\";"
                                 : string.Format("params.bgcolor = \"{0}\";", this.settings.Bgcolor);
 
@@ -648,7 +648,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 this.settings.FlashWidth,
                 this.settings.FlashHeight);
 
-            Type csType = typeof(Page);
+            var csType = typeof(Page);
 
             ScriptManager.RegisterStartupScript(
                 this,
@@ -669,18 +669,18 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </returns>
         private string FormatUrl(string sInputUrl)
         {
-            string sNewUrl = sInputUrl;
+            var sNewUrl = sInputUrl;
 
             if (string.IsNullOrEmpty(sNewUrl) || sNewUrl.StartsWith("http://"))
             {
                 return sNewUrl;
             }
 
-            int iTabId = int.Parse(sNewUrl);
+            var iTabId = int.Parse(sNewUrl);
 
-            TabController objTabController = new TabController();
+            var objTabController = new TabController();
 
-            TabInfo objTabInfo = objTabController.GetTab(iTabId, PortalSettings.PortalId, true);
+            var objTabInfo = objTabController.GetTab(iTabId, PortalSettings.PortalId, true);
 
             sNewUrl = objTabInfo.FullUrl;
 
@@ -695,12 +695,12 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </returns>
         private IEnumerable<CloudItem> GetItemsFromActiveForums()
         {
-            List<CloudItem> list = new List<CloudItem>();
+            var list = new List<CloudItem>();
 
             try
             {
                 ////////////////////////
-                foreach (CloudItem tag in
+                foreach (var tag in
                     DataControl.TagCloudActiveForumsTags(PortalSettings.PortalId, this.settings.AfModule, this.settings.TagCount).Where(
                         tag => tag.Weight >= this.settings.OccurCount))
                 {
@@ -738,12 +738,12 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </returns>
         private IEnumerable<CloudItem> GetItemsFromCustom()
         {
-            List<CloudItem> list = new List<CloudItem>();
+            var list = new List<CloudItem>();
 
             try
             {
                 ////////////////////////
-                foreach (CustomTags tag in
+                foreach (var tag in
                     DataControl.TagCloudItemsGetByModule(this.ModuleId).Where(tag => tag.iWeight >= this.settings.OccurCount))
                 {
                     if (Utility.IsNumeric(tag.sUrl) && this.settings.TagsLinkChk)
@@ -757,13 +757,13 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     CloudItem entry;
 
                     // Has Localized Value?
-                    CultureInfo currentCulture = Thread.CurrentThread.CurrentUICulture;
+                    var currentCulture = Thread.CurrentThread.CurrentUICulture;
 
                     tag.localTags = DataControl.TagCloudItemsGetByLocale(this.ModuleId, tag.iTagId);
 
                     string sTag = null, sTagUrl = null;
 
-                    foreach (Locales locales in
+                    foreach (var locales in
                         tag.localTags.Where(locales => locales.Locale.Equals(currentCulture.ToString())))
                     {
                         sTag = locales.TagMl;
@@ -811,14 +811,14 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </returns>
         private IEnumerable<CloudItem> GetItemsFromNewsArticles()
         {
-            List<CloudItem> list = new List<CloudItem>();
+            var list = new List<CloudItem>();
 
-            Ventrian.NewsArticles.TagController tc = new Ventrian.NewsArticles.TagController();
+            var tc = new Ventrian.NewsArticles.TagController();
 
             try
             {
                 ////////////////////////
-                foreach (Ventrian.NewsArticles.TagInfo tag in
+                foreach (var tag in
                     tc.List(this.settings.VentrianModuleNews, this.settings.TagCount).Cast<Ventrian.NewsArticles.TagInfo>().Where(
                         tag => tag.Usages >= this.settings.OccurCount))
                 {
@@ -859,16 +859,16 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </returns>
         private IEnumerable<CloudItem> GetItemsFromSimpleGallery()
         {
-            List<CloudItem> list = new List<CloudItem>();
+            var list = new List<CloudItem>();
 
-            TagController tc = new TagController();
+            var tc = new TagController();
 
             var simpleGalleryInstance = new ModuleController().GetModule(this.settings.VentrianModuleSimple, this.settings.VentrianTabSimple);
 
             try
             {
                 ////////////////////////
-                foreach (TagInfo tag in
+                foreach (var tag in
                     tc.List(this.settings.VentrianModuleSimple, -1, this.settings.TagCount, true).Cast<TagInfo>().Where(
                         tag => tag.Usages >= this.settings.OccurCount))
                 {
@@ -910,12 +910,12 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </returns>
         private IEnumerable<CloudItem> GetItemsFromTax()
         {
-            List<CloudItem> list = new List<CloudItem>();
+            var list = new List<CloudItem>();
 
             try
             {
                 ////////////////////////
-                foreach (Term term in this.GetTerms())
+                foreach (var term in this.GetTerms())
                 {
                     // if (term.ParentTermId != -1) continue;
                     CloudItem entry;
@@ -964,7 +964,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </returns>
         private IEnumerable<Term> GetTerms()
         {
-            List<Term> terms = new List<Term>();
+            var terms = new List<Term>();
 
             switch (this.settings.TaxMode)
             {
@@ -976,19 +976,19 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     break;
                 case "all":
                     {
-                        ITermController termRep = Util.GetTermController();
+                        var termRep = Util.GetTermController();
 
-                        IVocabularyController vocabRep = Util.GetVocabularyController();
+                        var vocabRep = Util.GetVocabularyController();
 
-                        IQueryable<Vocabulary> vs = from v in vocabRep.GetVocabularies()
+                        var vs = from v in vocabRep.GetVocabularies()
                                                     where
                                                         v.ScopeType.ScopeType == "Application" ||
                                                         (v.ScopeType.ScopeType == "Portal" && v.ScopeId == PortalSettings.PortalId)
                                                     select v;
 
-                        foreach (Vocabulary v in vs)
+                        foreach (var v in vs)
                         {
-                            foreach (Term t in termRep.GetTermsByVocabulary(v.VocabularyId))
+                            foreach (var t in termRep.GetTermsByVocabulary(v.VocabularyId))
                             {
                                 if (v.Type == VocabularyType.Simple)
                                 {
@@ -1005,9 +1005,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     {
                         if (this.vocabularies != null)
                         {
-                            ITermController termRep = Util.GetTermController();
+                            var termRep = Util.GetTermController();
 
-                            foreach (string sVocabularyId in this.vocabularies)
+                            foreach (var sVocabularyId in this.vocabularies)
                             {
                                 terms.AddRange(termRep.GetTermsByVocabulary(int.Parse(sVocabularyId)));
                             }
@@ -1057,7 +1057,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         {
             var objModuleController = new ModuleController();
 
-            Hashtable moduleSettings = objModuleController.GetTabModuleSettings(this.TabModuleId);
+            var moduleSettings = objModuleController.GetTabModuleSettings(this.TabModuleId);
 
             // Set Default Settings
             this.settings = new TagCloudSettings
@@ -1133,7 +1133,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 // Import old setting
                 if (!string.IsNullOrEmpty((string)moduleSettings["flashenabled"]))
                 {
-                    bool flashEnabled = bool.Parse((string)moduleSettings["flashenabled"]);
+                    var flashEnabled = bool.Parse((string)moduleSettings["flashenabled"]);
 
                     this.settings.renderMode = flashEnabled
                                                             ? RenderMode.Flash
@@ -1235,7 +1235,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             // Load old Setting
             if (!string.IsNullOrEmpty((string)moduleSettings["TagMode"]))
             {
-                string sTagMode = (string)moduleSettings["TagMode"];
+                var sTagMode = (string)moduleSettings["TagMode"];
 
                 switch (sTagMode)
                 {
@@ -1345,7 +1345,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             // Setting TaxMode Vocabularies
             if (!string.IsNullOrEmpty((string)moduleSettings["TaxVocabularies"]))
             {
-                string sVocabularies = (string)moduleSettings["TaxVocabularies"];
+                var sVocabularies = (string)moduleSettings["TaxVocabularies"];
 
                 this.vocabularies = sVocabularies.Split(';');
             }
@@ -1395,13 +1395,13 @@ namespace WatchersNET.DNN.Modules.TagCloud
             if (this.settings.ExcludeCommon)
             {
                 // Load Common Words, current Language
-                string commonWords = Localization.GetString("CommonWords.Text", this.LocalResourceFile);
+                var commonWords = Localization.GetString("CommonWords.Text", this.LocalResourceFile);
 
                 if (!string.IsNullOrEmpty(commonWords))
                 {
-                    string[] comnmonWordList = commonWords.Split(',');
+                    var comnmonWordList = commonWords.Split(',');
 
-                    foreach (string word in comnmonWordList)
+                    foreach (var word in comnmonWordList)
                     {
                         this.settings.exlusionWords.Add(new ExcludeWord { Word = word, ExcludeWordType = ExcludeType.Equals });
                     }
@@ -1409,13 +1409,13 @@ namespace WatchersNET.DNN.Modules.TagCloud
             }
 
             // Import Old List
-            string strExlusionList = (string)moduleSettings["exlusLst"];
+            var strExlusionList = (string)moduleSettings["exlusLst"];
 
             if (!string.IsNullOrEmpty(strExlusionList))
             {
-                string[] oldList = strExlusionList.Split(',');
+                var oldList = strExlusionList.Split(',');
 
-                foreach (string word in oldList)
+                foreach (var word in oldList)
                 {
                     this.settings.exlusionWords.Add(new ExcludeWord { Word = word, ExcludeWordType = ExcludeType.Equals });
                 }
@@ -1433,7 +1433,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 this.settings.CloudSortType = SortType.AlphabeticAsc;
             }
 
-            string sRenderUl = (string)moduleSettings["RenderUl"];
+            var sRenderUl = (string)moduleSettings["RenderUl"];
 
             this.settings.RenderUl = !string.IsNullOrEmpty(sRenderUl) && bool.Parse(sRenderUl);
 
@@ -1453,15 +1453,15 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             this.c1.RenderItemWeight = this.settings.RenderItemWeight;
 
-            string strTagsLink = (string)moduleSettings["tagslink"];
+            var strTagsLink = (string)moduleSettings["tagslink"];
 
             this.settings.TagsLink = string.IsNullOrEmpty(strTagsLink) || bool.Parse(strTagsLink);
 
-            string strTagsLinkChk = (string)moduleSettings["tagslinkChk"];
+            var strTagsLinkChk = (string)moduleSettings["tagslinkChk"];
 
             this.settings.TagsLinkChk = string.IsNullOrEmpty(strTagsLinkChk) || bool.Parse(strTagsLinkChk);
 
-            string sCacheItems = (string)moduleSettings["CacheItems"];
+            var sCacheItems = (string)moduleSettings["CacheItems"];
 
             this.settings.CacheItems = string.IsNullOrEmpty(sCacheItems) || bool.Parse(sCacheItems);
 

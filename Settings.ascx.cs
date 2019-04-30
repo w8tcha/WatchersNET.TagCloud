@@ -406,9 +406,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
         {
             this.AddTabScript(restoreTab, panelOpenSelector);
 
-            Type csType = typeof(Page);
+            var csType = typeof(Page);
 
-            StringBuilder sbColorPScript = new StringBuilder();
+            var sbColorPScript = new StringBuilder();
 
             sbColorPScript.Append("$(document).ready(function() {");
 
@@ -450,7 +450,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             /*ClientResourceManager.RegisterStyleSheet(
                 this.Page, "//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/blitzer/jquery-ui.css");
             */
-            Type csType = typeof(Page);
+            var csType = typeof(Page);
 
             // Register jQuery
             jQuery.RequestRegistration();
@@ -465,7 +465,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             ScriptManager.RegisterClientScriptInclude(
                 this, csType, "jqueryColorPicker", this.ResolveUrl("js/jpicker-1.1.6.min.js"));
 
-            StringBuilder sbDialogJs = new StringBuilder();
+            var sbDialogJs = new StringBuilder();
 
             sbDialogJs.Append("jQuery(function ($) {");
             sbDialogJs.Append("var setupTagCloudSettingsTabs = function () {");
@@ -592,7 +592,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     return;
                 }
 
-                foreach (string sVocabulary in this.vocabularies)
+                foreach (var sVocabulary in this.vocabularies)
                 {
                     this.cBlVocabularies.Items.FindByValue(sVocabulary).Selected = true;
                 }
@@ -612,7 +612,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </param>
         private void DeleteAllLocales(int iTagId)
         {
-            foreach (Locale language in new LocaleController().GetLocales(this.PortalId).Values)
+            foreach (var language in new LocaleController().GetLocales(this.PortalId).Values)
             {
                 DataControl.TagCloudItemsDeleteMl(iTagId, this.ModuleId, language.Code);
             }
@@ -629,9 +629,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </param>
         private void ExportClick(object sender, EventArgs e)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(List<CustomTags>));
+            var serializer = new XmlSerializer(typeof(List<CustomTags>));
 
-            string sXmlFile = this.txtExportName.Text;
+            var sXmlFile = this.txtExportName.Text;
 
             if (string.IsNullOrEmpty(sXmlFile))
             {
@@ -669,16 +669,16 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </summary>
         private void FillCustomTags()
         {
-            DataTable dtTags = new DataTable();
+            var dtTags = new DataTable();
 
             dtTags.Columns.Add("TagID");
             dtTags.Columns.Add("Tag");
             dtTags.Columns.Add("TagUrl");
             dtTags.Columns.Add("Weight");
 
-            foreach (CustomTags tag in DataControl.TagCloudItemsGetByModule(this.ModuleId))
+            foreach (var tag in DataControl.TagCloudItemsGetByModule(this.ModuleId))
             {
-                DataRow drNewRow = dtTags.NewRow();
+                var drNewRow = dtTags.NewRow();
 
                 drNewRow["TagID"] = tag.iTagId.ToString();
                 drNewRow["Tag"] = tag.sTag;
@@ -700,7 +700,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             // ArrayList folders = FileSystemUtils.GetFoldersByUser(this.PortalId, false, false, "READ, WRITE");
             var folders = FolderManager.Instance.GetFolders(UserController.GetCurrentUserInfo(), "READ, WRITE");
 
-            foreach (ListItem folderItem in from FolderInfo folder in folders
+            foreach (var folderItem in from FolderInfo folder in folders
                                             select
                                                 new ListItem
                                                     {
@@ -724,18 +724,18 @@ namespace WatchersNET.DNN.Modules.TagCloud
         {
             this.grdTagLocales.Visible = true;
 
-            DataTable dtLocales = new DataTable();
+            var dtLocales = new DataTable();
 
             dtLocales.Columns.Add("TagID");
             dtLocales.Columns.Add("Locale");
             dtLocales.Columns.Add("Tag");
             dtLocales.Columns.Add("TagUrl");
 
-            List<Locales> localesList = DataControl.TagCloudItemsGetByLocale(this.ModuleId, int.Parse(this.lTagId.Text));
+            var localesList = DataControl.TagCloudItemsGetByLocale(this.ModuleId, int.Parse(this.lTagId.Text));
 
-            foreach (Locale language in new LocaleController().GetLocales(this.PortalId).Values)
+            foreach (var language in new LocaleController().GetLocales(this.PortalId).Values)
             {
-                DataRow drNewRow = dtLocales.NewRow();
+                var drNewRow = dtLocales.NewRow();
 
                 drNewRow["TagID"] = this.lTagId.Text;
                 drNewRow["Locale"] = language.Code;
@@ -744,9 +744,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 drNewRow["TagUrl"] = tagUrl;
 
                 // Fill With SQL Values
-                Locale language1 = language;
+                var language1 = language;
 
-                Locales locale = localesList.Find(check => check.Locale.Equals(language1.Code));
+                var locale = localesList.Find(check => check.Locale.Equals(language1.Code));
 
                 if (locale != null)
                 {
@@ -793,13 +793,13 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 }
             }
 
-            foreach (TabInfo objTab in objTabs.Where(tab => !tab.IsDeleted))
+            foreach (var objTab in objTabs.Where(tab => !tab.IsDeleted))
             {
-                ModuleController objModules = new ModuleController();
+                var objModules = new ModuleController();
 
-                foreach (KeyValuePair<int, ModuleInfo> pair in objModules.GetTabModules(objTab.TabID))
+                foreach (var pair in objModules.GetTabModules(objTab.TabID))
                 {
-                    ModuleInfo objModule = pair.Value;
+                    var objModule = pair.Value;
 
                     if (objModule.IsDeleted)
                     {
@@ -811,8 +811,8 @@ namespace WatchersNET.DNN.Modules.TagCloud
                         continue;
                     }
 
-                    string strPath = objTab.TabName;
-                    TabInfo objTabSelected = objTab;
+                    var strPath = objTab.TabName;
+                    var objTabSelected = objTab;
 
                     while (objTabSelected.ParentId != Null.NullInteger)
                     {
@@ -843,11 +843,11 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </summary>
         private void FillSearchLst()
         {
-            ListItem item0 = new ListItem();
-            ListItem item1 = new ListItem();
-            ListItem item2 = new ListItem();
-            ListItem item3 = new ListItem();
-            ListItem item4 = new ListItem();
+            var item0 = new ListItem();
+            var item1 = new ListItem();
+            var item2 = new ListItem();
+            var item3 = new ListItem();
+            var item4 = new ListItem();
 
             // Google, Bing, Yahoo, Ask.com and the Portal Search
             item0.Text = string.Format("<img src=\"{0}\" />&nbsp;Google", this.ResolveUrl("google.gif"));
@@ -883,14 +883,14 @@ namespace WatchersNET.DNN.Modules.TagCloud
         {
             this.dDlSkins.Items.Clear();
 
-            DirectoryInfo objDir = new DirectoryInfo(this.MapPath(this.ResolveUrl("Skins")));
+            var objDir = new DirectoryInfo(this.MapPath(this.ResolveUrl("Skins")));
 
-            foreach (FileInfo objFile in objDir.GetFiles("*.css"))
+            foreach (var objFile in objDir.GetFiles("*.css"))
             {
-                string sName = objFile.Name;
+                var sName = objFile.Name;
                 sName = sName.Remove(objFile.Name.LastIndexOf(".", StringComparison.Ordinal));
 
-                ListItem skinItem = new ListItem { Text = objFile.Name, Value = sName };
+                var skinItem = new ListItem { Text = objFile.Name, Value = sName };
 
                 this.dDlSkins.Items.Add(skinItem);
             }
@@ -918,21 +918,21 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </summary>
         private void FillTaxOptions()
         {
-            ListItem itemTab = new ListItem
+            var itemTab = new ListItem
                 {
                    Text = Localization.GetString("TabTerms.Text", this.LocalResourceFile), Value = "tab"
                 };
 
             this.dDlTaxMode.Items.Add(itemTab);
 
-            ListItem itemAll = new ListItem
+            var itemAll = new ListItem
                 {
                    Text = Localization.GetString("AllTerms.Text", this.LocalResourceFile), Value = "all"
                 };
 
             this.dDlTaxMode.Items.Add(itemAll);
 
-            ListItem itemCustom = new ListItem
+            var itemCustom = new ListItem
                 {
                    Text = Localization.GetString("CustomVocabulary.Text", this.LocalResourceFile), Value = "custom"
                 };
@@ -947,15 +947,15 @@ namespace WatchersNET.DNN.Modules.TagCloud
         {
             try
             {
-                IVocabularyController vocabRep = Util.GetVocabularyController();
+                var vocabRep = Util.GetVocabularyController();
 
-                IQueryable<Vocabulary> vs = from v in vocabRep.GetVocabularies()
+                var vs = from v in vocabRep.GetVocabularies()
                                             where
                                                 v.ScopeType.ScopeType == "Application" ||
                                                 (v.ScopeType.ScopeType == "Portal" && v.ScopeId == this.PortalId)
                                             select v;
 
-                foreach (Vocabulary v in vs)
+                foreach (var v in vs)
                 {
                     this.cBlVocabularies.Items.Add(new ListItem(v.Name, v.VocabularyId.ToString()));
                 }
@@ -971,9 +971,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </summary>
         private void FillWeightList()
         {
-            for (int i = 00; i < 201; i++)
+            for (var i = 00; i < 201; i++)
             {
-                ListItem item = new ListItem { Text = i.ToString(), Value = i.ToString() };
+                var item = new ListItem { Text = i.ToString(), Value = i.ToString() };
 
                 this.dDlTagWeight.Items.Add(item);
             }
@@ -1151,7 +1151,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </param>
         private void GrdTagListItemDataBound(object sender, DataGridItemEventArgs e)
         {
-            ImageButton btnTemp = (ImageButton)e.Item.FindControl("btnDelete");
+            var btnTemp = (ImageButton)e.Item.FindControl("btnDelete");
 
             if (btnTemp != null)
             {
@@ -1230,7 +1230,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </param>
         private void GrdTagLocalesItemDataBound(object sender, DataGridItemEventArgs e)
         {
-            ImageButton btnTemp = (ImageButton)e.Item.FindControl("btnDelete");
+            var btnTemp = (ImageButton)e.Item.FindControl("btnDelete");
 
             if (btnTemp != null)
             {
@@ -1272,7 +1272,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                             this.lBExList.Items.Clear();
 
                             foreach (
-                                ListItem item in this.exlusionWords.Select(wordItem => new ListItem { Text = wordItem.Word, Value = wordItem.WordID.ToString() }))
+                                var item in this.exlusionWords.Select(wordItem => new ListItem { Text = wordItem.Word, Value = wordItem.WordID.ToString() }))
                             {
                                 this.lBExList.Items.Add(item);
                             }
@@ -1300,9 +1300,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
                                 ModuleID = this.TabModuleId
                             };
 
-                            int wordId = DataControl.TagCloudExcludeWordAdd(newItem);
+                            var wordId = DataControl.TagCloudExcludeWordAdd(newItem);
 
-                            ListItem item = new ListItem { Text = newItem.Word, Value = wordId.ToString() };
+                            var item = new ListItem { Text = newItem.Word, Value = wordId.ToString() };
 
                             this.lBExList.Items.Add(item);
                         }
@@ -1415,7 +1415,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 return;
             }
 
-            string sXmlImport = this.ImportFile.Url;
+            var sXmlImport = this.ImportFile.Url;
 
             this.upGrid.Update();
 
@@ -1424,7 +1424,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             try
             {
-                int iFileId = int.Parse(sXmlImport.Substring(7));
+                var iFileId = int.Parse(sXmlImport.Substring(7));
 
                 // var objFileController = new FileController();
                 var objFileInfo = FileManager.Instance.GetFile(iFileId);
@@ -1433,29 +1433,29 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     iFileId, this.PortalSettings.PortalId);*/
                 sXmlImport = this.PortalSettings.HomeDirectoryMapPath + objFileInfo.Folder + objFileInfo.FileName;
 
-                XmlSerializer serializer = new XmlSerializer(typeof(List<CustomTags>));
+                var serializer = new XmlSerializer(typeof(List<CustomTags>));
                 TextReader tr = new StreamReader(Path.Combine(this.PortalSettings.HomeDirectoryMapPath, sXmlImport));
 
-                List<CustomTags> listImport = (List<CustomTags>)serializer.Deserialize(tr);
+                var listImport = (List<CustomTags>)serializer.Deserialize(tr);
 
                 tr.Close();
 
                 if (listImport.Count > 0)
                 {
                     // Check Current List - to Prevent Exceptions when Items Exists
-                    List<CustomTags> listCurrent = DataControl.TagCloudItemsGetByModule(this.ModuleId);
+                    var listCurrent = DataControl.TagCloudItemsGetByModule(this.ModuleId);
 
                     /////////////
                     int[] iNewTagId = { DataControl.TagCloudItemsGetByModule(this.ModuleId).Count };
 
-                    foreach (CustomTags importTag in listImport)
+                    foreach (var importTag in listImport)
                     {
                         while (listCurrent.Find(existsTag => existsTag.iTagId.Equals(iNewTagId[0])) != null)
                         {
                             iNewTagId[0]++;
                         }
 
-                        CustomTags tag = new CustomTags
+                        var tag = new CustomTags
                             {
                                 iWeight = importTag.iWeight,
                                 sTag = importTag.sTag,
@@ -1655,7 +1655,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             // Load old Setting
             if (!string.IsNullOrEmpty((string)this.Settings["TagMode"]))
             {
-                string sTagMode = (string)this.Settings["TagMode"];
+                var sTagMode = (string)this.Settings["TagMode"];
 
                 switch (sTagMode)
                 {
@@ -1694,7 +1694,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 }
 
                 // Delete Old Setting.
-                ModuleController objModules = new ModuleController();
+                var objModules = new ModuleController();
                 objModules.DeleteTabModuleSetting(this.TabModuleId, "TagMode");
             }
 
@@ -1846,13 +1846,13 @@ namespace WatchersNET.DNN.Modules.TagCloud
             // Setting TaxMode Vocabularies
             if (!string.IsNullOrEmpty((string)this.Settings["TaxVocabularies"]))
             {
-                string sVocabularies = (string)this.Settings["TaxVocabularies"];
+                var sVocabularies = (string)this.Settings["TaxVocabularies"];
 
                 this.vocabularies = sVocabularies.Split(';');
 
                 if (this.dDlTaxMode.SelectedValue.Equals("custom"))
                 {
-                    foreach (string sVocabulary in this.vocabularies.Where(sVocabulary => this.cBlVocabularies.Items.FindByValue(sVocabulary) != null))
+                    foreach (var sVocabulary in this.vocabularies.Where(sVocabulary => this.cBlVocabularies.Items.FindByValue(sVocabulary) != null))
                     {
                         this.cBlVocabularies.Items.FindByValue(sVocabulary).Selected = true;
                     }
@@ -1959,7 +1959,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 // Import old setting
                 if (!string.IsNullOrEmpty((string)this.Settings["flashenabled"]))
                 {
-                    bool flashEnabled = bool.Parse((string)this.Settings["flashenabled"]);
+                    var flashEnabled = bool.Parse((string)this.Settings["flashenabled"]);
 
                     this.Settings.Remove("flashenabled");
 
@@ -2013,7 +2013,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             this.exlusionWords.AddRange(DataControl.TagCloudExcludeWordsGetByModule(this.TabModuleId));
 
             foreach (
-                ListItem item in this.exlusionWords.Select(wordItem => new ListItem { Text = wordItem.Word, Value = wordItem.WordID.ToString() }))
+                var item in this.exlusionWords.Select(wordItem => new ListItem { Text = wordItem.Word, Value = wordItem.WordID.ToString() }))
             {
                 this.lBExList.Items.Add(item);
             }
@@ -2410,7 +2410,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             this.SaveSetting(modController, "TaxMode", this.dDlTaxMode.SelectedValue);
 
             // Setting TaxMode Vocabularies
-            string sVocabularies = string.Empty;
+            var sVocabularies = string.Empty;
 
             if (this.dDlTaxMode.SelectedValue.Equals("custom"))
             {
@@ -2499,7 +2499,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     objModules.UpdateTabModuleSetting(TabModuleId, "tagcloudheight", string.Format("{0}%", tbTagsCloudHeight.Text));
                 }
             }*/
-            string sLogCacheKey = string.Format("CloudItems{0}", this.TabModuleId);
+            var sLogCacheKey = string.Format("CloudItems{0}", this.TabModuleId);
 
             if (DataCache.GetCache(sLogCacheKey) != null)
             {
@@ -2543,7 +2543,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             {
                 if (this.ddLTabsVentrianNews.Items.Count > 0)
                 {
-                    string[] values = this.ddLTabsVentrianNews.SelectedValue.Split(Convert.ToChar("-"));
+                    var values = this.ddLTabsVentrianNews.SelectedValue.Split(Convert.ToChar("-"));
 
                     if (values.Length == 2)
                     {
@@ -2557,7 +2557,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             {
                 if (this.ddLTabsVentrianSimple.Items.Count > 0)
                 {
-                    string[] values = this.ddLTabsVentrianSimple.SelectedValue.Split(Convert.ToChar("-"));
+                    var values = this.ddLTabsVentrianSimple.SelectedValue.Split(Convert.ToChar("-"));
 
                     if (values.Length == 2)
                     {
@@ -2581,7 +2581,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             if (this.ddLTabsActiveforums.Items.Count > 0)
             {
-                string[] values = this.ddLTabsActiveforums.SelectedValue.Split(Convert.ToChar("-"));
+                var values = this.ddLTabsActiveforums.SelectedValue.Split(Convert.ToChar("-"));
 
                 if (values.Length == 2)
                 {
@@ -2604,7 +2604,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         {
             if (!string.IsNullOrEmpty(this.tbCustomTag.Text))
             {
-                string sTagName = this.tbCustomTag.Text;
+                var sTagName = this.tbCustomTag.Text;
 
                 // Check if Tag is only one word
                 if (sTagName.Contains(" "))
@@ -2612,7 +2612,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     sTagName.Remove(sTagName.IndexOf(" "));
                 }
 
-                CustomTags tag = new CustomTags
+                var tag = new CustomTags
                     {
                         iWeight = int.Parse(this.dDlTagWeight.SelectedValue),
                         sTag = sTagName,
@@ -2679,7 +2679,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </param>
         private void TagModesSelectedIndexChanged(object sender, EventArgs e)
         {
-            List<TabInfo> tabs = TabController.GetPortalTabs(this.PortalSettings.PortalId, -1, true, true);
+            var tabs = TabController.GetPortalTabs(this.PortalSettings.PortalId, -1, true, true);
 
             var panelOpenSelector = string.Empty;
 
@@ -2816,7 +2816,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             if (!string.IsNullOrEmpty(this.tbCustomTag.Text) && !string.IsNullOrEmpty(this.lTagId.Text))
             {
-                string sTagName = this.tbCustomTag.Text;
+                var sTagName = this.tbCustomTag.Text;
 
                 // Check if Tag is only one word
                 if (sTagName.Contains(" "))

@@ -79,6 +79,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// <param name="iModuleId">
         /// The Module Instance of the Active Forums
         /// </param>
+        /// <param name="tagCount">
+        /// The tag Count.
+        /// </param>
         /// <returns>
         /// The Tags
         /// </returns>
@@ -92,13 +95,13 @@ namespace WatchersNET.DNN.Modules.TagCloud
                                   : GetForumsForUser(
                                       forumUser.UserRoles, iPortalId, iModuleId);
 
-            List<CloudItem> afTagsList = new List<CloudItem>();
+            var afTagsList = new List<CloudItem>();
 
-            using (IDataReader dr = new Common().TagCloud_Get(iPortalId, iModuleId, forumIds, tagCount))
+            using (var dr = new Common().TagCloud_Get(iPortalId, iModuleId, forumIds, tagCount))
             {
                 while (dr.Read())
                 {
-                    CloudItem item = new CloudItem
+                    var item = new CloudItem
                         {
                            Weight = Convert.ToInt32(dr["Priority"]), Text = dr["TagName"].ToString()
                         };
@@ -120,8 +123,8 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// <returns></returns>
         internal static string GetForumsForUser(string UserRoles, int PortalId, int ModuleId, string PermissionType = "CanView")
         {
-            ForumsDB forumsDb = new ForumsDB();
-            string str = string.Empty;
+            var forumsDb = new ForumsDB();
+            var str = string.Empty;
             foreach (Forum forum in forumsDb.Forums_List(PortalId, ModuleId))
             {
                 string AuthorizedRoles;
@@ -238,13 +241,13 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </returns>
         public static List<Locales> TagCloudItemsGetByLocale(int iModulId, int iTagId)
         {
-            List<Locales> localesList = new List<Locales>();
+            var localesList = new List<Locales>();
 
-            using (IDataReader dr = DataProvider.Instance().ExecuteReader("TagCloudItemsGetByLocale", iModulId, iTagId))
+            using (var dr = DataProvider.Instance().ExecuteReader("TagCloudItemsGetByLocale", iModulId, iTagId))
             {
                 while (dr.Read())
                 {
-                    Locales locales = new Locales
+                    var locales = new Locales
                         {
                             Locale = Convert.ToString(dr["Locale"]),
                             TagMl = Convert.ToString(dr["Tag"]),
@@ -269,13 +272,13 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </returns>
         public static List<CustomTags> TagCloudItemsGetByModule(int iModulId)
         {
-            List<CustomTags> tagsList = new List<CustomTags>();
+            var tagsList = new List<CustomTags>();
 
-            using (IDataReader dr = DataProvider.Instance().ExecuteReader("TagCloudItemsGetByModule", iModulId))
+            using (var dr = DataProvider.Instance().ExecuteReader("TagCloudItemsGetByModule", iModulId))
             {
                 while (dr.Read())
                 {
-                    CustomTags tag = new CustomTags
+                    var tag = new CustomTags
                         {
                             iTagId = Convert.ToInt32(dr["TagID"]),
                             iWeight = Convert.ToInt32(dr["Weight"]),
@@ -311,7 +314,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </returns>
         public static int TagCloudSearchWordsOccur(int searchWordsId)
         {
-            using (IDataReader dr = DataProvider.Instance().ExecuteReader("TagCloud_SearchWords", searchWordsId))
+            using (var dr = DataProvider.Instance().ExecuteReader("TagCloud_SearchWords", searchWordsId))
             {
                 while (dr.Read())
                 {
@@ -378,7 +381,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         {
             var wordList = new List<ExcludeWord>();
 
-            using (IDataReader dr = DataProvider.Instance().ExecuteReader("TagCloudExcludeWordsGetByModule", moduleId))
+            using (var dr = DataProvider.Instance().ExecuteReader("TagCloudExcludeWordsGetByModule", moduleId))
             {
                 while (dr.Read())
                 {
@@ -414,7 +417,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         {
             ExcludeWord word = null;
 
-            using (IDataReader dr = DataProvider.Instance().ExecuteReader("TagCloudExcludeWordsGetWord", moduleId, wordId))
+            using (var dr = DataProvider.Instance().ExecuteReader("TagCloudExcludeWordsGetWord", moduleId, wordId))
             {
                 while (dr.Read())
                 {

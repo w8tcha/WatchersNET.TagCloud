@@ -41,9 +41,9 @@ namespace VRK.Controls
         public static double Mean(IEnumerable<double> values)
         {
             double sum = 0;
-            int count = 0;
+            var count = 0;
 
-            foreach (double d in values)
+            foreach (var d in values)
             {
                 sum += d;
                 count++;
@@ -68,11 +68,11 @@ namespace VRK.Controls
         {
             mean = Mean(values);
             double sumOfDiffSquares = 0;
-            int count = 0;
+            var count = 0;
 
-            foreach (double d in values)
+            foreach (var d in values)
             {
-                double diff = d - mean;
+                var diff = d - mean;
                 sumOfDiffSquares += diff * diff;
                 count++;
             }

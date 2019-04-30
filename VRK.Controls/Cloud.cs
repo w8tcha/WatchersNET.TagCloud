@@ -74,7 +74,7 @@ namespace VRK.Controls
         {
             get
             {
-                string val = this.ViewState["DataHrefField"] as string;
+                var val = this.ViewState["DataHrefField"] as string;
 
                 return val ?? string.Empty;
             }
@@ -98,7 +98,7 @@ namespace VRK.Controls
         {
             get
             {
-                string val = this.ViewState["DataHrefFormatString"] as string;
+                var val = this.ViewState["DataHrefFormatString"] as string;
 
                 return val ?? string.Empty;
             }
@@ -123,7 +123,7 @@ namespace VRK.Controls
         {
             get
             {
-                string val = this.ViewState["DataTextField"] as string;
+                var val = this.ViewState["DataTextField"] as string;
 
                 return val ?? string.Empty;
             }
@@ -147,7 +147,7 @@ namespace VRK.Controls
         {
             get
             {
-                string val = this.ViewState["DataTextFormatString"] as string;
+                var val = this.ViewState["DataTextFormatString"] as string;
 
                 return val ?? string.Empty;
             }
@@ -172,7 +172,7 @@ namespace VRK.Controls
         {
             get
             {
-                string val = this.ViewState["DataTitleField"] as string;
+                var val = this.ViewState["DataTitleField"] as string;
 
                 return val ?? string.Empty;
             }
@@ -197,7 +197,7 @@ namespace VRK.Controls
         {
             get
             {
-                string val = this.ViewState["DataTitleFormatString"] as string;
+                var val = this.ViewState["DataTitleFormatString"] as string;
 
                 return val ?? string.Empty;
             }
@@ -222,7 +222,7 @@ namespace VRK.Controls
         {
             get
             {
-                string val = this.ViewState["DataWeightField"] as string;
+                var val = this.ViewState["DataWeightField"] as string;
 
                 return val ?? string.Empty;
             }
@@ -246,7 +246,7 @@ namespace VRK.Controls
         {
             get
             {
-                string val = this.ViewState["ItemCssClassPrefix"] as string;
+                var val = this.ViewState["ItemCssClassPrefix"] as string;
 
                 return val ?? string.Empty;
             }
@@ -265,7 +265,7 @@ namespace VRK.Controls
         {
             get
             {
-                string val = this.ViewState["ItemSeparator"] as string;
+                var val = this.ViewState["ItemSeparator"] as string;
 
                 return val ?? string.Empty;
             }
@@ -284,7 +284,7 @@ namespace VRK.Controls
         {
             get
             {
-                string val = this.ViewState["Skin"] as string;
+                var val = this.ViewState["Skin"] as string;
 
                 return val ?? string.Empty;
             }
@@ -317,8 +317,8 @@ namespace VRK.Controls
         {
             get
             {
-                bool ret = false;
-                object obj = this.ViewState["RenderAsUl"];
+                var ret = false;
+                var obj = this.ViewState["RenderAsUl"];
                 if (obj != null)
                 {
                     ret = Convert.ToBoolean(obj);
@@ -341,8 +341,8 @@ namespace VRK.Controls
         {
             get
             {
-                bool ret = false;
-                object obj = this.ViewState["CanvasEnabled"];
+                var ret = false;
+                var obj = this.ViewState["CanvasEnabled"];
                 if (obj != null)
                 {
                     ret = Convert.ToBoolean(obj);
@@ -365,8 +365,8 @@ namespace VRK.Controls
         {
             get
             {
-                bool ret = false;
-                object obj = this.ViewState["RenderItemWeight"];
+                var ret = false;
+                var obj = this.ViewState["RenderItemWeight"];
                 if (obj != null)
                 {
                     ret = Convert.ToBoolean(obj);
@@ -459,13 +459,13 @@ namespace VRK.Controls
             }
 
             double mean;
-            double stdDev = Statistics.StdDev(this.ItemWeights, out mean);
+            var stdDev = Statistics.StdDev(this.ItemWeights, out mean);
 
-            bool hasCssClassPrefix = !string.IsNullOrEmpty(this.ItemCssClassPrefix);
-            int index = 0;
-            int index2 = 10;
+            var hasCssClassPrefix = !string.IsNullOrEmpty(this.ItemCssClassPrefix);
+            var index = 0;
+            var index2 = 10;
 
-            foreach (CloudItem item in this.Items)
+            foreach (var item in this.Items)
             {
                 /*HtmlAnchor a = new HtmlAnchor
                                    {
@@ -480,9 +480,9 @@ namespace VRK.Controls
                                    };*/
 
                 // UL Wrapper
-                HtmlGenericControl li = new HtmlGenericControl("li");
+                var li = new HtmlGenericControl("li");
 
-                HtmlAnchor a = new HtmlAnchor
+                var a = new HtmlAnchor
                                    {
                                        HRef = item.Href,
                                        InnerHtml =
@@ -497,7 +497,7 @@ namespace VRK.Controls
                                        Title = item.Title
                                    };
 
-                int normalWeight = NormalizeWeight(item.Weight, mean, stdDev);
+                var normalWeight = NormalizeWeight(item.Weight, mean, stdDev);
 
                 if (hasCssClassPrefix)
                 {
@@ -569,7 +569,7 @@ namespace VRK.Controls
 
             if (this.DesignMode && this.Items.Count == 0)
             {
-                HtmlAnchor a = new HtmlAnchor { HRef = "javascript:void(0)", InnerText = SR.Cloud };
+                var a = new HtmlAnchor { HRef = "javascript:void(0)", InnerText = SR.Cloud };
                 this.Controls.Add(a);
             }
 
@@ -607,7 +607,7 @@ namespace VRK.Controls
         /// </returns>
         private static int NormalizeWeight(double weight, double mean, double stdDev)
         {
-            double factor = weight - mean;
+            var factor = weight - mean;
 
             if (factor != 0 && stdDev != 0)
             {
@@ -629,9 +629,9 @@ namespace VRK.Controls
         /// </param>
         private void CreateItemsFromData(IEnumerable dataSource)
         {
-            foreach (object data in dataSource)
+            foreach (var data in dataSource)
             {
-                CloudItem item = new CloudItem();
+                var item = new CloudItem();
 
                 if (string.IsNullOrEmpty(this.DataHrefField))
                 {

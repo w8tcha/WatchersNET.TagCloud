@@ -81,11 +81,11 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </returns>
         public string ExportModule(int moduleId)
         {
-            ModuleController objModules = new ModuleController();
+            var objModules = new ModuleController();
 
-            Hashtable moduleSettings = objModules.GetTabModuleSettings(TagCloud.CurrentTabModuleId);
+            var moduleSettings = objModules.GetTabModuleSettings(TagCloud.CurrentTabModuleId);
 
-            StringBuilder sBXml = new StringBuilder();
+            var sBXml = new StringBuilder();
 
             try
             {
@@ -750,9 +750,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
         {
             try
             {
-                XmlNode xmlTagCloud = Globals.GetContent(content, "TagCloud");
+                var xmlTagCloud = Globals.GetContent(content, "TagCloud");
 
-                ModuleController objModules = new ModuleController();
+                var objModules = new ModuleController();
 
                 foreach (XmlNode xmlContent in xmlTagCloud.SelectNodes("Settings"))
                 {

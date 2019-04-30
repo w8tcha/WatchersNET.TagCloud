@@ -100,32 +100,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
         }
 
         /// <summary>
-        /// Check for secure connection
-        /// </summary>
-        /// <param name="request">
-        /// The http request.
-        /// </param>
-        /// <returns>
-        /// returns value if true or false
-        /// </returns>
-        public static bool IsHttps(HttpRequest request)
-        {
-            return request != null && request.IsSecureConnection;
-        }
-
-        /// <summary>
-        /// Determines whether the specified input contains number.
-        /// </summary>
-        /// <param name="input">The input.</param>
-        /// <returns>
-        ///   <c>true</c> if the specified input contains number; otherwise, <c>false</c>.
-        /// </returns>
-        public static bool ContainsNumber(string input)
-        {
-            return input.Any(char.IsDigit);
-        }
-
-        /// <summary>
         /// Check if Object is a Number
         /// </summary>
         /// <param name="valueToCheck">Object to Check</param>
@@ -135,52 +109,11 @@ namespace WatchersNET.DNN.Modules.TagCloud
         public static bool IsNumeric(object valueToCheck)
         {
             double dummy;
-            string inputValue = Convert.ToString(valueToCheck);
-
-            bool numeric = double.TryParse(inputValue, System.Globalization.NumberStyles.Any, null, out dummy);
-
-            return numeric;
-        }
-
-        /// <summary>
-        /// Check if Object is a Url
-        /// </summary>
-        /// <param name="valueToCheck">Object to Check</param>
-        /// <returns>
-        ///   <c>true</c> if the specified value to check is URL; otherwise, <c>false</c>.
-        /// </returns>
-        public static bool IsUrl(object valueToCheck)
-        {
             var inputValue = Convert.ToString(valueToCheck);
 
-            return inputValue.Contains("http") || inputValue.Contains("www") || inputValue.Contains(".");
-        }
+            var numeric = double.TryParse(inputValue, System.Globalization.NumberStyles.Any, null, out dummy);
 
-        /// <summary>
-        /// Check if Length of Tag is Ok
-        /// </summary>
-        /// <param name="valueToCheck">Object to Check</param>
-        /// <returns>
-        ///   <c>true</c> if [is length ok] [the specified value to check]; otherwise, <c>false</c>.
-        /// </returns>
-        public static bool IsLengthOk(object valueToCheck)
-        {
-            string sInputValue = Convert.ToString(valueToCheck);
-
-            bool bResult = sInputValue.Length > 1;
-
-            if (sInputValue.Length > 43)
-            {
-                bResult = false;
-            }
-
-            // Remove Websites
-            if (sInputValue.Contains(".") && sInputValue.Contains("/"))
-            {
-                bResult = false;
-            }
-
-            return bResult;
+            return numeric;
         }
 
         /// <summary>
@@ -190,7 +123,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// <returns>Cleaned String</returns>
         public static string RemoveIllegalCharecters(string sString)
         {
-            string sNewComposed = sString;
+            var sNewComposed = sString;
 
             sNewComposed = sNewComposed.Replace("'", string.Empty);
             sNewComposed = sNewComposed.Replace("\"", string.Empty);
@@ -223,44 +156,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
             }
 
             return sNewComposed;
-        }
-
-        /// <summary>
-        /// Sorts the Keyword by Search Provider
-        /// </summary>
-        /// <param name="sReferrer">Original Referrer URL</param>
-        /// <returns>The Keyword</returns>
-        public static string SortKeyWord(string sReferrer)
-        {
-            string sRef = string.Empty;
-
-            if (sReferrer.Contains("q="))
-            {
-                // Google and Bing, Ask.com Search
-                sRef = sReferrer.Substring(sReferrer.IndexOf("q=", StringComparison.Ordinal) + 2);
-
-                if (sRef.Contains("&"))
-                {
-                    sRef = sRef.Replace(sRef.Substring(sRef.IndexOf("&", StringComparison.Ordinal)), string.Empty);
-                }
-            }
-            else if (sReferrer.Contains("search?p="))
-            {
-                // Yahoo Search
-                sRef = sReferrer.Substring(sReferrer.IndexOf("p=", StringComparison.Ordinal) + 2);
-
-                if (sRef.Contains("&"))
-                {
-                    sRef = sRef.Replace(sRef.Substring(sRef.IndexOf("&", StringComparison.Ordinal)), string.Empty);
-                }
-            }
-            else if (sReferrer.Contains(@"Search="))
-            {
-                // Portal Search
-                sRef = sReferrer.Substring(sReferrer.IndexOf("Search=", StringComparison.Ordinal) + 7);
-            }
-
-            return sRef;
         }
 
         /// <summary>
@@ -320,9 +215,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </returns>
         public static string GetSeoLink(int iPortalId, int iTabId, string sControlKey, string sTitle, params string[] sAdditionalParameters)
         {
-            TabInfo tabInfo = (new TabController()).GetTab(iTabId, iPortalId, false);
+            var tabInfo = (new TabController()).GetTab(iTabId, iPortalId, false);
             
-            string sPath = "~/default.aspx?tabid=" + tabInfo.TabID;
+            var sPath = "~/default.aspx?tabid=" + tabInfo.TabID;
 
             sPath = sAdditionalParameters.Aggregate(sPath, (current, p) => current + string.Format("&{0}", p));
 
