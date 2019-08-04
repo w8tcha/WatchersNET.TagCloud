@@ -55,9 +55,9 @@ The Color Settings can be easily changed with an Color Picker
 Easy Import and Export of all Module Settings
 
 *Demos*
-* [Demo 1 (With Flash)](http://www.watchersnet.de/DotNetNuke/Module/TagCloud.aspx?Module1014_SelectById=1016)
-* [Demo 2 (Without Flash)](http://www.watchersnet.de/DotNetNuke/Module/TagCloud.aspx?Module1014_SelectById=1017)
-* [Demo 3 (wordle Word Cloud)](http://www.watchersnet.de/DotNetNuke/Module/TagCloud.aspx?Module1014_SelectById=1074)
+* [Demo 1 (With Flash)](http://www.watchersnet.de/DNN/Module/TagCloud.aspx?Module1014_SelectById=1016)
+* [Demo 2 (Without Flash)](http://www.watchersnet.de/DNN/Module/TagCloud.aspx?Module1014_SelectById=1017)
+* [Demo 3 (wordle Word Cloud)](http://www.watchersnet.de/DNN/Module/TagCloud.aspx?Module1014_SelectById=1074)
 
 *Screenshots*
 ![wordle" - Word Cloud](http://www.watchersnet.de/Portals/0/screenshots/dnn/dnnTagCloudWordle.png)
