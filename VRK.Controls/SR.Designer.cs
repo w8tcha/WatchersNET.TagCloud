@@ -8,10 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace VRK.Controls {
-    using System;
-    
-    
+namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls {
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>

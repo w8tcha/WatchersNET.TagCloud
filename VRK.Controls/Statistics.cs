@@ -13,7 +13,7 @@
 *  *********************************************************************************************
 */
 
-namespace VRK.Controls
+namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
 {
     #region
 
@@ -91,8 +91,7 @@ namespace VRK.Controls
         /// </returns>
         public static double StdDev(IEnumerable<double> values)
         {
-            double mean;
-            return StdDev(values, out mean);
+            return StdDev(values, out var mean);
         }
 
         #endregion

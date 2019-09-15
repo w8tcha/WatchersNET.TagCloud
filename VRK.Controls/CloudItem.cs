@@ -13,7 +13,7 @@
 *  *********************************************************************************************
 */
 
-namespace VRK.Controls
+namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
 {
     #region
 
@@ -122,15 +122,9 @@ namespace VRK.Controls
         /// </summary>
         public string Href
         {
-            get
-            {
-                return this.href;
-            }
+            get => this.href;
 
-            set
-            {
-                this.href = value;
-            }
+            set => this.href = value;
         }
 
         /// <summary>
@@ -138,15 +132,9 @@ namespace VRK.Controls
         /// </summary>
         public string Text
         {
-            get
-            {
-                return this.text;
-            }
+            get => this.text;
 
-            set
-            {
-                this.text = value;
-            }
+            set => this.text = value;
         }
 
         /// <summary>
@@ -154,15 +142,9 @@ namespace VRK.Controls
         /// </summary>
         public string Title
         {
-            get
-            {
-                return this.title;
-            }
+            get => this.title;
 
-            set
-            {
-                this.title = value;
-            }
+            set => this.title = value;
         }
 
         /// <summary>
@@ -170,15 +152,9 @@ namespace VRK.Controls
         /// </summary>
         public double Weight
         {
-            get
-            {
-                return this.weight;
-            }
+            get => this.weight;
 
-            set
-            {
-                this.weight = value;
-            }
+            set => this.weight = value;
         }
 
         #endregion

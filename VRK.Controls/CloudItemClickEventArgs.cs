@@ -13,7 +13,7 @@
 *  *********************************************************************************************
 */
 
-namespace VRK.Controls
+namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
 {
     #region
 
@@ -28,11 +28,6 @@ namespace VRK.Controls
     {
         #region Constants and Fields
 
-        /// <summary>
-        /// The _item.
-        /// </summary>
-        private readonly CloudItem cloudItem;
-
         #endregion
 
         #region Constructors and Destructors
@@ -45,7 +40,7 @@ namespace VRK.Controls
         /// </param>
         internal CloudItemClickEventArgs(CloudItem item)
         {
-            this.cloudItem = item;
+            this.Item = item;
         }
 
         #endregion
@@ -55,13 +50,7 @@ namespace VRK.Controls
         /// <summary>
         ///   Gets the item which is clicked.
         /// </summary>
-        public CloudItem Item
-        {
-            get
-            {
-                return this.cloudItem;
-            }
-        }
+        public CloudItem Item { get; }
 
         #endregion
     }

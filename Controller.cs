@@ -10,7 +10,7 @@
 *
 *   Copyright(c) Ingo Herbote (thewatcher@watchersnet.de)
 *   All rights reserved.
-*   Internet: http://www.watchersnet.de/TagCloud
+*   Internet: https://github.com/w8tcha/WatchersNET.TagCloud
 *
 *   WatchersNET.TagCloud is released under the New BSD License, see below
 ************************************************************************************************
@@ -47,7 +47,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
     #region
 
     using System;
-    using System.Collections;
     using System.Text;
     using System.Xml;
 
@@ -521,7 +520,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 }*/
                 try
                 {
-                    sTcolor = string.Format("0x{0}", moduleSettings["tcolor"]);
+                    sTcolor = $"0x{moduleSettings["tcolor"]}";
                 }
                 finally
                 {
@@ -533,7 +532,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
                 try
                 {
-                    sTcolor2 = string.Format("0x{0}", moduleSettings["tcolor2"]);
+                    sTcolor2 = $"0x{moduleSettings["tcolor2"]}";
                 }
                 finally
                 {
@@ -545,7 +544,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
                 try
                 {
-                    sHicolor = string.Format("0x{0}", moduleSettings["hicolor"]);
+                    sHicolor = $"0x{moduleSettings["hicolor"]}";
                 }
                 finally
                 {
@@ -557,7 +556,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
                 try
                 {
-                    sBgcolor = string.Format("#{0}", moduleSettings["bgcolor"]);
+                    sBgcolor = $"#{moduleSettings["bgcolor"]}";
                 }
                 finally
                 {

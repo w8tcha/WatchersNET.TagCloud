@@ -10,7 +10,7 @@
 *
 *   Copyright(c) Ingo Herbote (thewatcher@watchersnet.de)
 *   All rights reserved.
-*   Internet: http://www.watchersnet.de/TagCloud
+*   Internet: https://github.com/w8tcha/WatchersNET.TagCloud
 *
 *   WatchersNET.TagCloud is released under the New BSD License, see below
 ************************************************************************************************

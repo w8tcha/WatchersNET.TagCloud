@@ -10,7 +10,7 @@
 *
 *   Copyright(c) Ingo Herbote (thewatcher@watchersnet.de)
 *   All rights reserved.
-*   Internet: http://www.watchersnet.de/TagCloud
+*   Internet: https://github.com/w8tcha/WatchersNET.TagCloud
 *
 *   WatchersNET.TagCloud is released under the New BSD License, see below
 ************************************************************************************************
@@ -54,31 +54,31 @@ namespace WatchersNET.DNN.Modules.TagCloud.Objects
         /// <summary>
         /// Gets or sets The Tag Word
         /// </summary>
-        public string sTag { get; set; }
+        public string Tag { get; set; }
 
         /// <summary>
         /// Gets or sets The Tag Url
         /// </summary>
-        public string sUrl { get; set; }
+        public string Url { get; set; }
 
         /// <summary>
         /// Gets or sets The Tag Weight in the Database
         /// </summary>
-        public int iWeight { get; set; }
+        public int Weight { get; set; }
 
         /// <summary>
         /// Gets or sets The Tag ModuleID
         /// </summary>
-        public int iModulId { get; set; }
+        public int ModuleId { get; set; }
 
         /// <summary>
         /// Gets or sets The Tag ID
         /// </summary>
-        public int iTagId { get; set; }
+        public int TagId { get; set; }
 
         /// <summary>
         /// Gets or sets Localized Tags
         /// </summary>
-        public List<Locales> localTags { get; set; }
+        public List<Locales> LocalTags { get; set; }
     }
 }

@@ -130,7 +130,7 @@
   </data>
   <data name="ModuleHelp.Text" xml:space="preserve">
     <value>&lt;h1&gt;WatchersNET TagCloud &lt;/h1&gt;
-&lt;h2&gt;Copyright(c) Ingo Herbote. All rights reserved. (&lt;a href="http://www.watchersnet.de/TagCloud"&gt;www.WatchersNET.de&lt;/a&gt;)&lt;/h2&gt; &lt;p&gt;This Module displays Tags from various sources  as a standard Web 2.0 Tag Cloud.  The Tags are links which linked to the Portal Search to  show all Pages with that Tag.&lt;/p&gt;
+&lt;h2&gt;Copyright(c) Ingo Herbote. All rights reserved. (&lt;a href="https://github.com/w8tcha/WatchersNET.TagCloud"&gt;www.WatchersNET.de&lt;/a&gt;)&lt;/h2&gt; &lt;p&gt;This Module displays Tags from various sources  as a standard Web 2.0 Tag Cloud.  The Tags are links which linked to the Portal Search to  show all Pages with that Tag.&lt;/p&gt;
 &lt;p&gt; The Tag Cloud can be rendered as HTML5 Canvas 3D Cloud, or Flash 3D Cloud, or as Plain HTML with Skinning  as a list of hyperlinks in varying styles depending on a weight.    This is similar to tag clouds in del.icio.us or Flickr.&lt;/p&gt;</value>
   </data>
   <data name="CommonWords.Text" xml:space="preserve">

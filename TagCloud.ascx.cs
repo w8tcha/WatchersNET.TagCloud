@@ -10,7 +10,7 @@
 *
 *   Copyright(c) Ingo Herbote (thewatcher@watchersnet.de)
 *   All rights reserved.
-*   Internet: http://www.watchersnet.de/TagCloud
+*   Internet: https://github.com/w8tcha/WatchersNET.TagCloud
 *
 *   WatchersNET.TagCloud is released under the New BSD License, see below
 ************************************************************************************************
@@ -47,7 +47,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
     #region
 
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
@@ -66,11 +65,11 @@ namespace WatchersNET.DNN.Modules.TagCloud
     using DotNetNuke.Entities.Portals;
     using DotNetNuke.Entities.Tabs;
     using DotNetNuke.Framework;
+    using DotNetNuke.Framework.JavaScriptLibraries;
     using DotNetNuke.Security;
     using DotNetNuke.Security.Permissions;
     using DotNetNuke.Services.Exceptions;
     using DotNetNuke.Services.Localization;
-    using DotNetNuke.Services.Search;
     using DotNetNuke.Web.Client.ClientResourceManagement;
 
     using VRK.Controls;
@@ -162,7 +161,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </returns>
         public List<CloudItem> GetItems()
         {
-            var sLogCacheKey = string.Format("CloudItems{0}", this.TabModuleId);
+            var sLogCacheKey = $"CloudItems{this.TabModuleId}";
 
             List<CloudItem> itemList;
 
@@ -327,7 +326,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             if (this.settings.CacheItems)
             {
-                DataCache.SetCache(string.Format("CloudItems{0}", this.TabModuleId), list);
+                DataCache.SetCache($"CloudItems{this.TabModuleId}", list);
             }
 
             return list;
@@ -373,64 +372,38 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 factor /= stdDev;
             }
 
-            return (factor > 2)
+            return factor > 2
                        ? 7
-                       : (factor > 1)
+                       : factor > 1
                              ? 6
-                             : (factor > 0.5) ? 5 : (factor > -0.5) ? 4 : (factor > -1) ? 3 : (factor > -2) ? 2 : 1;
-        }
-
-        /// <summary>
-        /// Check if the User can see the Page where the Word (Tag) came from
-        /// </summary>
-        /// <param name="iPortalId">
-        /// Portal ID
-        /// </param>
-        /// <param name="sWord">
-        /// Word to Check
-        /// </param>
-        /// <returns>
-        /// Returns if the User can see the Page or not.
-        /// </returns>
-        private static bool UserSeeTag(int iPortalId, string sWord)
-        {
-            var bCanSee = false;
-            var results = SearchDataStoreProvider.Instance().GetSearchResults(iPortalId, sWord);
-
-            if (results.Cast<SearchResultsInfo>().Select(
-                result => TabPermissionController.GetTabPermissions(result.TabId, iPortalId)).Any(tabPermissions => PortalSecurity.IsInRoles(tabPermissions.ToString("VIEW"))))
-            {
-                 bCanSee = true;
-            }
-
-            return bCanSee;
+                             : factor > 0.5 ? 5 : factor > -0.5 ? 4 : factor > -1 ? 3 : factor > -2 ? 2 : 1;
         }
 
         /// <summary>
         /// Check if the User can see the Page
         /// </summary>
-        /// <param name="iPortalId">
+        /// <param name="portalId">
         /// Portal ID
         /// </param>
-        /// <param name="iTabId">
+        /// <param name="tabId">
         /// Tab to Check
         /// </param>
         /// <returns>
         /// Returns if the User can see the Page or not.
         /// </returns>
-        private static bool UserSeeTag(int iPortalId, int iTabId)
+        private static bool UserSeeTag(int portalId, int tabId)
         {
-            var bCanSee = false;
+            var canSee = false;
 
-            var tabPermissions = TabPermissionController.GetTabPermissions(iTabId, iPortalId);
+            var tabPermissions = TabPermissionController.GetTabPermissions(tabId, portalId);
 
             // Get The Tab
             if (PortalSecurity.IsInRoles(tabPermissions.ToString("VIEW")))
             {
-                bCanSee = true;
+                canSee = true;
             }
 
-            return bCanSee;
+            return canSee;
         }
 
         /// <summary>
@@ -438,7 +411,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </summary>
         private void AddCanvasScript()
         {
-            jQuery.RequestRegistration();
+            JavaScript.RequestRegistration(CommonJs.jQuery);
 
             if (HttpContext.Current.Items["tagcanvas_registered"] == null)
             {
@@ -491,7 +464,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             ScriptManager.RegisterStartupScript(
                 this,
                 typeof(Page),
-                string.Format("CanvasScript{0}", this.tagCloudDiv.ClientID),
+                $"CanvasScript{this.tagCloudDiv.ClientID}",
                 canvasScript.ToString(),
                 true);
         }
@@ -502,7 +475,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// <param name="cloudItems">The item list.</param>
         private void AddWordCloudScript(IEnumerable<CloudItem> cloudItems)
         {
-            jQuery.RequestRegistration();
+            JavaScript.RequestRegistration(CommonJs.jQuery);
 
             if (HttpContext.Current.Items["wordcloudjs_registered"] == null)
             {
@@ -576,7 +549,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             ScriptManager.RegisterStartupScript(
                 this,
                 typeof(Page),
-                string.Format("CanvasScript{0}", this.tagCloudDiv.ClientID),
+                $"CanvasScript{this.tagCloudDiv.ClientID}",
                 canvasScript.ToString(),
                 true);
         }
@@ -599,8 +572,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 HttpContext.Current.Items.Add("swfobject_registered", "true");
             }
 
-            double mean;
-            var stdDev = Statistics.StdDev(this.ItemWeights, out mean);
+            var stdDev = Statistics.StdDev(this.ItemWeights, out var mean);
 
             var sBTags = new StringBuilder();
 
@@ -611,19 +583,14 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 var normalWeight = NormalizeWeight(cloudItem.Weight, mean, stdDev);
 
                 sBTags.AppendLine(
-                    string.Format(
-                        "<a href='{0}' title='{1}' style='font-size:{2}px'>{3}</a>",
-                        cloudItem.Href,
-                        HttpUtility.HtmlEncode(cloudItem.Title),
-                        this.fontSizes[normalWeight - 1],
-                        cloudItem.Text));
+                    $"<a href='{cloudItem.Href}' title='{HttpUtility.HtmlEncode(cloudItem.Title)}' style='font-size:{this.fontSizes[normalWeight - 1]}px'>{cloudItem.Text}</a>");
             }
 
             sBTags.AppendLine("</tags>");
 
             var sWmode = this.settings.Bgcolor.Contains("transparent")
                                 ? "params.wmode = \"transparent\";"
-                                : string.Format("params.bgcolor = \"{0}\";", this.settings.Bgcolor);
+                                : $"params.bgcolor = \"{this.settings.Bgcolor}\";";
 
             var flashScript = new StringBuilder();
 
@@ -653,7 +620,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             ScriptManager.RegisterStartupScript(
                 this,
                 csType,
-                string.Format("TagCloudFlashScript{0}", this.tagCloudDiv.ClientID),
+                $"TagCloudFlashScript{this.tagCloudDiv.ClientID}",
                 flashScript.ToString(),
                 true);
         }
@@ -711,7 +678,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                         entry = new CloudItem(
                             Utility.RemoveIllegalCharecters(tag.Text),
                             tag.Weight,
-                            Globals.NavigateURL(this.settings.AfTab, string.Empty, "afv=search", string.Format("aftg={0}", tag.Text)),
+                            Globals.NavigateURL(this.settings.AfTab, string.Empty, "afv=search", $"aftg={tag.Text}"),
                             tag.Text);
                     }
                     else
@@ -744,11 +711,11 @@ namespace WatchersNET.DNN.Modules.TagCloud
             {
                 ////////////////////////
                 foreach (var tag in
-                    DataControl.TagCloudItemsGetByModule(this.ModuleId).Where(tag => tag.iWeight >= this.settings.OccurCount))
+                    DataControl.TagCloudItemsGetByModule(this.ModuleId).Where(tag => tag.Weight >= this.settings.OccurCount))
                 {
-                    if (Utility.IsNumeric(tag.sUrl) && this.settings.TagsLinkChk)
+                    if (Utility.IsNumeric(tag.Url) && this.settings.TagsLinkChk)
                     {
-                        if (!UserSeeTag(PortalSettings.PortalId, int.Parse(tag.sUrl)))
+                        if (!UserSeeTag(PortalSettings.PortalId, int.Parse(tag.Url)))
                         {
                             continue;
                         }
@@ -759,12 +726,12 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     // Has Localized Value?
                     var currentCulture = Thread.CurrentThread.CurrentUICulture;
 
-                    tag.localTags = DataControl.TagCloudItemsGetByLocale(this.ModuleId, tag.iTagId);
+                    tag.LocalTags = DataControl.TagCloudItemsGetByLocale(this.ModuleId, tag.TagId);
 
                     string sTag = null, sTagUrl = null;
 
                     foreach (var locales in
-                        tag.localTags.Where(locales => locales.Locale.Equals(currentCulture.ToString())))
+                        tag.LocalTags.Where(locales => locales.Locale.Equals(currentCulture.ToString())))
                     {
                         sTag = locales.TagMl;
                         sTagUrl = locales.UrlMl;
@@ -774,22 +741,22 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
                     if (string.IsNullOrEmpty(sTag))
                     {
-                        sTag = tag.sTag;
+                        sTag = tag.Tag;
                     }
 
                     if (string.IsNullOrEmpty(sTagUrl))
                     {
-                        sTagUrl = tag.sUrl;
+                        sTagUrl = tag.Url;
                     }
 
                     if (this.settings.TagsLink)
                     {
                         entry = new CloudItem(
-                            Utility.RemoveIllegalCharecters(sTag), tag.iWeight, this.FormatUrl(sTagUrl), sTag);
+                            Utility.RemoveIllegalCharecters(sTag), tag.Weight, this.FormatUrl(sTagUrl), sTag);
                     }
                     else
                     {
-                        entry = new CloudItem(Utility.RemoveIllegalCharecters(sTag), tag.iWeight, null, sTag);
+                        entry = new CloudItem(Utility.RemoveIllegalCharecters(sTag), tag.Weight, null, sTag);
                     }
 
                     list.Add(entry);
@@ -832,7 +799,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                             Globals.NavigateURL(
                                 this.settings.VentrianTabNews,
                                 string.Empty,
-                                string.Format("articletype=tagview&tag={0}", Server.UrlEncode(tag.NameLowered))),
+                                $"articletype=tagview&tag={this.Server.UrlEncode(tag.NameLowered)}"),
                             tag.Name);
                     }
                     else
@@ -882,8 +849,8 @@ namespace WatchersNET.DNN.Modules.TagCloud
                             Globals.NavigateURL(
                                 this.settings.VentrianTabSimple,
                                 string.Empty,
-                                string.Format("Tag={0}", tag.Name),
-                                string.Format("Tags={0}", simpleGalleryInstance.TabModuleID)),
+                                $"Tag={tag.Name}",
+                                $"Tags={simpleGalleryInstance.TabModuleID}"),
                             tag.Name);
                     }
                     else
@@ -983,7 +950,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                         var vs = from v in vocabRep.GetVocabularies()
                                                     where
                                                         v.ScopeType.ScopeType == "Application" ||
-                                                        (v.ScopeType.ScopeType == "Portal" && v.ScopeId == PortalSettings.PortalId)
+                                                        v.ScopeType.ScopeType == "Portal" && v.ScopeId == this.PortalSettings.PortalId
                                                     select v;
 
                         foreach (var v in vs)
@@ -1148,8 +1115,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             // Setting Render Item Weight
             if (!string.IsNullOrEmpty((string)moduleSettings["RenderItemWeight"]))
             {
-                bool renderItemWeight;
-                bool.TryParse((string)moduleSettings["RenderItemWeight"], out renderItemWeight);
+                bool.TryParse((string)moduleSettings["RenderItemWeight"], out var renderItemWeight);
 
                 this.settings.RenderItemWeight = renderItemWeight;
             }
@@ -1194,40 +1160,35 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             if (!string.IsNullOrEmpty((string)moduleSettings["ModeCustom"]))
             {
-                bool modeCustom;
-                bool.TryParse((string)moduleSettings["ModeCustom"], out modeCustom);
+                bool.TryParse((string)moduleSettings["ModeCustom"], out var modeCustom);
 
                 this.settings.ModeCustom = modeCustom;
             }
 
             if (!string.IsNullOrEmpty((string)moduleSettings["ModeTax"]))
             {
-                bool modeTax;
-                bool.TryParse((string)moduleSettings["ModeTax"], out modeTax);
+                bool.TryParse((string)moduleSettings["ModeTax"], out var modeTax);
 
                 this.settings.ModeTax = modeTax;
             }
 
             if (!string.IsNullOrEmpty((string)moduleSettings["ModeNewsarticles"]))
             {
-                bool modenews;
-                bool.TryParse((string)moduleSettings["ModeNewsarticles"], out modenews);
+                bool.TryParse((string)moduleSettings["ModeNewsarticles"], out var modenews);
 
                 this.settings.ModeNewsarticles = modenews;
             }
 
             if (!string.IsNullOrEmpty((string)moduleSettings["ModeSimplegallery"]))
             {
-                bool modesimple;
-                bool.TryParse((string)moduleSettings["ModeSimplegallery"], out modesimple);
+                bool.TryParse((string)moduleSettings["ModeSimplegallery"], out var modesimple);
 
                 this.settings.ModeSimplegallery = modesimple;
             }
 
             if (!string.IsNullOrEmpty((string)moduleSettings["ModeActiveforums"]))
             {
-                bool modeactive;
-                bool.TryParse((string)moduleSettings["ModeActiveforums"], out modeactive);
+                bool.TryParse((string)moduleSettings["ModeActiveforums"], out var modeactive);
 
                 this.settings.ModeActiveforums = modeactive;
             }
@@ -1368,12 +1329,13 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             if (!this.settings.SkinName.Equals("None"))
             {
-                ClientResourceManager.RegisterStyleSheet(this.Page, string.Format("{0}/{1}.css", this.ResolveUrl("Skins"), this.settings.SkinName));
+                ClientResourceManager.RegisterStyleSheet(this.Page,
+                    $"{this.ResolveUrl("Skins")}/{this.settings.SkinName}.css");
 
                 //PageBase.RegisterStyleSheet(Page,  string.Format("{0}/{1}.css", this.ResolveUrl("Skins"), this.settings.SkinName));
 
-                this.tagCloudDiv.CssClass += string.Format("-{0}", this.settings.SkinName);
-                this.c1.ItemCssClassPrefix += string.Format("-{0}", this.settings.SkinName);
+                this.tagCloudDiv.CssClass += $"-{this.settings.SkinName}";
+                this.c1.ItemCssClassPrefix += $"-{this.settings.SkinName}";
             }
 
             this.settings.OccurCount = !string.IsNullOrEmpty((string)moduleSettings["occurcount"])
@@ -1386,8 +1348,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             if (!string.IsNullOrEmpty((string)moduleSettings["ExcludeCommon"]))
             {
-                bool excludeCommon;
-                bool.TryParse((string)moduleSettings["ExcludeCommon"], out excludeCommon);
+                bool.TryParse((string)moduleSettings["ExcludeCommon"], out var excludeCommon);
 
                 this.settings.ExcludeCommon = excludeCommon;
             }
@@ -1556,7 +1517,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             }
             finally
             {
-                this.settings.Tcolor = string.IsNullOrEmpty(this.settings.Tcolor) ? "0x000000" : string.Format("0x{0}", this.settings.Tcolor);
+                this.settings.Tcolor = string.IsNullOrEmpty(this.settings.Tcolor) ? "0x000000" : $"0x{this.settings.Tcolor}";
             }
 
             try
@@ -1565,7 +1526,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             }
             finally
             {
-                this.settings.Tcolor2 = string.IsNullOrEmpty(this.settings.Tcolor2) ? "0x000000" : string.Format("0x{0}", this.settings.Tcolor2);
+                this.settings.Tcolor2 = string.IsNullOrEmpty(this.settings.Tcolor2) ? "0x000000" : $"0x{this.settings.Tcolor2}";
             }
 
             try
@@ -1574,7 +1535,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             }
             finally
             {
-                this.settings.Hicolor = string.IsNullOrEmpty(this.settings.Hicolor) ? "0x42a5ff" : string.Format("0x{0}", this.settings.Hicolor);
+                this.settings.Hicolor = string.IsNullOrEmpty(this.settings.Hicolor) ? "0x42a5ff" : $"0x{this.settings.Hicolor}";
             }
 
             try
@@ -1585,7 +1546,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             {
                 this.settings.Bgcolor = string.IsNullOrEmpty(this.settings.Bgcolor)
                                     ? "transparent"
-                                    : string.Format("#{0}", this.settings.Bgcolor);
+                                    : $"#{this.settings.Bgcolor}";
             }
 
             try
@@ -1660,10 +1621,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             // Set TagCloud width & Height to Main DIV Tag
             this.tagCloudDiv.Attributes["style"] =
-                string.Format(
-                    "width:{0}{1};height:auto;",
-                    this.settings.TagCloudWidth,
-                    this.settings.TagCloudWValue);
+                $"width:{this.settings.TagCloudWidth}{this.settings.TagCloudWValue};height:auto;";
         }
 
         #endregion

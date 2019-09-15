@@ -28,6 +28,6 @@ namespace WatchersNET.DNN.Modules.TagCloud {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::VRK.Controls.Cloud c1;
+        protected global::WatchersNET.DNN.Modules.TagCloud.VRK.Controls.Cloud c1;
     }
 }

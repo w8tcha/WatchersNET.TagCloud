@@ -31,7 +31,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <IsWebBootstrapper>true</IsWebBootstrapper>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <PublishUrl>http://localhost/WatchersNET.DNN.Modules.UserManager/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -190,7 +190,6 @@
     <Compile Include="TagCloud.ascx.designer.cs">
       <DependentUpon>TagCloud.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Objects\TagWords.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="VRK.Controls\Cloud.cs" />
     <Compile Include="VRK.Controls\CloudItem.cs" />
@@ -199,6 +198,50 @@
     <Compile Include="VRK.Controls\Statistics.cs" />
     <Content Include="Installation\License.html" />
     <Content Include="Installation\ReleaseNotes.html" />
+    <Content Include="Resources\exclude.png" />
+    <Content Include="Resources\Flash.png" />
+    <Content Include="Resources\images\AlphaBar.png" />
+    <Content Include="Resources\images\bar-opacity.png" />
+    <Content Include="Resources\images\Bars.png" />
+    <Content Include="Resources\images\map-opacity.png" />
+    <Content Include="Resources\images\mappoint.gif" />
+    <Content Include="Resources\images\Maps.png" />
+    <Content Include="Resources\images\NoColor.png" />
+    <Content Include="Resources\images\picker.gif" />
+    <Content Include="Resources\images\preview-opacity.png" />
+    <Content Include="Resources\images\rangearrows.gif" />
+    <Content Include="Resources\js\jpicker-1.1.6.min.js" />
+    <Content Include="Resources\js\jquery.numeric.js" />
+    <Content Include="Resources\js\jquery.tagcanvas.min.js" />
+    <Content Include="Resources\js\jquery.wordcloud.js" />
+    <Content Include="Resources\js\swfobject.js" />
+    <Content Include="Resources\license.txt" />
+    <Content Include="Resources\module.css" />
+    <Content Include="Resources\Settings.png" />
+    <Content Include="Resources\skins\Blue.css" />
+    <Content Include="Resources\skins\Colored.css" />
+    <Content Include="Resources\skins\Colored2.css" />
+    <Content Include="Resources\skins\Colored3.css" />
+    <Content Include="Resources\skins\ColoredPurple.css" />
+    <Content Include="Resources\skins\ColoredWaves.css" />
+    <Content Include="Resources\skins\ColoredWong.css" />
+    <Content Include="Resources\skins\Orange.css" />
+    <Content Include="Resources\skins\Red.css" />
+    <Content Include="Resources\skins\Rotated.css" />
+    <Content Include="Resources\skins\RoundedButton.css" />
+    <Content Include="Resources\skins\Sliding-Blue.css" />
+    <Content Include="Resources\skins\Sliding-Green.css" />
+    <Content Include="Resources\skins\Sliding-Orange.css" />
+    <Content Include="Resources\skins\Standard.css" />
+    <Content Include="Resources\skins\tag-bg.png" />
+    <Content Include="Resources\skins\tag-end.png" />
+    <Content Include="Resources\skins\tag-start.png" />
+    <Content Include="Resources\skins\tagtastic.css" />
+    <Content Include="Resources\skins\Tomorrow.css" />
+    <Content Include="Resources\skins\UlSimple.css" />
+    <Content Include="Resources\Tag.png" />
+    <Content Include="Resources\tagcloud.swf" />
+    <Content Include="Resources\TagCloudLogo.png" />
     <Content Include="Settings.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
@@ -211,7 +254,9 @@
     <Content Include="App_LocalResources\Settings.ascx.resx">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="App_LocalResources\TagCloud.ascx.de-DE.resx" />
+    <Content Include="App_LocalResources\TagCloud.ascx.de-DE.resx">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="App_LocalResources\TagCloud.ascx.resx" />
     <Content Include="App_LocalResources\Settings.ascx.pl-PL.resx" />
     <Content Include="App_LocalResources\TagCloud.ascx.pl-PL.resx" />
@@ -286,13 +331,13 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DotNetNuke.Core">
-      <Version>9.3.1</Version>
+      <Version>9.3.2</Version>
     </PackageReference>
     <PackageReference Include="DotNetNuke.Web">
-      <Version>9.3.1</Version>
+      <Version>9.3.2</Version>
     </PackageReference>
     <PackageReference Include="DotNetNuke.Web.Client">
-      <Version>9.3.1</Version>
+      <Version>9.3.2</Version>
     </PackageReference>
     <PackageReference Include="MSBuildTasks">
       <Version>1.5.0.235</Version>

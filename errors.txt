@@ -1,2 +1,0 @@
-DataControl.cs(54,30): error CS0234: Der Typ- oder Namespacename 'ActiveForums' ist im Namespace 'DotNetNuke.Modules' nicht vorhanden. (Fehlt ein Assemblyverweis?) [C:\Users\Watcher\Documents\Projects\Visual Studio 2015\Projects\DNN\WatchersNET\TagCloud\WatchersNET.TagCloud.csproj]
-DataControl.cs(55,30): error CS0234: Der Typ- oder Namespacename 'ActiveForums' ist im Namespace 'DotNetNuke.Modules' nicht vorhanden. (Fehlt ein Assemblyverweis?) [C:\Users\Watcher\Documents\Projects\Visual Studio 2015\Projects\DNN\WatchersNET\TagCloud\WatchersNET.TagCloud.csproj]

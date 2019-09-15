@@ -10,7 +10,7 @@
 *
 *   Copyright(c) Ingo Herbote (thewatcher@watchersnet.de)
 *   All rights reserved.
-*   Internet: http://www.watchersnet.de/TagCloud
+*   Internet: https://github.com/w8tcha/WatchersNET.TagCloud
 *
 *   WatchersNET.TagCloud is released under the New BSD License, see below
 ************************************************************************************************
@@ -76,7 +76,7 @@ namespace WatchersNET.DNN.Modules.TagCloud.Objects
         public int GridSize { get; set; }
 
         /// <summary>
-        /// Gets or sets the minium font size in pixel to draw (default: $.miniumFontSize / 2, larger than that is still look good using bilinear sampling in browser)
+        /// Gets or sets the minimum font size in pixel to draw (default: $.miniumFontSize / 2, larger than that is still look good using bilinear sampling in browser)
         /// </summary>
         /// <value>
         /// The size of the min.

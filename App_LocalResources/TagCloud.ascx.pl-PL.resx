@@ -125,7 +125,7 @@
   </data>
   <data name="ModuleHelp.Text" xml:space="preserve">
     <value>&lt;h1&gt;WatchersNET TagCloud &lt;/h1&gt;
-&lt;h2&gt;Copyright(c) Ingo Herbote. Wszystkie prawa zastrzeżone. (&lt;a href="http://www.watchersnet.de/TagCloud"&gt;www.WatchersNET.de&lt;/a&gt;)&lt;/h2&gt; &lt;p&gt;Moduł wyświetla etykiety z różnych źródeł jako standardową chmurę etykiet Web 2.0.&lt;/p&gt;
+&lt;h2&gt;Copyright(c) Ingo Herbote. Wszystkie prawa zastrzeżone. (&lt;a href="https://github.com/w8tcha/WatchersNET.TagCloud"&gt;www.WatchersNET.de&lt;/a&gt;)&lt;/h2&gt; &lt;p&gt;Moduł wyświetla etykiety z różnych źródeł jako standardową chmurę etykiet Web 2.0.&lt;/p&gt;
 &lt;p&gt; Chmura etykiet może być wyświetlana jako chmura 3D Canvas w HTML5, jako chmura 3D w technologii Flash lub jako zwykły HTML w możliwością ostylowania odnośników zależnie od ich wagi. Jest to podobne rozwiązanie do chmur etykiet na del.icio.us lub Flickr.&lt;/p&gt;</value>
   </data>
   <data name="TagFound.Text" xml:space="preserve">

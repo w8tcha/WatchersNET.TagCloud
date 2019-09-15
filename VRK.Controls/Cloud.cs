@@ -13,7 +13,7 @@
 *  *********************************************************************************************
 */
 
-namespace VRK.Controls
+namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
 {
     #region
 
@@ -45,11 +45,6 @@ namespace VRK.Controls
             {
                "xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large" 
             };
-
-        /// <summary>
-        /// The _items.
-        /// </summary>
-        private readonly Collection<CloudItem> items = new Collection<CloudItem>();
 
         #endregion
 
@@ -251,10 +246,7 @@ namespace VRK.Controls
                 return val ?? string.Empty;
             }
 
-            set
-            {
-                this.ViewState["ItemCssClassPrefix"] = value;
-            }
+            set => this.ViewState["ItemCssClassPrefix"] = value;
         }
 
         /// <summary>
@@ -270,10 +262,7 @@ namespace VRK.Controls
                 return val ?? string.Empty;
             }
 
-            set
-            {
-                this.ViewState["ItemSeparator"] = value;
-            }
+            set => this.ViewState["ItemSeparator"] = value;
         }
 
         /// <summary>
@@ -289,10 +278,7 @@ namespace VRK.Controls
                 return val ?? string.Empty;
             }
 
-            set
-            {
-                this.ViewState["Skin"] = value;
-            }
+            set => this.ViewState["Skin"] = value;
         }
 
         /// <summary>
@@ -301,13 +287,7 @@ namespace VRK.Controls
         [Themeable(false)]
         [PersistenceMode(PersistenceMode.InnerProperty)]
         [MergableProperty(false)]
-        public Collection<CloudItem> Items
-        {
-            get
-            {
-                return this.items;
-            }
-        }
+        public Collection<CloudItem> Items { get; } = new Collection<CloudItem>();
 
         /// <summary>
         /// Gets or sets a value indicating whether the Renders Tags as UL
@@ -327,10 +307,7 @@ namespace VRK.Controls
                 return ret;
             }
 
-            set
-            {
-                this.ViewState["RenderAsUl"] = value;
-            }
+            set => this.ViewState["RenderAsUl"] = value;
         }
 
         /// <summary>
@@ -351,10 +328,7 @@ namespace VRK.Controls
                 return ret;
             }
 
-            set
-            {
-                this.ViewState["CanvasEnabled"] = value;
-            }
+            set => this.ViewState["CanvasEnabled"] = value;
         }
 
         /// <summary>
@@ -375,22 +349,13 @@ namespace VRK.Controls
                 return ret;
             }
 
-            set
-            {
-                this.ViewState["RenderItemWeight"] = value;
-            }
+            set => this.ViewState["RenderItemWeight"] = value;
         }
 
         /// <summary>
         /// Gets TagKey.
         /// </summary>
-        protected override HtmlTextWriterTag TagKey
-        {
-            get
-            {
-                return this.RenderAsUl ? HtmlTextWriterTag.Ul : HtmlTextWriterTag.Span;
-            }
-        }
+        protected override HtmlTextWriterTag TagKey => this.RenderAsUl ? HtmlTextWriterTag.Ul : HtmlTextWriterTag.Span;
 
         /// <summary>
         /// Gets ItemWeights.
@@ -417,9 +382,7 @@ namespace VRK.Controls
         /// </param>
         public void RaisePostBackEvent(string eventArgument)
         {
-            int selectedIndex;
-
-            if (!Int32.TryParse(eventArgument, out selectedIndex))
+            if (!int.TryParse(eventArgument, out var selectedIndex))
             {
                 return;
             }
@@ -458,8 +421,7 @@ namespace VRK.Controls
                 this.CreateItemsFromData(dataSource);
             }
 
-            double mean;
-            var stdDev = Statistics.StdDev(this.ItemWeights, out mean);
+            var stdDev = Statistics.StdDev(this.ItemWeights, out var mean);
 
             var hasCssClassPrefix = !string.IsNullOrEmpty(this.ItemCssClassPrefix);
             var index = 0;
@@ -504,19 +466,19 @@ namespace VRK.Controls
                     if (this.RenderAsUl)
                     {
                         // li.Attributes["class"] = string.Format("{0}_{1}", ItemCssClassPrefix, rnd.Next(7));
-                        li.Attributes["class"] = string.Format("{0}_{1}", this.ItemCssClassPrefix, normalWeight - 1);
+                        li.Attributes["class"] = $"{this.ItemCssClassPrefix}_{normalWeight - 1}";
 
                         if (this.CanvasEnabled)
                         {
                             a.Attributes.Add(
                                 "data-weight",
-                                normalWeight < 10 ? (item.Weight + 15).ToString() : item.Weight.ToString());
+                                normalWeight < 10 ? (item.Weight + 15).ToString(CultureInfo.InvariantCulture) : item.Weight.ToString());
                         }
                     }
                     else
                     {
                         // a.Attributes["class"] = string.Format("{0}_{1}", ItemCssClassPrefix, rnd.Next(7));
-                        a.Attributes["class"] = string.Format("{0}_{1}", this.ItemCssClassPrefix, normalWeight - 1);
+                        a.Attributes["class"] = $"{this.ItemCssClassPrefix}_{normalWeight - 1}";
                     }
                 }
 
@@ -545,7 +507,7 @@ namespace VRK.Controls
                         }
                         else
                         {
-                            this.Controls.Add(new LiteralControl(string.Format("&nbsp;{0}", this.ItemSeparator)));
+                            this.Controls.Add(new LiteralControl($"&nbsp;{this.ItemSeparator}"));
                         }
 
                         // Controls.Add(new LiteralControl(string.Format("&nbsp;{0}<br />", ItemSeparator)));
@@ -559,7 +521,7 @@ namespace VRK.Controls
                         }
                         else
                         {
-                            this.Controls.Add(new LiteralControl(string.Format("&nbsp;{0}", this.ItemSeparator)));
+                            this.Controls.Add(new LiteralControl($"&nbsp;{this.ItemSeparator}"));
                         }
                     }
                 }
@@ -584,10 +546,7 @@ namespace VRK.Controls
         /// </param>
         protected void OnItemClick(CloudItemClickEventArgs e)
         {
-            if (this.ItemClick != null)
-            {
-                this.ItemClick(this, e);
-            }
+            this.ItemClick?.Invoke(this, e);
         }
 
         /// <summary>
@@ -614,11 +573,11 @@ namespace VRK.Controls
                 factor /= stdDev;
             }
 
-            return (factor > 2)
+            return factor > 2
                        ? 7
-                       : (factor > 1)
+                       : factor > 1
                              ? 6
-                             : (factor > 0.5) ? 5 : (factor > -0.5) ? 4 : (factor > -1) ? 3 : (factor > -2) ? 2 : 1;
+                             : factor > 0.5 ? 5 : factor > -0.5 ? 4 : factor > -1 ? 3 : factor > -2 ? 2 : 1;
         }
 
         /// <summary>
@@ -637,7 +596,7 @@ namespace VRK.Controls
                 {
                     if (string.IsNullOrEmpty(this.DataHrefFormatString))
                     {
-                        item.Href = String.Empty;
+                        item.Href = string.Empty;
                     }
                     else
                     {

@@ -10,7 +10,7 @@
 *
 *   Copyright(c) Ingo Herbote (thewatcher@watchersnet.de)
 *   All rights reserved.
-*   Internet: http://www.watchersnet.de/TagCloud
+*   Internet: https://github.com/w8tcha/WatchersNET.TagCloud
 *
 *   WatchersNET.TagCloud is released under the New BSD License, see below
 ************************************************************************************************
@@ -48,7 +48,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
     using System;
     using System.Collections.Generic;
-    using System.Data;
 
     using DotNetNuke.Entities.Modules;
     using DotNetNuke.Modules.ActiveForums;
@@ -150,7 +149,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 if ((Permissions.HasPerm(AuthorizedRoles, UserRoles)
                      || !forum.Hidden && (PermissionType == "CanView" || PermissionType == "CanRead")) && forum.Active)
                 {
-                    str = string.Format("{0}{1};", str, forum.ForumID);
+                    str = $"{str}{forum.ForumID};";
                 }
             }
             return str;
@@ -170,7 +169,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             return
                 Convert.ToInt32(
                     DataProvider.Instance().ExecuteScalar(
-                        "TagCloudItemsAdd", objTag.iTagId, objTag.iWeight, objTag.sTag, objTag.iModulId, objTag.sUrl));
+                        "TagCloudItemsAdd", objTag.TagId, objTag.Weight, objTag.Tag, objTag.ModuleId, objTag.Url));
         }
 
         /// <summary>
@@ -280,10 +279,10 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 {
                     var tag = new CustomTags
                         {
-                            iTagId = Convert.ToInt32(dr["TagID"]),
-                            iWeight = Convert.ToInt32(dr["Weight"]),
-                            sTag = Convert.ToString(dr["Tag"]),
-                            sUrl = Convert.ToString(dr["TagUrl"])
+                            TagId = Convert.ToInt32(dr["TagID"]),
+                            Weight = Convert.ToInt32(dr["Weight"]),
+                            Tag = Convert.ToString(dr["Tag"]),
+                            Url = Convert.ToString(dr["TagUrl"])
                         };
 
                     tagsList.Add(tag);
@@ -302,7 +301,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         public static void TagCloudItemsUpdate(CustomTags objTag)
         {
             DataProvider.Instance().ExecuteNonQuery(
-                "TagCloudItemsUpdate", objTag.iTagId, objTag.iWeight, objTag.sTag, objTag.iModulId, objTag.sUrl);
+                "TagCloudItemsUpdate", objTag.TagId, objTag.Weight, objTag.Tag, objTag.ModuleId, objTag.Url);
         }
 
         /// <summary>

@@ -10,7 +10,7 @@
 *
 *   Copyright(c) Ingo Herbote (thewatcher@watchersnet.de)
 *   All rights reserved.
-*   Internet: http://www.watchersnet.de/TagCloud
+*   Internet: https://github.com/w8tcha/WatchersNET.TagCloud
 *
 *   WatchersNET.TagCloud is released under the New BSD License, see below
 ************************************************************************************************
@@ -58,12 +58,12 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
     using DotNetNuke.Common.Utilities;
     using DotNetNuke.Entities.Content.Common;
-    using DotNetNuke.Entities.Content.Taxonomy;
     using DotNetNuke.Entities.Modules;
     using DotNetNuke.Entities.Portals;
     using DotNetNuke.Entities.Tabs;
     using DotNetNuke.Entities.Users;
     using DotNetNuke.Framework;
+    using DotNetNuke.Framework.JavaScriptLibraries;
     using DotNetNuke.Services.Exceptions;
     using DotNetNuke.Services.FileSystem;
     using DotNetNuke.Services.Localization;
@@ -74,7 +74,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
     using WatchersNET.DNN.Modules.TagCloud.Objects;
 
     using DataCache = DotNetNuke.Common.Utilities.DataCache;
-    using FileInfo = System.IO.FileInfo;
     using Globals = DotNetNuke.Common.Globals;
 
     #endregion
@@ -87,11 +86,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
         #region Constants and Fields
 
         /// <summary>
-        ///   The c validator por id.
-        /// </summary>
-        protected CustomValidator cValidatorPorId;
-
-        /// <summary>
         ///   The ctl import file.
         /// </summary>
         protected UrlControl ctlImportFile;
@@ -101,32 +95,10 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </summary>
         protected UrlControl ctlTagUrl;
 
-        /*
-        /// <summary>
-        ///   The dsh comm opt.
-        /// </summary>
-        protected SectionHeadControl dshCommOpt;
-
-        /// <summary>
-        ///   The dsh flash opt.
-        /// </summary>
-        protected SectionHeadControl dshFlashOpt;
-
-        /// <summary>
-        /// The dsh Exlcude Opt.
-        /// </summary>
-        protected SectionHeadControl dshExcludeOpt;
-         * */
-
         /// <summary>
         ///   The lbl choose voc.
         /// </summary>
         protected LabelControl lblChooseVoc;
-
-        /// <summary>
-        ///   The pnl setting.
-        /// </summary>
-        protected Panel pnlSetting;
 
         /// <summary>
         ///   The up export.
@@ -185,13 +157,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// <summary>
         ///   Gets ImportFile.
         /// </summary>
-        private UrlControl ImportFile
-        {
-            get
-            {
-                return this.ctlImportFile;
-            }
-        }
+        private UrlControl ImportFile => this.ctlImportFile;
 
         #endregion
 
@@ -295,7 +261,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
             this.Update.Click += this.UpdateClick;
             this.Cancel.Click += this.CancelClick;
 
-            // CODEGEN: This call is required by the ASP.NET Web Form Designer.);
             this.InitializeComponent();
             base.OnInit(e);
         }
@@ -412,22 +377,37 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             sbColorPScript.Append("$(document).ready(function() {");
 
-            sbColorPScript.Append("jQuery.fn.jPicker.defaults.window.position.y=($(\".TagCloudLogo\").position().top) + 200 + 'px';");
-            sbColorPScript.AppendFormat("jQuery.fn.jPicker.defaults.images.clientPath='{0}';", this.ResolveUrl("images/"));
+            sbColorPScript.Append(
+                "jQuery.fn.jPicker.defaults.window.position.y=($(\".TagCloudLogo\").position().top) + 200 + 'px';");
+            sbColorPScript.AppendFormat(
+                "jQuery.fn.jPicker.defaults.images.clientPath='{0}';",
+                this.ResolveUrl("images/"));
 
             // Tcolor
-            sbColorPScript.AppendFormat("$(\"#{0}\").jPicker({{window:{{title:'{1}' }} }});", this.tbTcolor.ClientID, Localization.GetString("lblTcolor.Help", this.LocalResourceFile));
+            sbColorPScript.AppendFormat(
+                "$(\"#{0}\").jPicker({{window:{{title:'{1}' }} }});",
+                this.tbTcolor.ClientID,
+                Localization.GetString("lblTcolor.Help", this.LocalResourceFile));
 
             // Tcolor2
-            sbColorPScript.AppendFormat("$(\"#{0}\").jPicker({{window:{{title:'{1}' }} }});", this.tbTcolor2.ClientID, Localization.GetString("lblTcolor2.Help", this.LocalResourceFile));
+            sbColorPScript.AppendFormat(
+                "$(\"#{0}\").jPicker({{window:{{title:'{1}' }} }});",
+                this.tbTcolor2.ClientID,
+                Localization.GetString("lblTcolor2.Help", this.LocalResourceFile));
 
             // Hicolor
-            sbColorPScript.AppendFormat("$(\"#{0}\").jPicker({{window:{{title:'{1}' }} }});", this.tbHicolor.ClientID, Localization.GetString("lblHicolor.Help", this.LocalResourceFile));
+            sbColorPScript.AppendFormat(
+                "$(\"#{0}\").jPicker({{window:{{title:'{1}' }} }});",
+                this.tbHicolor.ClientID,
+                Localization.GetString("lblHicolor.Help", this.LocalResourceFile));
 
             // BgColor
             if (this.tbBgcolor.Enabled)
             {
-                sbColorPScript.AppendFormat("$(\"#{0}\").jPicker({{window:{{title:'{1}' }} }});", this.tbBgcolor.ClientID, Localization.GetString("lblBgcolor.Help", this.LocalResourceFile));
+                sbColorPScript.AppendFormat(
+                    "$(\"#{0}\").jPicker({{window:{{title:'{1}' }} }});",
+                    this.tbBgcolor.ClientID,
+                    Localization.GetString("lblBgcolor.Help", this.LocalResourceFile));
                 sbColorPScript.Append("});");
             }
             else
@@ -447,23 +427,23 @@ namespace WatchersNET.DNN.Modules.TagCloud
         {
             ClientResourceManager.RegisterStyleSheet(this.Page, this.ResolveUrl("module.css"));
 
-            /*ClientResourceManager.RegisterStyleSheet(
-                this.Page, "//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/blitzer/jquery-ui.css");
-            */
             var csType = typeof(Page);
 
-            // Register jQuery
-            jQuery.RequestRegistration();
+            JavaScript.RequestRegistration(CommonJs.jQuery);
 
-            jQuery.RequestUIRegistration();
-
-            jQuery.RequestDnnPluginsRegistration();
+            JavaScript.RequestRegistration(CommonJs.DnnPlugins);
 
             ScriptManager.RegisterClientScriptInclude(
-                this, csType, "jqueryNumeric", this.ResolveUrl("js/jquery.numeric.js"));
+                this,
+                csType,
+                "jqueryNumeric",
+                this.ResolveUrl("js/jquery.numeric.js"));
 
             ScriptManager.RegisterClientScriptInclude(
-                this, csType, "jqueryColorPicker", this.ResolveUrl("js/jpicker-1.1.6.min.js"));
+                this,
+                csType,
+                "jqueryColorPicker",
+                this.ResolveUrl("js/jpicker-1.1.6.min.js"));
 
             var sbDialogJs = new StringBuilder();
 
@@ -511,43 +491,43 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             /*if (this.bModeCustom)
             {*/
-                sbDialogJs.Append("$(document).ready(function() {");
+            sbDialogJs.Append("$(document).ready(function() {");
 
-                sbDialogJs.Append("jQuery(\".NumericTextBox\").numeric();");
+            sbDialogJs.Append("jQuery(\".NumericTextBox\").numeric();");
 
-                // Import Dialog
-                sbDialogJs.Append("jQuery('#ImportDialog').dialog({");
-                sbDialogJs.Append("autoOpen: false,");
-                sbDialogJs.Append("width: 350,");
-                sbDialogJs.AppendFormat(
-                    "buttons: {{ \"Cancel\": function () {{ jQuery(this).dialog(\"close\"); }}, \"{1}\": function () {{ __doPostBack('{0}', '');jQuery(this).dialog(\"close\"); }} }},",
-                    this.cmdImport.ClientID.Replace("_", "$"),
+            // Import Dialog
+            sbDialogJs.Append("jQuery('#ImportDialog').dialog({");
+            sbDialogJs.Append("autoOpen: false,");
+            sbDialogJs.Append("width: 350,");
+            sbDialogJs.AppendFormat(
+                "buttons: {{ \"Cancel\": function () {{ jQuery(this).dialog(\"close\"); }}, \"{1}\": function () {{ __doPostBack('{0}', '');jQuery(this).dialog(\"close\"); }} }},",
+                this.cmdImport.ClientID.Replace("_", "$"),
                 Localization.GetString("cmdImport.Text", this.LocalResourceFile));
-                sbDialogJs.Append("open: function (type, data) {");
-                sbDialogJs.Append("jQuery(this).parent().appendTo(\"form\");");
-                sbDialogJs.Append("}");
-                sbDialogJs.Append("});");
+            sbDialogJs.Append("open: function (type, data) {");
+            sbDialogJs.Append("jQuery(this).parent().appendTo(\"form\");");
+            sbDialogJs.Append("}");
+            sbDialogJs.Append("});");
 
-                // Export Dialog
-                sbDialogJs.Append("jQuery('#ExportDialog').dialog({");
-                sbDialogJs.Append("autoOpen: false,");
-                sbDialogJs.Append("width: 350,");
-                sbDialogJs.AppendFormat(
-                    "buttons: {{ \"Cancel\": function () {{ jQuery(this).dialog(\"close\"); }}, \"{2}\": function () {{ __doPostBack('{0}', '');alert('{1}'); jQuery(this).dialog(\"close\"); }} }},",
-                    this.cmdExport.ClientID.Replace("_", "$"),
-                    Localization.GetString("TagsExported.Text", this.LocalResourceFile),
-                    Localization.GetString("cmdExport.Text", this.LocalResourceFile));
-                sbDialogJs.Append("open: function (type, data) {");
-                sbDialogJs.Append("jQuery(this).parent().appendTo(\"form\");");
-                sbDialogJs.Append("}");
-                sbDialogJs.Append("});");
+            // Export Dialog
+            sbDialogJs.Append("jQuery('#ExportDialog').dialog({");
+            sbDialogJs.Append("autoOpen: false,");
+            sbDialogJs.Append("width: 350,");
+            sbDialogJs.AppendFormat(
+                "buttons: {{ \"Cancel\": function () {{ jQuery(this).dialog(\"close\"); }}, \"{2}\": function () {{ __doPostBack('{0}', '');alert('{1}'); jQuery(this).dialog(\"close\"); }} }},",
+                this.cmdExport.ClientID.Replace("_", "$"),
+                Localization.GetString("TagsExported.Text", this.LocalResourceFile),
+                Localization.GetString("cmdExport.Text", this.LocalResourceFile));
+            sbDialogJs.Append("open: function (type, data) {");
+            sbDialogJs.Append("jQuery(this).parent().appendTo(\"form\");");
+            sbDialogJs.Append("}");
+            sbDialogJs.Append("});");
 
-                sbDialogJs.Append("});");
+            sbDialogJs.Append("});");
 
-                // Dialog Open Script
-                sbDialogJs.Append("function showDialog(id) {");
-                sbDialogJs.Append("$('#' + id).dialog(\"open\");");
-                sbDialogJs.Append("}");
+            // Dialog Open Script
+            sbDialogJs.Append("function showDialog(id) {");
+            sbDialogJs.Append("$('#' + id).dialog(\"open\");");
+            sbDialogJs.Append("}");
             //}
 
             ScriptManager.RegisterStartupScript(this, csType, "jqueryTabnDialogScript", sbDialogJs.ToString(), true);
@@ -680,10 +660,10 @@ namespace WatchersNET.DNN.Modules.TagCloud
             {
                 var drNewRow = dtTags.NewRow();
 
-                drNewRow["TagID"] = tag.iTagId.ToString();
-                drNewRow["Tag"] = tag.sTag;
-                drNewRow["TagUrl"] = tag.sUrl;
-                drNewRow["Weight"] = tag.iWeight.ToString();
+                drNewRow["TagID"] = tag.TagId.ToString();
+                drNewRow["Tag"] = tag.Tag;
+                drNewRow["TagUrl"] = tag.Url;
+                drNewRow["Weight"] = tag.Weight.ToString();
 
                 dtTags.Rows.Add(drNewRow);
             }
@@ -701,15 +681,13 @@ namespace WatchersNET.DNN.Modules.TagCloud
             var folders = FolderManager.Instance.GetFolders(UserController.GetCurrentUserInfo(), "READ, WRITE");
 
             foreach (var folderItem in from FolderInfo folder in folders
-                                            select
-                                                new ListItem
-                                                    {
-                                                        Text =
-                                                            folder.FolderPath == Null.NullString
-                                                                ? "Root"
-                                                                : folder.FolderPath,
-                                                        Value = folder.FolderID.ToString()
-                                                    })
+                                       select new ListItem
+                                                  {
+                                                      Text = folder.FolderPath == Null.NullString
+                                                                 ? "Root"
+                                                                 : folder.FolderPath,
+                                                      Value = folder.FolderID.ToString()
+                                                  })
             {
                 this.cboFolders.Items.Add(folderItem);
             }
@@ -822,58 +800,20 @@ namespace WatchersNET.DNN.Modules.TagCloud
                             break;
                         }
 
-                        strPath = string.Format("{0} -> {1}", objTabSelected.TabName, strPath);
+                        strPath = $"{objTabSelected.TabName} -> {strPath}";
                     }
 
                     ListItem objListItem;
 
                     objListItem = new ListItem
-                    {
-                        Value = string.Format("{0}-{1}", objModule.TabID, objModule.ModuleID),
-                        Text = string.Format("{0} -> {1}", strPath, objModule.ModuleTitle)
-                    };
+                                      {
+                                          Value = $"{objModule.TabID}-{objModule.ModuleID}",
+                                          Text = $"{strPath} -> {objModule.ModuleTitle}"
+                                      };
 
                     dropDownList.Items.Add(objListItem);
                 }
             }
-        }
-
-        /// <summary>
-        /// Fill Search Items List
-        /// </summary>
-        private void FillSearchLst()
-        {
-            var item0 = new ListItem();
-            var item1 = new ListItem();
-            var item2 = new ListItem();
-            var item3 = new ListItem();
-            var item4 = new ListItem();
-
-            // Google, Bing, Yahoo, Ask.com and the Portal Search
-            item0.Text = string.Format("<img src=\"{0}\" />&nbsp;Google", this.ResolveUrl("google.gif"));
-            item0.Value = "google";
-            item0.Enabled = false;
-            item0.Selected = true;
-
-            item1.Text = string.Format("<img src=\"{0}\" />&nbsp;Bing", this.ResolveUrl("Bing.gif"));
-            item1.Value = "bing";
-            item1.Enabled = false;
-            item1.Selected = true;
-
-            item2.Text = string.Format("<img src=\"{0}\" />&nbsp;Yahoo", this.ResolveUrl("yahoo.gif"));
-            item2.Value = "yahoo";
-            item2.Enabled = false;
-            item2.Selected = true;
-
-            item3.Text = string.Format("<img src=\"{0}\" />&nbsp;Ask.com", this.ResolveUrl("ask.gif"));
-            item3.Value = "ask";
-            item3.Enabled = false;
-            item3.Selected = true;
-
-            item4.Text = string.Format("<img src=\"{0}\" />&nbsp;Site Search", this.ResolveUrl("dotnetnuke.gif"));
-            item4.Value = "site";
-            item4.Enabled = false;
-            item4.Selected = true;
         }
 
         /// <summary>
@@ -919,23 +859,24 @@ namespace WatchersNET.DNN.Modules.TagCloud
         private void FillTaxOptions()
         {
             var itemTab = new ListItem
-                {
-                   Text = Localization.GetString("TabTerms.Text", this.LocalResourceFile), Value = "tab"
-                };
+                              {
+                                  Text = Localization.GetString("TabTerms.Text", this.LocalResourceFile), Value = "tab"
+                              };
 
             this.dDlTaxMode.Items.Add(itemTab);
 
             var itemAll = new ListItem
-                {
-                   Text = Localization.GetString("AllTerms.Text", this.LocalResourceFile), Value = "all"
-                };
+                              {
+                                  Text = Localization.GetString("AllTerms.Text", this.LocalResourceFile), Value = "all"
+                              };
 
             this.dDlTaxMode.Items.Add(itemAll);
 
             var itemCustom = new ListItem
-                {
-                   Text = Localization.GetString("CustomVocabulary.Text", this.LocalResourceFile), Value = "custom"
-                };
+                                 {
+                                     Text = Localization.GetString("CustomVocabulary.Text", this.LocalResourceFile),
+                                     Value = "custom"
+                                 };
 
             this.dDlTaxMode.Items.Add(itemCustom);
         }
@@ -950,10 +891,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 var vocabRep = Util.GetVocabularyController();
 
                 var vs = from v in vocabRep.GetVocabularies()
-                                            where
-                                                v.ScopeType.ScopeType == "Application" ||
-                                                (v.ScopeType.ScopeType == "Portal" && v.ScopeId == this.PortalId)
-                                            select v;
+                         where v.ScopeType.ScopeType == "Application"
+                               || v.ScopeType.ScopeType == "Portal" && v.ScopeId == this.PortalId
+                         select v;
 
                 foreach (var v in vs)
                 {
@@ -998,21 +938,18 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
                         if (this.ddLTabsVentrianNews.Items.Count > 0)
                         {
-                            if (!string.IsNullOrEmpty((string)this.Settings["NewsArticlesTab"]) &&
-                                !string.IsNullOrEmpty((string)this.Settings["NewsArticlesModule"]))
+                            if (!string.IsNullOrEmpty((string)this.Settings["NewsArticlesTab"])
+                                && !string.IsNullOrEmpty((string)this.Settings["NewsArticlesModule"]))
                             {
-                                if (this.ddLTabsVentrianNews.Items.FindByValue(string.Format(
-                                    "{0}-{1}",
-                                    this.Settings["NewsArticlesTab"],
-                                    this.Settings["NewsArticlesModule"])) == null)
+                                if (this.ddLTabsVentrianNews.Items.FindByValue(
+                                        $"{this.Settings["NewsArticlesTab"]}-{this.Settings["NewsArticlesModule"]}")
+                                    == null)
                                 {
                                     return;
                                 }
 
-                                this.ddLTabsVentrianNews.SelectedValue = string.Format(
-                                    "{0}-{1}",
-                                    this.Settings["NewsArticlesTab"],
-                                    this.Settings["NewsArticlesModule"]);
+                                this.ddLTabsVentrianNews.SelectedValue =
+                                    $"{this.Settings["NewsArticlesTab"]}-{this.Settings["NewsArticlesModule"]}";
                             }
                         }
                     }
@@ -1024,21 +961,18 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
                         if (this.ddLTabsVentrianSimple.Items.Count > 0)
                         {
-                            if (!string.IsNullOrEmpty((string)this.Settings["SimpleGalleryTab"]) &&
-                                !string.IsNullOrEmpty((string)this.Settings["SimpleGalleryModule"]))
+                            if (!string.IsNullOrEmpty((string)this.Settings["SimpleGalleryTab"])
+                                && !string.IsNullOrEmpty((string)this.Settings["SimpleGalleryModule"]))
                             {
-                                if (this.ddLTabsVentrianSimple.Items.FindByValue(string.Format(
-                                    "{0}-{1}",
-                                    this.Settings["SimpleGalleryTab"],
-                                    this.Settings["SimpleGalleryModule"])) == null)
+                                if (this.ddLTabsVentrianSimple.Items.FindByValue(
+                                        $"{this.Settings["SimpleGalleryTab"]}-{this.Settings["SimpleGalleryModule"]}")
+                                    == null)
                                 {
                                     return;
                                 }
 
-                                this.ddLTabsVentrianSimple.SelectedValue = string.Format(
-                                    "{0}-{1}",
-                                    this.Settings["SimpleGalleryTab"],
-                                    this.Settings["SimpleGalleryModule"]);
+                                this.ddLTabsVentrianSimple.SelectedValue =
+                                    $"{this.Settings["SimpleGalleryTab"]}-{this.Settings["SimpleGalleryModule"]}";
                             }
                         }
                     }
@@ -1050,21 +984,18 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
                         if (this.ddLTabsActiveforums.Items.Count > 0)
                         {
-                            if (!string.IsNullOrEmpty((string)this.Settings["ActiveForumsTab"]) &&
-                                !string.IsNullOrEmpty((string)this.Settings["ActiveForumsModule"]))
+                            if (!string.IsNullOrEmpty((string)this.Settings["ActiveForumsTab"])
+                                && !string.IsNullOrEmpty((string)this.Settings["ActiveForumsModule"]))
                             {
-                                if (this.ddLTabsVentrianSimple.Items.FindByValue(string.Format(
-                                    "{0}-{1}",
-                                    this.Settings["ActiveForumsTab"],
-                                    this.Settings["ActiveForumsModule"])) == null)
+                                if (this.ddLTabsVentrianSimple.Items.FindByValue(
+                                        $"{this.Settings["ActiveForumsTab"]}-{this.Settings["ActiveForumsModule"]}")
+                                    == null)
                                 {
                                     return;
                                 }
 
-                                this.ddLTabsActiveforums.SelectedValue = string.Format(
-                                    "{0}-{1}",
-                                    this.Settings["ActiveForumsTab"],
-                                    this.Settings["ActiveForumsModule"]);
+                                this.ddLTabsActiveforums.SelectedValue =
+                                    $"{this.Settings["ActiveForumsTab"]}-{this.Settings["ActiveForumsModule"]}";
                             }
                         }
                     }
@@ -1092,11 +1023,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
                         this.iBTagSave.Visible = true;
                         this.iBTagSave.Text =
-                            string.Format(
-                                "<img src=\"{0}\" alt=\"{1}\" title=\"{2}\" style=\"border:0;height:16px;weight:16px\" /> {1}",
-                                this.ResolveUrl("~/images/save.gif"),
-                                Localization.GetString("SaveTag.Text", this.LocalResourceFile),
-                                Localization.GetString("SaveTag.Text", this.LocalResourceFile));
+                            $"<img src=\"{this.ResolveUrl("~/images/save.gif")}\" alt=\"{Localization.GetString("SaveTag.Text", this.LocalResourceFile)}\" title=\"{Localization.GetString("SaveTag.Text", this.LocalResourceFile)}\" style=\"border:0;height:16px;weight:16px\" /> {Localization.GetString("SaveTag.Text", this.LocalResourceFile)}";
 
                         this.iBTagLocalize.Visible = true;
                         this.iBTagAdd.Visible = false;
@@ -1153,12 +1080,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
         {
             var btnTemp = (ImageButton)e.Item.FindControl("btnDelete");
 
-            if (btnTemp != null)
-            {
-                btnTemp.Attributes.Add(
-                    "OnClick",
-                    string.Format("return confirm('{0}')", Localization.GetString("DeleteTag.Text", this.LocalResourceFile)));
-            }
+            btnTemp?.Attributes.Add(
+                "OnClick",
+                $"return confirm('{Localization.GetString("DeleteTag.Text", this.LocalResourceFile)}')");
         }
 
         /// <summary>
@@ -1177,12 +1101,11 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 case "btnEdit":
                     {
                         this.iBTagSave.Visible = true;
-                        this.iBTagSave.Text =
-                            string.Format(
-                                "<img src=\"{0}\" alt=\"{1}\" title=\"{2}\" style=\"border:0;height:16px;weight:16px\" /> {1}",
-                                this.ResolveUrl("~/images/save.gif"),
-                                Localization.GetString("SaveLocale.Text", this.LocalResourceFile),
-                                Localization.GetString("SaveLocale.Text", this.LocalResourceFile));
+                        this.iBTagSave.Text = string.Format(
+                            "<img src=\"{0}\" alt=\"{1}\" title=\"{2}\" style=\"border:0;height:16px;weight:16px\" /> {1}",
+                            this.ResolveUrl("~/images/save.gif"),
+                            Localization.GetString("SaveLocale.Text", this.LocalResourceFile),
+                            Localization.GetString("SaveLocale.Text", this.LocalResourceFile));
 
                         this.iBTagAdd.Visible = false;
                         this.iBTagEditCancel.Visible = true;
@@ -1205,7 +1128,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 case "btnDelete":
                     {
                         DataControl.TagCloudItemsDeleteMl(
-                            int.Parse(e.Item.Cells[0].Text), this.ModuleId, e.Item.Cells[4].Text);
+                            int.Parse(e.Item.Cells[0].Text),
+                            this.ModuleId,
+                            e.Item.Cells[4].Text);
                         this.FillLocalizedTag(string.Empty, string.Empty);
 
                         this.tbCustomTag.Text = string.Empty;
@@ -1232,12 +1157,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
         {
             var btnTemp = (ImageButton)e.Item.FindControl("btnDelete");
 
-            if (btnTemp != null)
-            {
-                btnTemp.Attributes.Add(
-                    "OnClick",
-                    string.Format("return confirm('{0}')", Localization.GetString("DeleteLocale.Text", this.LocalResourceFile)));
-            }
+            btnTemp?.Attributes.Add(
+                "OnClick",
+                $"return confirm('{Localization.GetString("DeleteLocale.Text", this.LocalResourceFile)}')");
         }
 
         /// <summary>
@@ -1258,12 +1180,14 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     case "save":
                         {
                             var updateItem = new ExcludeWord
-                            {
-                                Word = this.tbExlusLst.Text,
-                                WordID = int.Parse(this.lBExList.SelectedValue),
-                                ExcludeWordType = (ExcludeType)Enum.Parse(typeof(ExcludeType), this.ExclusionType.SelectedItem.Text),
-                                ModuleID = this.TabModuleId
-                            };
+                                                 {
+                                                     Word = this.tbExlusLst.Text,
+                                                     WordID = int.Parse(this.lBExList.SelectedValue),
+                                                     ExcludeWordType = (ExcludeType)Enum.Parse(
+                                                         typeof(ExcludeType),
+                                                         this.ExclusionType.SelectedItem.Text),
+                                                     ModuleID = this.TabModuleId
+                                                 };
 
                             DataControl.TagCloudExcludeWordUpdate(updateItem);
 
@@ -1271,19 +1195,18 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
                             this.lBExList.Items.Clear();
 
-                            foreach (
-                                var item in this.exlusionWords.Select(wordItem => new ListItem { Text = wordItem.Word, Value = wordItem.WordID.ToString() }))
+                            foreach (var item in this.exlusionWords.Select(
+                                wordItem => new ListItem { Text = wordItem.Word, Value = wordItem.WordID.ToString() }))
                             {
                                 this.lBExList.Items.Add(item);
                             }
 
                             this.iBAdd.CommandArgument = "add";
 
-                            this.iBAdd.Text =
-                                string.Format(
-                                    "<img src=\"{0}\" alt=\"{1}\" title=\"{1}\" style=\"border:0\" /> {1}",
-                                    this.ResolveUrl("~/images/add.gif"),
-                                    Localization.GetString("AddExWord.Text", this.LocalResourceFile));
+                            this.iBAdd.Text = string.Format(
+                                "<img src=\"{0}\" alt=\"{1}\" title=\"{1}\" style=\"border:0\" /> {1}",
+                                this.ResolveUrl("~/images/add.gif"),
+                                Localization.GetString("AddExWord.Text", this.LocalResourceFile));
                             this.iBAdd.ToolTip = Localization.GetString("AddExWord.Text", this.LocalResourceFile);
 
                             this.iBCancel.Visible = false;
@@ -1293,12 +1216,14 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     case "add":
                         {
                             var newItem = new ExcludeWord
-                            {
-                                Word = this.tbExlusLst.Text,
-                                WordID = 0,
-                                ExcludeWordType = (ExcludeType)Enum.Parse(typeof(ExcludeType), this.ExclusionType.SelectedItem.Text),
-                                ModuleID = this.TabModuleId
-                            };
+                                              {
+                                                  Word = this.tbExlusLst.Text,
+                                                  WordID = 0,
+                                                  ExcludeWordType = (ExcludeType)Enum.Parse(
+                                                      typeof(ExcludeType),
+                                                      this.ExclusionType.SelectedItem.Text),
+                                                  ModuleID = this.TabModuleId
+                                              };
 
                             var wordId = DataControl.TagCloudExcludeWordAdd(newItem);
 
@@ -1352,11 +1277,10 @@ namespace WatchersNET.DNN.Modules.TagCloud
         {
             this.iBAdd.CommandArgument = "add";
 
-            this.iBAdd.Text =
-                string.Format(
-                    "<img src=\"{0}\" alt=\"{1}\" title=\"{1}\" style=\"border:0\" /> {1}",
-                    this.ResolveUrl("~/images/add.gif"),
-                    Localization.GetString("AddExWord.Text", this.LocalResourceFile));
+            this.iBAdd.Text = string.Format(
+                "<img src=\"{0}\" alt=\"{1}\" title=\"{1}\" style=\"border:0\" /> {1}",
+                this.ResolveUrl("~/images/add.gif"),
+                Localization.GetString("AddExWord.Text", this.LocalResourceFile));
             this.iBAdd.ToolTip = Localization.GetString("AddExWord.Text", this.LocalResourceFile);
 
             this.iBCancel.Visible = false;
@@ -1379,7 +1303,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
         {
             if (this.lBExList.SelectedItem != null)
             {
-                var editItem = DataControl.TagCloudExcludeWordsGetWord(this.TabModuleId, int.Parse(this.lBExList.SelectedValue));
+                var editItem = DataControl.TagCloudExcludeWordsGetWord(
+                    this.TabModuleId,
+                    int.Parse(this.lBExList.SelectedValue));
 
                 this.tbExlusLst.Text = editItem.Word;
                 this.ExclusionType.SelectedValue = editItem.ExcludeWordType.ToString();
@@ -1387,11 +1313,10 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             this.iBAdd.CommandArgument = "save";
 
-            this.iBAdd.Text =
-                                string.Format(
-                                    "<img src=\"{0}\" alt=\"{1}\" title=\"{1}\" style=\"border:0\" /> {1}",
-                                    this.ResolveUrl("~/images/save.gif"),
-                                    Localization.GetString("SaveExWord.Text", this.LocalResourceFile));
+            this.iBAdd.Text = string.Format(
+                "<img src=\"{0}\" alt=\"{1}\" title=\"{1}\" style=\"border:0\" /> {1}",
+                this.ResolveUrl("~/images/save.gif"),
+                Localization.GetString("SaveExWord.Text", this.LocalResourceFile));
             this.iBAdd.ToolTip = Localization.GetString("SaveExWord.Text", this.LocalResourceFile);
 
             this.iBCancel.Visible = true;
@@ -1429,8 +1354,8 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 // var objFileController = new FileController();
                 var objFileInfo = FileManager.Instance.GetFile(iFileId);
 
-               /* DotNetNuke.Services.FileSystem.FileInfo objFileInfo = objFileController.GetFileById(
-                    iFileId, this.PortalSettings.PortalId);*/
+                /* DotNetNuke.Services.FileSystem.FileInfo objFileInfo = objFileController.GetFileById(
+                     iFileId, this.PortalSettings.PortalId);*/
                 sXmlImport = this.PortalSettings.HomeDirectoryMapPath + objFileInfo.Folder + objFileInfo.FileName;
 
                 var serializer = new XmlSerializer(typeof(List<CustomTags>));
@@ -1450,19 +1375,19 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
                     foreach (var importTag in listImport)
                     {
-                        while (listCurrent.Find(existsTag => existsTag.iTagId.Equals(iNewTagId[0])) != null)
+                        while (listCurrent.Find(existsTag => existsTag.TagId.Equals(iNewTagId[0])) != null)
                         {
                             iNewTagId[0]++;
                         }
 
                         var tag = new CustomTags
-                            {
-                                iWeight = importTag.iWeight,
-                                sTag = importTag.sTag,
-                                iModulId = this.ModuleId,
-                                sUrl = importTag.sUrl,
-                                iTagId = iNewTagId[0]
-                            };
+                                      {
+                                          Weight = importTag.Weight,
+                                          Tag = importTag.Tag,
+                                          ModuleId = this.ModuleId,
+                                          Url = importTag.Url,
+                                          TagId = iNewTagId[0]
+                                      };
 
                         iNewTagId[0]++;
 
@@ -1495,9 +1420,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
             this.iBCancel.ToolTip = Localization.GetString("Cancel.Text", this.LocalResourceFile);
 
             this.iBAdd.Text = string.Format(
-                 "<img src=\"{0}\" alt=\"{1}\" title=\"{1}\" style=\"border:0\" /> {1}",
-                 this.ResolveUrl("~/images/add.gif"),
-                 Localization.GetString("AddExWord.Text", this.LocalResourceFile));
+                "<img src=\"{0}\" alt=\"{1}\" title=\"{1}\" style=\"border:0\" /> {1}",
+                this.ResolveUrl("~/images/add.gif"),
+                Localization.GetString("AddExWord.Text", this.LocalResourceFile));
             this.iBAdd.ToolTip = Localization.GetString("AddExWord.Text", this.LocalResourceFile);
 
             this.iBEdit.Text = string.Format(
@@ -1512,61 +1437,53 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 Localization.GetString("DeleteExWord.Text", this.LocalResourceFile));
             this.iBDelete.ToolTip = Localization.GetString("DeleteExWord.Text", this.LocalResourceFile);
 
-            this.iBTagAdd.Text =
-                string.Format(
-                    "<img src=\"{0}\" alt=\"{1}\" title=\"{2}\" style=\"border:0;height:16px;weight:16px\" /> {1}",
-                    this.ResolveUrl("~/images/add.gif"),
-                    Localization.GetString("AddTag.Text", this.LocalResourceFile),
-                    Localization.GetString("AddTag.Text", this.LocalResourceFile));
+            this.iBTagAdd.Text = string.Format(
+                "<img src=\"{0}\" alt=\"{1}\" title=\"{2}\" style=\"border:0;height:16px;weight:16px\" /> {1}",
+                this.ResolveUrl("~/images/add.gif"),
+                Localization.GetString("AddTag.Text", this.LocalResourceFile),
+                Localization.GetString("AddTag.Text", this.LocalResourceFile));
 
-            this.iBTagSave.Text =
-                string.Format(
-                    "<img src=\"{0}\" alt=\"{1}\" title=\"{2}\" style=\"border:0;height:16px;weight:16px\" /> {1}",
-                    this.ResolveUrl("~/images/save.gif"),
-                    Localization.GetString("SaveTag.Text", this.LocalResourceFile),
-                    Localization.GetString("SaveTag.Text", this.LocalResourceFile));
+            this.iBTagSave.Text = string.Format(
+                "<img src=\"{0}\" alt=\"{1}\" title=\"{2}\" style=\"border:0;height:16px;weight:16px\" /> {1}",
+                this.ResolveUrl("~/images/save.gif"),
+                Localization.GetString("SaveTag.Text", this.LocalResourceFile),
+                Localization.GetString("SaveTag.Text", this.LocalResourceFile));
 
-            this.iBTagEditCancel.Text =
-                string.Format(
-                    "<img src=\"{0}\" alt=\"{1}\" title=\"{2}\" style=\"border:0;height:16px;weight:16px\" /> {1}",
-                    this.ResolveUrl("~/images/cancel.gif"),
-                    Localization.GetString("Cancel.Text", this.LocalResourceFile),
-                    Localization.GetString("Cancel.Text", this.LocalResourceFile));
+            this.iBTagEditCancel.Text = string.Format(
+                "<img src=\"{0}\" alt=\"{1}\" title=\"{2}\" style=\"border:0;height:16px;weight:16px\" /> {1}",
+                this.ResolveUrl("~/images/cancel.gif"),
+                Localization.GetString("Cancel.Text", this.LocalResourceFile),
+                Localization.GetString("Cancel.Text", this.LocalResourceFile));
 
-            this.iBTagLocalize.Text =
-                string.Format(
-                    "<img src=\"{0}\" alt=\"{1}\" title=\"{2}\" style=\"border:0;height:16px;weight:16px\" /> {1}",
-                    this.ResolveUrl("~/images//icon_language_16px.gif"),
-                    Localization.GetString("ShowLocalize.Text", this.LocalResourceFile),
-                    Localization.GetString("ShowLocalize.Text", this.LocalResourceFile));
+            this.iBTagLocalize.Text = string.Format(
+                "<img src=\"{0}\" alt=\"{1}\" title=\"{2}\" style=\"border:0;height:16px;weight:16px\" /> {1}",
+                this.ResolveUrl("~/images//icon_language_16px.gif"),
+                Localization.GetString("ShowLocalize.Text", this.LocalResourceFile),
+                Localization.GetString("ShowLocalize.Text", this.LocalResourceFile));
 
             /*this.dshCommOpt.Text = Localization.GetString("lCommOpt.Text", this.LocalResourceFile);
             this.dshFlashOpt.Text = Localization.GetString("lFlashOpt.Text", this.LocalResourceFile);
             this.dshExcludeOpt.Text = Localization.GetString("lExcludeOpt.Text", this.LocalResourceFile);*/
 
-            this.lTab1.Text =
-                string.Format(
-                    "<img src=\"{0}\" alt=\"{1}\" title=\"{1}\" style=\"border:0;height:16px;weight:16px\" /> {1}",
-                    this.ResolveUrl("Settings.png"),
-                    Localization.GetString("lCommOpt.Text", this.LocalResourceFile));
+            this.lTab1.Text = string.Format(
+                "<img src=\"{0}\" alt=\"{1}\" title=\"{1}\" style=\"border:0;height:16px;weight:16px\" /> {1}",
+                this.ResolveUrl("Settings.png"),
+                Localization.GetString("lCommOpt.Text", this.LocalResourceFile));
 
-            this.lTab2.Text =
-                string.Format(
-                    "<img src=\"{0}\" alt=\"{1}\" title=\"{1}\" style=\"border:0;height:16px;weight:16px\" /> {1}",
-                    this.ResolveUrl("Flash.png"),
-                    Localization.GetString("lFlashOpt.Text", this.LocalResourceFile));
+            this.lTab2.Text = string.Format(
+                "<img src=\"{0}\" alt=\"{1}\" title=\"{1}\" style=\"border:0;height:16px;weight:16px\" /> {1}",
+                this.ResolveUrl("Flash.png"),
+                Localization.GetString("lFlashOpt.Text", this.LocalResourceFile));
 
-            this.lTab3.Text =
-                string.Format(
-                    "<img src=\"{0}\" alt=\"{1}\" title=\"{1}\" style=\"border:0;height:16px;weight:16px\" /> {1}",
-                    this.ResolveUrl("Tag.png"),
-                    Localization.GetString("lTagSrcOpt.Text", this.LocalResourceFile));
+            this.lTab3.Text = string.Format(
+                "<img src=\"{0}\" alt=\"{1}\" title=\"{1}\" style=\"border:0;height:16px;weight:16px\" /> {1}",
+                this.ResolveUrl("Tag.png"),
+                Localization.GetString("lTagSrcOpt.Text", this.LocalResourceFile));
 
-            this.lTab4.Text =
-                string.Format(
-                    "<img src=\"{0}\" alt=\"{1}\" title=\"{1}\" style=\"border:0;height:16px;weight:16px\" /> {1}",
-                    this.ResolveUrl("Exclude.png"),
-                    Localization.GetString("lExcludeOpt.Text", this.LocalResourceFile));
+            this.lTab4.Text = string.Format(
+                "<img src=\"{0}\" alt=\"{1}\" title=\"{1}\" style=\"border:0;height:16px;weight:16px\" /> {1}",
+                this.ResolveUrl("Exclude.png"),
+                Localization.GetString("lExcludeOpt.Text", this.LocalResourceFile));
 
             this.rangevalidator1.ErrorMessage = Localization.GetString("rangevalidator1.Text", this.LocalResourceFile);
 
@@ -1586,7 +1503,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             this.FillSkinList();
 
-            this.cbTransparent.Text = string.Format("&nbsp;{0}", Localization.GetString("transparent.Text", this.LocalResourceFile));
+            this.cbTransparent.Text = $"&nbsp;{Localization.GetString("transparent.Text", this.LocalResourceFile)}";
 
             this.cbTransparent.CheckedChanged += this.CBTransparentCheckedChanged;
 
@@ -1618,7 +1535,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             foreach (ListItem listItem in this.TagModes.Items)
             {
-                    listItem.Text = Localization.GetString(string.Format("{0}.Text", listItem.Value), this.LocalResourceFile);
+                listItem.Text = Localization.GetString($"{listItem.Value}.Text", this.LocalResourceFile);
             }
 
             this.FillWeightList();
@@ -1628,8 +1545,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             this.FillVocabularies();
 
             this.FillCustomTags();
-            this.FillSearchLst();
-
+            
             this.FillExportFolders();
         }
 
@@ -1734,8 +1650,8 @@ namespace WatchersNET.DNN.Modules.TagCloud
             }
 
             // Check if all false, set search
-            if (!this.bModeCustom && !this.bModeTax && !this.bModeNewsarticles &&
-                !this.bModeSimplegallery && !this.bModeActiveforums)
+            if (!this.bModeCustom && !this.bModeTax && !this.bModeNewsarticles && !this.bModeSimplegallery
+                && !this.bModeActiveforums)
             {
                 //this.TagModes.Items.FindByValue("ModeSearch").Selected = true;
                 //this.bModeSearch = true;
@@ -1852,7 +1768,8 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
                 if (this.dDlTaxMode.SelectedValue.Equals("custom"))
                 {
-                    foreach (var sVocabulary in this.vocabularies.Where(sVocabulary => this.cBlVocabularies.Items.FindByValue(sVocabulary) != null))
+                    foreach (var sVocabulary in this.vocabularies.Where(
+                        sVocabulary => this.cBlVocabularies.Items.FindByValue(sVocabulary) != null))
                     {
                         this.cBlVocabularies.Items.FindByValue(sVocabulary).Selected = true;
                     }
@@ -1919,7 +1836,8 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             foreach (var weightMode in Enum.GetNames(typeof(WeightMode)))
             {
-                this.CanvasWeightMode.Items.Add(new ListItem(Localization.GetString(string.Format("{0}.Text", weightMode), this.LocalResourceFile), weightMode));
+                this.CanvasWeightMode.Items.Add(
+                    new ListItem(Localization.GetString($"{weightMode}.Text", this.LocalResourceFile), weightMode));
             }
 
             // Setting Weight Mode
@@ -2012,8 +1930,8 @@ namespace WatchersNET.DNN.Modules.TagCloud
             // Setting Exclude Words
             this.exlusionWords.AddRange(DataControl.TagCloudExcludeWordsGetByModule(this.TabModuleId));
 
-            foreach (
-                var item in this.exlusionWords.Select(wordItem => new ListItem { Text = wordItem.Word, Value = wordItem.WordID.ToString() }))
+            foreach (var item in this.exlusionWords.Select(
+                wordItem => new ListItem { Text = wordItem.Word, Value = wordItem.WordID.ToString() }))
             {
                 this.lBExList.Items.Add(item);
             }
@@ -2022,7 +1940,8 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             foreach (var sortType in Enum.GetNames(typeof(SortType)))
             {
-                this.SortTags.Items.Add(new ListItem(Localization.GetString(string.Format("{0}.Text", sortType), this.LocalResourceFile), sortType));
+                this.SortTags.Items.Add(
+                    new ListItem(Localization.GetString($"{sortType}.Text", this.LocalResourceFile), sortType));
             }
 
             // Setting Sort Tags
@@ -2144,16 +2063,16 @@ namespace WatchersNET.DNN.Modules.TagCloud
             if (this.tbTagsCloudWidth.Text.EndsWith("px"))
             {
                 this.dDlWidth.SelectedValue = "pixel";
-                this.tbTagsCloudWidth.Text =
-                    this.tbTagsCloudWidth.Text.Replace(
-                        this.tbTagsCloudWidth.Text.Substring(this.tbTagsCloudWidth.Text.IndexOf("px")), string.Empty);
+                this.tbTagsCloudWidth.Text = this.tbTagsCloudWidth.Text.Replace(
+                    this.tbTagsCloudWidth.Text.Substring(this.tbTagsCloudWidth.Text.IndexOf("px")),
+                    string.Empty);
             }
             else if (this.tbTagsCloudWidth.Text.EndsWith("%"))
             {
                 this.dDlWidth.SelectedValue = "percent";
-                this.tbTagsCloudWidth.Text =
-                    this.tbTagsCloudWidth.Text.Replace(
-                        this.tbTagsCloudWidth.Text.Substring(this.tbTagsCloudWidth.Text.IndexOf("%")), string.Empty);
+                this.tbTagsCloudWidth.Text = this.tbTagsCloudWidth.Text.Replace(
+                    this.tbTagsCloudWidth.Text.Substring(this.tbTagsCloudWidth.Text.IndexOf("%")),
+                    string.Empty);
             }
 
             // Setting Tags Cloud Height
@@ -2414,9 +2333,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             if (this.dDlTaxMode.SelectedValue.Equals("custom"))
             {
-                sVocabularies =
-                    this.cBlVocabularies.Items.Cast<ListItem>().Where(item => item.Selected).Aggregate(
-                        sVocabularies, (current, item) => current + string.Format("{0};", item.Value));
+                sVocabularies = this.cBlVocabularies.Items.Cast<ListItem>().Where(item => item.Selected).Aggregate(
+                    sVocabularies,
+                    (current, item) => current + $"{item.Value};");
             }
 
             if (sVocabularies.EndsWith(";"))
@@ -2480,10 +2399,10 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 switch (this.dDlWidth.SelectedValue)
                 {
                     case "pixel":
-                        this.SaveSetting(modController, "tagcloudwidth", string.Format("{0}px", this.tbTagsCloudWidth.Text));
+                        this.SaveSetting(modController, "tagcloudwidth", $"{this.tbTagsCloudWidth.Text}px");
                         break;
                     case "percent":
-                        this.SaveSetting(modController, "tagcloudwidth", string.Format("{0}%", this.tbTagsCloudWidth.Text));
+                        this.SaveSetting(modController, "tagcloudwidth", $"{this.tbTagsCloudWidth.Text}%");
                         break;
                 }
             }
@@ -2499,7 +2418,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     objModules.UpdateTabModuleSetting(TabModuleId, "tagcloudheight", string.Format("{0}%", tbTagsCloudHeight.Text));
                 }
             }*/
-            var sLogCacheKey = string.Format("CloudItems{0}", this.TabModuleId);
+            var sLogCacheKey = $"CloudItems{this.TabModuleId}";
 
             if (DataCache.GetCache(sLogCacheKey) != null)
             {
@@ -2613,13 +2532,13 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 }
 
                 var tag = new CustomTags
-                    {
-                        iWeight = int.Parse(this.dDlTagWeight.SelectedValue),
-                        sTag = sTagName,
-                        iModulId = this.ModuleId,
-                        sUrl = this.ctlTagUrl.Url,
-                        iTagId = DataControl.TagCloudItemsGetByModule(this.ModuleId).Count
-                    };
+                              {
+                                  Weight = int.Parse(this.dDlTagWeight.SelectedValue),
+                                  Tag = sTagName,
+                                  ModuleId = this.ModuleId,
+                                  Url = this.ctlTagUrl.Url,
+                                  TagId = DataControl.TagCloudItemsGetByModule(this.ModuleId).Count
+                              };
 
                 // Add to Sql
                 try
@@ -2631,11 +2550,11 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     // Retrieve Highest Tag Id to Generate new TagId
                     var list = DataControl.TagCloudItemsGetByModule(this.ModuleId);
 
-                    Utility.SortDescending(list, item => item.iTagId);
+                    Utility.SortDescending(list, item => item.TagId);
 
                     var itemHighest = list.FirstOrDefault();
 
-                    tag.iTagId = itemHighest.iTagId + 1;
+                    tag.TagId = itemHighest.TagId + 1;
 
                     DataControl.TagCloudItemsAdd(tag);
                 }
@@ -2695,7 +2614,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                                 this.phCustom.Visible = true;
 
                                 // Expand Panel
-                               panelOpenSelector = "TagSrcCustomPanel";
+                                panelOpenSelector = "TagSrcCustomPanel";
                             }
                             else
                             {
@@ -2825,23 +2744,27 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 }
 
                 tag = new CustomTags
-                    {
-                        iWeight = int.Parse(this.dDlTagWeight.SelectedValue),
-                        sTag = sTagName,
-                        iModulId = this.ModuleId,
-                        sUrl = this.ctlTagUrl.Url,
-                        iTagId = int.Parse(this.lTagId.Text)
-                    };
+                          {
+                              Weight = int.Parse(this.dDlTagWeight.SelectedValue),
+                              Tag = sTagName,
+                              ModuleId = this.ModuleId,
+                              Url = this.ctlTagUrl.Url,
+                              TagId = int.Parse(this.lTagId.Text)
+                          };
             }
 
             if (!string.IsNullOrEmpty(this.lTagLocale.Text))
             {
                 if (tag != null)
                 {
-                    DataControl.TagCloudItemsDeleteMl(tag.iTagId, tag.iModulId, this.lTagLocale.Text);
+                    DataControl.TagCloudItemsDeleteMl(tag.TagId, tag.ModuleId, this.lTagLocale.Text);
 
                     DataControl.TagCloudItemsAddMl(
-                        tag.iTagId, this.lTagLocale.Text, this.tbCustomTag.Text, tag.iModulId, this.ctlTagUrl.Url);
+                        tag.TagId,
+                        this.lTagLocale.Text,
+                        this.tbCustomTag.Text,
+                        tag.ModuleId,
+                        this.ctlTagUrl.Url);
                 }
 
                 this.FillLocalizedTag(string.Empty, string.Empty);

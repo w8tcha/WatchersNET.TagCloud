@@ -10,7 +10,7 @@
 *
 *   Copyright(c) Ingo Herbote (thewatcher@watchersnet.de)
 *   All rights reserved.
-*   Internet: http://www.watchersnet.de/TagCloud
+*   Internet: https://github.com/w8tcha/WatchersNET.TagCloud
 *
 *   WatchersNET.TagCloud is released under the New BSD License, see below
 ************************************************************************************************
@@ -47,10 +47,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Web;
-
-    using DotNetNuke.Entities.Tabs;
 
     /// <summary>
     /// Helper Class
@@ -108,10 +105,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </returns>
         public static bool IsNumeric(object valueToCheck)
         {
-            double dummy;
             var inputValue = Convert.ToString(valueToCheck);
 
-            var numeric = double.TryParse(inputValue, System.Globalization.NumberStyles.Any, null, out dummy);
+            var numeric = double.TryParse(inputValue, System.Globalization.NumberStyles.Any, null, out var dummy);
 
             return numeric;
         }
@@ -190,62 +186,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
         {
             return File.Exists(HttpContext.Current.Server.MapPath("~/bin/Active.Modules.Forums.40.dll"))
                    || File.Exists(HttpContext.Current.Server.MapPath("~/bin/DotNetNuke.Modules.ActiveForums.dll"));
-        }
-
-        /// <summary>
-        /// Convert to an SEO Link
-        /// </summary>
-        /// <param name="iPortalId">
-        /// The i portal id.
-        /// </param>
-        /// <param name="iTabId">
-        /// The i tab id.
-        /// </param>
-        /// <param name="sControlKey">
-        /// The s control key.
-        /// </param>
-        /// <param name="sTitle">
-        /// The s title.
-        /// </param>
-        /// <param name="sAdditionalParameters">
-        /// The s additional parameters.
-        /// </param>
-        /// <returns>
-        /// Returns the SEO Friendly Link
-        /// </returns>
-        public static string GetSeoLink(int iPortalId, int iTabId, string sControlKey, string sTitle, params string[] sAdditionalParameters)
-        {
-            var tabInfo = (new TabController()).GetTab(iTabId, iPortalId, false);
-            
-            var sPath = "~/default.aspx?tabid=" + tabInfo.TabID;
-
-            sPath = sAdditionalParameters.Aggregate(sPath, (current, p) => current + string.Format("&{0}", p));
-
-            if (string.IsNullOrEmpty(sTitle))
-            {
-                sTitle = "Default.aspx";
-            }
-
-            return DotNetNuke.Common.Globals.FriendlyUrl(tabInfo, sPath, sTitle);
-
-            /*if (Settings.BlogSettings.GetBlogSettings(iPortalId, iTabID).ShowSeoFriendlyUrl)
-            {
-                DotNetNuke.Entities.Tabs.TabInfo TabInfo = (new DotNetNuke.Entities.Tabs.TabController()).GetTab(iTabID, iPortalId, false);
-                string Path = "~/default.aspx?tabid=" + TabInfo.TabID;
-                foreach (string p in sAdditionalParameters)
-                {
-                    Path += "&" + p;
-                }
-                if (string.IsNullOrEmpty(sTitle))
-                {
-                    sTitle = "Default.aspx";
-                }
-                return DotNetNuke.Common.Globals.FriendlyUrl(TabInfo, Path, sTitle);
-            }
-            else
-            {
-                return NavigateURL(iTabID, sControlKey, sAdditionalParameters);
-            }*/
         }
     }
 }
