@@ -1,6 +1,8 @@
 # WatchersNET.TagCloud
 This DNN (formerly DotNetNuke) Module displays a Tag as an HTML5 Canvas 3D Cloud, WordCloud ("Wordle" inspired Tag Cloud), or as Plain HTML with Skinning as an list of hyper links in varying styles depending on a weight (Like a Standard Web 2.0 Tag Cloud). 
 
+![Logo](http://www.watchersnet.de/Portals/0/TagCloudLogo.png)
+
 The Tags are generated from...
 * An List of Custom (Localized) Tags you can define
 * From the Dnn Taxonomy Terms
