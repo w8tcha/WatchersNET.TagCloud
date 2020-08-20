@@ -4,7 +4,7 @@
 *   standard Web 2.0 Tag Cloud, or You can define your own Tags list.  The Tags are links which linked to the Portal Search to 
 *   show all Pages with that Tag.
 *
-*   The Tag Cloud will be rendered as 3D Flash Cloud, and as alternative for Non Flash 
+*   The Tag Cloud will be rendered as 3D Cloud, and as alternative for Non Flash 
 *   Users as a list of hyperlinks in varying styles depending on a weight. 
 *   This is similar to tag clouds in del.icio.us or Flickr.
 *
@@ -80,9 +80,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </returns>
         public string ExportModule(int moduleId)
         {
-            var objModules = new ModuleController();
-
-            var moduleSettings = objModules.GetTabModuleSettings(TagCloud.CurrentTabModuleId);
+            var moduleSettings = this.TabModuleSettings;
 
             var sBXml = new StringBuilder();
 

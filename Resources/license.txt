@@ -1,7 +1,7 @@
 ﻿WatchersNET.TagCloud
 Copyright(c) Ingo Herbote (thewatchter@watchersnet.de)
 All rights reserved.
-Internet: http://dslab.watchersnet.de
+Internet: https://github.com/w8tcha/WatchersNET.TagCloud
 
 ===============
 WatchersNET.TagCloud is released under the New BSD License, see below

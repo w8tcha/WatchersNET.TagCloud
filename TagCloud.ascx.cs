@@ -4,7 +4,7 @@
 *   standard Web 2.0 Tag Cloud, or You can define your own Tags list.  The Tags are links which linked to the Portal Search to
 *   show all Pages with that Tag.
 *
-*   The Tag Cloud will be rendered as 3D Flash Cloud, and as alternative for Non Flash
+*   The Tag Cloud will be rendered as 3D Cloud, and as alternative for Non Flash
 *   Users as a list of hyperlinks in varying styles depending on a weight.
 *   This is similar to tag clouds in del.icio.us or Flickr.
 *
@@ -64,7 +64,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
     using DotNetNuke.Entities.Modules.Actions;
     using DotNetNuke.Entities.Portals;
     using DotNetNuke.Entities.Tabs;
-    using DotNetNuke.Framework;
     using DotNetNuke.Framework.JavaScriptLibraries;
     using DotNetNuke.Security;
     using DotNetNuke.Security.Permissions;
@@ -159,7 +158,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// <returns>
         /// Item List
         /// </returns>
-        public List<CloudItem> GetItems()
+        private List<CloudItem> GetItems()
         {
             var sLogCacheKey = $"CloudItems{this.TabModuleId}";
 
@@ -183,13 +182,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             switch (this.settings.renderMode)
             {
-                case RenderMode.Flash:
-                    {
-                        this.tagListItems = itemList;
-                        this.AddFlashScript();
-                    }
-
-                    break;
                 case RenderMode.HTML5:
                     {
                         this.AddCanvasScript();
@@ -213,7 +205,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// <returns>
         /// List of Tags
         /// </returns>
-        public List<CloudItem> GetItemsFromDb()
+        private List<CloudItem> GetItemsFromDb()
         {
             var list = new List<CloudItem>();
 
@@ -531,7 +523,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             var currentItem = 1;
             var enumerable = cloudItems as IList<CloudItem> ?? cloudItems.ToList();
-            var itemCount = enumerable.Count();
+            var itemCount = enumerable.Count;
 
             foreach (var item in enumerable)
             {
@@ -551,77 +543,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 typeof(Page),
                 $"CanvasScript{this.tagCloudDiv.ClientID}",
                 canvasScript.ToString(),
-                true);
-        }
-
-        /// <summary>
-        /// Build Entire Script Link and Block for Flash
-        /// </summary>
-        private void AddFlashScript()
-        {
-            if (this.tagListItems.Count == 0)
-            {
-                return;
-            }
-
-            if (HttpContext.Current.Items["swfobject_registered"] == null)
-            {
-                ScriptManager.RegisterClientScriptInclude(
-                    this, typeof(Page), "swfObject", this.ResolveUrl("js/swfobject.js"));
-
-                HttpContext.Current.Items.Add("swfobject_registered", "true");
-            }
-
-            var stdDev = Statistics.StdDev(this.ItemWeights, out var mean);
-
-            var sBTags = new StringBuilder();
-
-            sBTags.AppendLine("<tags>");
-
-            foreach (var cloudItem in this.tagListItems)
-            {
-                var normalWeight = NormalizeWeight(cloudItem.Weight, mean, stdDev);
-
-                sBTags.AppendLine(
-                    $"<a href='{cloudItem.Href}' title='{HttpUtility.HtmlEncode(cloudItem.Title)}' style='font-size:{this.fontSizes[normalWeight - 1]}px'>{cloudItem.Text}</a>");
-            }
-
-            sBTags.AppendLine("</tags>");
-
-            var sWmode = this.settings.Bgcolor.Contains("transparent")
-                                ? "params.wmode = \"transparent\";"
-                                : $"params.bgcolor = \"{this.settings.Bgcolor}\";";
-
-            var flashScript = new StringBuilder();
-
-            flashScript.AppendLine("var flashvars = {};");
-            flashScript.AppendFormat("flashvars.tcolor = \"{0}\";", this.settings.Tcolor);
-            flashScript.AppendFormat("flashvars.tcolor2 = \"{0}\";", this.settings.Tcolor2);
-            flashScript.AppendFormat("flashvars.hicolor = \"{0}\"; ", this.settings.Hicolor);
-
-            flashScript.AppendFormat("flashvars.tspeed = \"{0}\";", this.settings.Tspeed);
-            flashScript.AppendLine("flashvars.distr = \"true\";");
-            flashScript.AppendLine("flashvars.mode = \"tags\";");
-            flashScript.AppendFormat("flashvars.tagcloud = \"{0}\";", HttpUtility.UrlEncode(sBTags.ToString()));
-            flashScript.AppendLine("  ");
-            flashScript.AppendLine("var params = {};");
-            flashScript.AppendLine(sWmode);
-            flashScript.AppendLine("params.allowScriptAccess = \"always\";");
-
-            flashScript.AppendFormat(
-                "swfobject.embedSWF(\"{0}\", \"{1}\", \"{2}\", \"{3}\", \"9.0.0\", \"\" , flashvars, params);",
-                this.ResolveUrl("tagcloud.swf"),
-                this.tagCloudDiv.ClientID,
-                this.settings.FlashWidth,
-                this.settings.FlashHeight);
-
-            var csType = typeof(Page);
-
-            ScriptManager.RegisterStartupScript(
-                this,
-                csType,
-                $"TagCloudFlashScript{this.tagCloudDiv.ClientID}",
-                flashScript.ToString(),
                 true);
         }
 
@@ -1097,19 +1018,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             }
             else
             {
-                // Import old setting
-                if (!string.IsNullOrEmpty((string)moduleSettings["flashenabled"]))
-                {
-                    var flashEnabled = bool.Parse((string)moduleSettings["flashenabled"]);
-
-                    this.settings.renderMode = flashEnabled
-                                                            ? RenderMode.Flash
-                                                            : RenderMode.BasicHTML;
-                }
-                else
-                {
-                    this.settings.renderMode = RenderMode.HTML5;
-                }
+                this.settings.renderMode = RenderMode.HTML5;
             }
 
             // Setting Render Item Weight

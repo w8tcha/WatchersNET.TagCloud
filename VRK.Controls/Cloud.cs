@@ -41,10 +41,10 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
         /// <summary>
         /// The font sizes.
         /// </summary>
-        private static readonly string[] FontSizes = new[]
-            {
-               "xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large" 
-            };
+        private static readonly string[] FontSizes =
+        {
+            "xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large"
+        };
 
         #endregion
 

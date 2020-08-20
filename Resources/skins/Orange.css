@@ -3,7 +3,7 @@
 
 .TagCloud-Orange,
 .TagCloud-Orange ul {margin: 0;padding: 0;
-           font-style: normal;font-variant: normal;font-weight: 400;font-size: 100%;text-align: center;background-color:faf7f3}
+           font-style: normal;font-variant: normal;font-weight: 400;font-size: 100%;text-align: center;background-color:#faf7f3}
 .TagCloud-Orange span a,
 .TagCloud-Orange li a {font-family: "Georgia", "Times New Roman", "Times", serif;margin-top: 0px;margin-right: 5px;margin-bottom: 0px;margin-left: 5px;
                   text-transform: capitalize;color: #ef5308;text-decoration:underline}

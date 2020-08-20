@@ -28,26 +28,6 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
     {
         #region Constants and Fields
 
-        /// <summary>
-        /// The _href.
-        /// </summary>
-        private string href;
-
-        /// <summary>
-        /// The _text.
-        /// </summary>
-        private string text;
-
-        /// <summary>
-        /// The _title.
-        /// </summary>
-        private string title;
-
-        /// <summary>
-        /// The _weight.
-        /// </summary>
-        private double weight;
-
         #endregion
 
         #region Constructors and Destructors
@@ -70,8 +50,8 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
         /// </param>
         public CloudItem(string text, double weight)
         {
-            this.text = text;
-            this.weight = weight;
+            this.Text = text;
+            this.Weight = weight;
         }
 
         /// <summary>
@@ -89,7 +69,7 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
         public CloudItem(string text, double weight, string href)
             : this(text, weight)
         {
-            this.href = href;
+            this.Href = href;
         }
 
         /// <summary>
@@ -110,7 +90,7 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
         public CloudItem(string text, double weight, string href, string title)
             : this(text, weight, href)
         {
-            this.title = title;
+            this.Title = title;
         }
 
         #endregion
@@ -120,42 +100,22 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
         /// <summary>
         /// Gets or sets The address of the HTML anchor.
         /// </summary>
-        public string Href
-        {
-            get => this.href;
-
-            set => this.href = value;
-        }
+        public string Href { get; set; }
 
         /// <summary>
         ///   Gets or sets the text for individual hyperlinks.
         /// </summary>
-        public string Text
-        {
-            get => this.text;
-
-            set => this.text = value;
-        }
+        public string Text { get; set; }
 
         /// <summary>
         ///   Gets or sets the title (tooltip) of the HTML anchor.
         /// </summary>
-        public string Title
-        {
-            get => this.title;
-
-            set => this.title = value;
-        }
+        public string Title { get; set; }
 
         /// <summary>
         ///   Gets or sets the weight of the item.
         /// </summary>
-        public double Weight
-        {
-            get => this.weight;
-
-            set => this.weight = value;
-        }
+        public double Weight { get; set; }
 
         #endregion
 
@@ -169,7 +129,7 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
         /// </returns>
         private bool ShouldSerializeHref()
         {
-            return !String.IsNullOrEmpty(this.href);
+            return !string.IsNullOrEmpty(this.Href);
         }
 
         /// <summary>
@@ -180,7 +140,7 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
         /// </returns>
         private bool ShouldSerializeText()
         {
-            return !String.IsNullOrEmpty(this.text);
+            return !string.IsNullOrEmpty(this.Text);
         }
 
         /// <summary>
@@ -191,7 +151,7 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
         /// </returns>
         private bool ShouldSerializeTitle()
         {
-            return !String.IsNullOrEmpty(this.title);
+            return !string.IsNullOrEmpty(this.Title);
         }
 
         /// <summary>
@@ -202,7 +162,7 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
         /// </returns>
         private bool ShouldSerializeWeight()
         {
-            return this.weight != 0;
+            return this.Weight != 0;
         }
 
         #endregion

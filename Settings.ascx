@@ -4,7 +4,6 @@
 <%@ Register TagPrefix="dnn" Assembly="DotNetNuke.Web" Namespace="DotNetNuke.Web.UI.WebControls" %>
 
 <asp:panel id="pnlSettings" runat="server">
-  <img class="TagCloudLogo" style="margin: 0 auto;" src="<%= ResolveUrl("TagCloudLogo.png")%>" alt="WatchersNET.TagCloud Logo" title="WatchersNET.TagCloud Logo" />
   <div class="dnnForm " id="SettingTabs">
     <ul class="dnnAdminTabNav">
         <li><a href="#BasicSettings"><asp:Label ID="lTab1" runat="server"></asp:Label></a></li>
@@ -27,8 +26,8 @@
       <div class="dnnFormItem">
           <dnn:label id="lblTagsCloudWidth" runat="server" ResourceKey="lblTagsCloudWidth" controlname="tbTagsCloudWidth" suffix=":" CssClass="SubHead"></dnn:label>
           <dnn:label id="lblFlashWidth" runat="server" ResourceKey="lblFlashWidth" controlname="tbFlashWidth" suffix=":" CssClass="SubHead"></dnn:label>
-          <asp:TextBox id="tbFlashWidth" Width="50px" runat="server" CssClass="NumericTextBox"></asp:TextBox>
-          <asp:TextBox id="tbTagsCloudWidth" Width="50px" runat="server" CssClass="NumericTextBox"></asp:TextBox>&nbsp;
+          <asp:TextBox id="tbFlashWidth" Width="50px" runat="server" TextMode="Number"></asp:TextBox>
+          <asp:TextBox id="tbTagsCloudWidth" Width="50px" runat="server" TextMode="Number"></asp:TextBox>&nbsp;
           <asp:DropDownList id="dDlWidth" runat="server">
             <asp:ListItem Text="px" Value="pixel"></asp:ListItem>
             <asp:ListItem Text="%" Value="percent"></asp:ListItem>
@@ -42,7 +41,7 @@
           <dnn:label id="lblFlashHeight" runat="server" ResourceKey="lblFlashHeight" controlname="tbFlashHeight" suffix=":" CssClass="SubHead"></dnn:label>
           <asp:TextBox id="tbTagsCloudHeight" Width="50px" Text="auto" Enabled="false" runat="server"></asp:TextBox>
 
-          <asp:TextBox id="tbFlashHeight" Width="50px" runat="server" CssClass="NumericTextBox"></asp:TextBox>
+          <asp:TextBox id="tbFlashHeight" Width="50px" runat="server" TextMode="Number"></asp:TextBox>
           <asp:CustomValidator id="cVFlashHeight" runat="server" OnServerValidate="CheckFlashHeight" ControlToValidate="tbFlashHeight" ErrorMessage="CustomValidator"></asp:CustomValidator>
       </div>
       <div class="dnnFormItem">
@@ -74,11 +73,11 @@
   <fieldset class="dnnClear">
       <div class="dnnFormItem">
           <dnn:label id="lblOccurCount" runat="server" ResourceKey="lblOccurCount" controlname="tbOccurCount" suffix=":" CssClass="SubHead"></dnn:label>
-          <asp:TextBox id="tbOccurCount" Width="50px" runat="server" CssClass="NumericTextBox" />
+          <asp:TextBox id="tbOccurCount" Width="50px" runat="server" TextMode="Number" />
       </div>
       <div class="dnnFormItem">
     <dnn:label id="lblTagsCount" runat="server" ResourceKey="lblTagsCount" controlname="tbTags" suffix=":" CssClass="SubHead"></dnn:label>
-      <asp:TextBox id="tbTags" Width="50px" runat="server" CssClass="NumericTextBox" />
+      <asp:TextBox id="tbTags" Width="50px" runat="server" TextMode="Number" />
      </div>
     <div class="dnnFormItem">
         <dnn:Label id="lblSortTags" runat="server" ResourceKey="lblSortTags" controlname="SortTags" suffix=":" CssClass="SubHead"></dnn:Label>
@@ -126,11 +125,12 @@
         #<asp:TextBox id="tbBgcolor" runat="server" Width="100px" />
     </div>
     <div class="dnnFormItem">
+        <dnn:label id="Label1" runat="server" ResourceKey="cbTransparent" controlname="cbTransparent" suffix="?" CssClass="SubHead"></dnn:label>
         <asp:CheckBox id="cbTransparent" runat="server" TextAlign="Right" Text="&nbsp;Transparent?" AutoPostBack="true" />
    </div>
    <div class="dnnFormItem">
         <dnn:label id="lblTspeed" runat="server" ResourceKey="lblTspeed" controlname="tbTspeed" suffix=":" CssClass="SubHead"></dnn:label>
-        <asp:TextBox id="tbTspeed" runat="server" Width="50px" CssClass="NumericTextBox" />
+        <asp:TextBox id="tbTspeed" runat="server" Width="50px" TextMode="Number" />
         <asp:RangeValidator  id="rangevalidator1" runat="server" MinimumValue="25" MaximumValue="500" Type="Integer" ControlToValidate="tbTspeed" ErrorMessage="RangeValidator"></asp:RangeValidator>
     </div>
     <div class="dnnFormItem">
@@ -146,19 +146,19 @@
           </div>
           <div class="dnnFormItem">
                     <dnn:label id="GridSizeLabel" runat="server" ResourceKey="GridSizeLabel" controlname="GridSize" suffix=":" CssClass="SubHead"></dnn:label>
-                    <asp:TextBox id="GridSize" runat="server" Width="50px" CssClass="NumericTextBox" />
+                    <asp:TextBox id="GridSize" runat="server" Width="50px" TextMode="Number" />
           </div>
           <div class="dnnFormItem">
                     <dnn:label id="EllipticityLabel" runat="server" ResourceKey="EllipticityLabel" controlname="Ellipticity" suffix=":" CssClass="SubHead"></dnn:label>
-                    <asp:TextBox id="Ellipticity" runat="server" Width="50px" CssClass="NumericTextBox" />
+                    <asp:TextBox id="Ellipticity" runat="server" Width="50px" TextMode="Number" />
            </div>
            <div class="dnnFormItem">
                     <dnn:label id="WeightFactorLabel" runat="server" ResourceKey="WeightFactorLabel" controlname="WeightFactor" suffix=":" CssClass="SubHead"></dnn:label>
-                    <asp:TextBox id="WeightFactor" runat="server" Width="50px" CssClass="NumericTextBox" />
+                    <asp:TextBox id="WeightFactor" runat="server" Width="50px" TextMode="Number" />
             </div>
             <div class="dnnFormItem">
                     <dnn:label id="MinSizeLabel" runat="server" ResourceKey="MinSizeLabel" controlname="MinSize" suffix=":" CssClass="SubHead"></dnn:label>
-                    <asp:TextBox id="MinSize" runat="server" Width="50px" CssClass="NumericTextBox" />
+                    <asp:TextBox id="MinSize" runat="server" Width="50px" TextMode="Number" />
             </div>
             <div class="dnnFormItem">
                     <dnn:label id="FillBoxLabel" runat="server" ResourceKey="FillBoxLabel" controlname="FillBox" suffix=":" CssClass="SubHead"></dnn:label>

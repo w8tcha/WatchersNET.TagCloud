@@ -1,5 +1,5 @@
 # WatchersNET.TagCloud
-This DNN (formerly DotNetNuke) Module displays a Tag as an HTML5 Canvas 3D Cloud, 3D Flash Cloud, WordCloud ("Wordle" inspired Tag Cloud), or as Plain HTML with Skinning as an list of hyper links in varying styles depending on a weight (Like a Standard Web 2.0 Tag Cloud). 
+This DNN (formerly DotNetNuke) Module displays a Tag as an HTML5 Canvas 3D Cloud, WordCloud ("Wordle" inspired Tag Cloud), or as Plain HTML with Skinning as an list of hyper links in varying styles depending on a weight (Like a Standard Web 2.0 Tag Cloud). 
 
 The Tags are generated from...
 * An List of Custom (Localized) Tags you can define
@@ -11,7 +11,7 @@ The Tags are generated from...
 
 ## Features
 ### 3D Cloud
-By default the Tag Cloud is rendered as a plain HTML 5 3 Cloud, as alternative Option this can be also rendered as 3D Flash Cloud., WordCloud ("Wordle" inspired Tag Cloud) or as Plain HTML with Skinning. You can customize the 3D Cloud, you can set... 
+By default the Tag Cloud is rendered as a plain HTML 5 3D Cloud, WordCloud ("Wordle" inspired Tag Cloud) or as Plain HTML with Skinning. You can customize the 3D Cloud, you can set... 
 * The Fore Color 
 * Highlight Color 
 * Background Color or Transparent
@@ -55,16 +55,13 @@ The Color Settings can be easily changed with an Color Picker
 Easy Import and Export of all Module Settings
 
 *Demos*
-* [Demo 1 (With Flash)](http://www.watchersnet.de/DNN/Module/TagCloud.aspx?Module1014_SelectById=1016)
-* [Demo 2 (Without Flash)](http://www.watchersnet.de/DNN/Module/TagCloud.aspx?Module1014_SelectById=1017)
-* [Demo 3 (wordle Word Cloud)](http://www.watchersnet.de/DNN/Module/TagCloud.aspx?Module1014_SelectById=1074)
+* [Demo 1 (Without Flash)](http://www.watchersnet.de/DNN/Module/TagCloud.aspx?Module1014_SelectById=1017)
+* [Demo 2 (wordle Word Cloud)](http://www.watchersnet.de/DNN/Module/TagCloud.aspx?Module1014_SelectById=1074)
 
 *Screenshots*
 ![wordle" - Word Cloud](http://www.watchersnet.de/Portals/0/screenshots/dnn/dnnTagCloudWordle.png)
 
 ![The 3D HTML Tag Cloud](http://www.watchersnet.de/Portals/0/screenshots/dnn/TagCloudCanvas.jpg)
-
-![The 3D Flash Tag Cloud](http://www.watchersnet.de/Portals/0/screenshots/dnn/TagCloud3DCloud.jpg)
 
 ![Sliding-Green Skin](http://www.watchersnet.de/Portals/0/screenshots/dnn/Sliding-Green.png)
 
@@ -81,8 +78,6 @@ Easy Import and Export of all Module Settings
 ![Basic Settings](http://www.watchersnet.de/Portals/0/screenshots/dnn/TagCloudBasicSettings.jpg)
 
 ![Source Settings](http://www.watchersnet.de/Portals/0/screenshots/dnn/TagCloudSourceSettings.jpg)
-
-![Flash Settings](http://www.watchersnet.de/Portals/0/screenshots/dnn/TagCloudFlashSettings.jpg)
 
 ![Exclude Settings](http://www.watchersnet.de/Portals/0/screenshots/dnn/TagCloudExludes.jpg)
 

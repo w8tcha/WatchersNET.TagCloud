@@ -130,7 +130,7 @@ namespace WatchersNET.DNN.Modules.TagCloud.Objects
         public DateTime StartDate { get; set; }
 
         /// <summary>
-        /// Gets or sets The exlusion words.
+        /// Gets or sets The exclusion words.
         /// </summary>
         public List<ExcludeWord> exlusionWords { get; set; }
 
