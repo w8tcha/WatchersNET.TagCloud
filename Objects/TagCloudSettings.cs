@@ -276,6 +276,11 @@ namespace WatchersNET.DNN.Modules.TagCloud.Objects
         public WeightMode weightMode { get; set; }
 
         /// <summary>
+        /// Gets or sets weightSize for the Canvas Cloud
+        /// </summary>
+        public string WeightSize { get; set; }
+
+        /// <summary>
         /// Gets or sets Font Family for the Canvas Cloud.
         /// </summary>
         public string FontFamily { get; set; }

@@ -99,6 +99,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                        sSearchPageTaxQueryString,
                        sFontFamily,
                        sWeightMode,
+                       sWeightSize,
                        sRenderMode,
                        sRenderItemWeight,
                        sTagCloudWidth,
@@ -465,6 +466,15 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
                 try
                 {
+                    sWeightSize = (string)moduleSettings["WeightSize"];
+                }
+                catch (Exception)
+                {
+                    sWeightSize = "1.0";
+                }
+
+                try
+                {
                     sRenderMode = (string)moduleSettings["RenderMode"];
                 }
                 catch (Exception)
@@ -693,6 +703,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     "<SearchPageTaxQueryString>{0}</SearchPageTaxQueryString>", XmlUtils.XMLEncode(sSearchPageTaxQueryString));
                 sBXml.AppendFormat("<FontFamily>{0}</FontFamily>", XmlUtils.XMLEncode(sFontFamily));
                 sBXml.AppendFormat("<WeightMode>{0}</WeightMode>", XmlUtils.XMLEncode(sWeightMode));
+                sBXml.AppendFormat("<WeightSize>{0}</WeightSize>", XmlUtils.XMLEncode(sWeightSize));
                 sBXml.AppendFormat("<rendermode>{0}</rendermode>", XmlUtils.XMLEncode(sRenderMode));
                 sBXml.AppendFormat("<RenderItemWeight>{0}</RenderItemWeight>", XmlUtils.XMLEncode(sRenderItemWeight));
                 sBXml.AppendFormat("<flashwidth>{0}</flashwidth>", XmlUtils.XMLEncode(sFlashWidth));
@@ -821,7 +832,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     objModules.UpdateTabModuleSetting(
                         TagCloud.CurrentTabModuleId, "FontFamily", xmlContent["FontFamily"].InnerText);
                     objModules.UpdateTabModuleSetting(
-                        TagCloud.CurrentTabModuleId, "WeightMode", xmlContent["WeightMode"].InnerText);
+                        TagCloud.CurrentTabModuleId, "WeightMode", xmlContent["WeightMode"].InnerText); 
+                    objModules.UpdateTabModuleSetting(
+                        TagCloud.CurrentTabModuleId, "WeightSize", xmlContent["WeightSize"].InnerText);
                     objModules.UpdateTabModuleSetting(
                         TagCloud.CurrentTabModuleId, "rendermode", xmlContent["RenderMode"].InnerText);
                     objModules.UpdateTabModuleSetting(

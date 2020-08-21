@@ -112,19 +112,19 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="$this.TrayLargeIcon" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
   <data name="$this.TrayAutoArrange" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <assembly alias="System" name="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="System" name="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="$this.DefaultModifiers" type="System.CodeDom.MemberAttributes, System">
     <value>Private</value>
   </data>
@@ -604,5 +604,11 @@
   </data>
   <data name="SearchPageTaxQueryStringLabel.Text" xml:space="preserve">
     <value>Search Page Tax Query String</value>
+  </data>
+  <data name="lblWeightSize.Help" xml:space="preserve">
+    <value>Multiplier for adjusting the size of tags when using a weight mode of size or both.</value>
+  </data>
+  <data name="lblWeightSize.Text" xml:space="preserve">
+    <value>Canvas (HTML5) Weight Size</value>
   </data>
 </root>

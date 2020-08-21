@@ -137,6 +137,10 @@
         <dnn:Label id="lblWeightMode" runat="server" ResourceKey="lblWeightMode" controlname="CanvasWeightMode" suffix=":" CssClass="SubHead"></dnn:Label>
         <asp:DropDownList id="CanvasWeightMode" Width="194px" runat="server"></asp:DropDownList>
      </div>
+      <div class="dnnFormItem">
+          <dnn:Label id="lblWeightSize" runat="server" ResourceKey="lblWeightSize" controlname="CanvasWeightSize" suffix=":" CssClass="SubHead"></dnn:Label>
+          <asp:TextBox id="CanvasWeightSize" runat="server"></asp:TextBox>
+      </div>
       </fieldset>
       <h2 id="WordCloudOptionsPanel" class="dnnFormSectionHead"><a href="#"><asp:Label runat="server" id="WordCloudOptionsPanelLabel" resourcekey="WordCloudOptionsPanelLabel"></asp:Label></a></h2>
       <fieldset class="dnnClear">

@@ -194,12 +194,6 @@
   <data name="lblTcolor.Text" xml:space="preserve">
     <value>Farbe der Tags</value>
   </data>
-  <data name="lblTcolor2.Help" xml:space="preserve">
-    <value>Optionale zweite Farbe für den Farbverlauf (Flash)</value>
-  </data>
-  <data name="lblTcolor2.Text" xml:space="preserve">
-    <value>Flash Verlauffarbe</value>
-  </data>
   <data name="lblTspeed.Help" xml:space="preserve">
     <value>Erlaubt die Geschwindigkeit der Sphere zu ändern. Werte zwischen 25-500 sind möglich.</value>
   </data>

@@ -440,7 +440,8 @@ namespace WatchersNET.DNN.Modules.TagCloud
             canvasScript.Append("outlineThickness : 1,");
             canvasScript.Append("weight : true,");
             canvasScript.Append("weightFrom : 'data-weight',");
-            canvasScript.AppendFormat("weightMode : '{0}'", this.settings.weightMode);
+            canvasScript.AppendFormat("weightMode : '{0}'", this.settings.weightMode); 
+            canvasScript.AppendFormat("weightSize : '{0}'", this.settings.WeightSize);
 
             canvasScript.Append("});");
 
@@ -964,6 +965,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                                     VentrianTabNews = -1,
                                     VentrianTabSimple = -1,
                                     weightMode = WeightMode.size,
+                                    WeightSize = "1.0", 
                                     FontFamily = "Georgia, Arial, sans-serif",
                                     WordCloudSettings =
                                         new WordCloudSettings
@@ -1001,6 +1003,19 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 catch (Exception)
                 {
                     this.settings.weightMode = WeightMode.size;
+                }
+            }
+
+            // Setting WeightSize
+            if (!string.IsNullOrEmpty((string)moduleSettings["WeightSize"]))
+            {
+                try
+                {
+                    this.settings.WeightSize = (string)moduleSettings["WeightSize"];
+                }
+                catch (Exception)
+                {
+                    this.settings.WeightSize = "1.0";
                 }
             }
 

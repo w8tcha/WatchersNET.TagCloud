@@ -8,4 +8,3 @@
   </vrk:Cloud>
 </asp:Panel>
 <div style="clear:both"></div>
-

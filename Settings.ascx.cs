@@ -1845,6 +1845,23 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 this.CanvasWeightMode.SelectedValue = WeightMode.size.ToString();
             }
 
+            // Setting Weight Size
+            if (!string.IsNullOrEmpty((string)this.Settings["WeightSize"]))
+            {
+                try
+                {
+                    this.CanvasWeightSize.Text = (string)this.Settings["WeightSize"];
+                }
+                catch (Exception)
+                {
+                    this.CanvasWeightSize.Text = "1.0";
+                }
+            }
+            else
+            {
+                this.CanvasWeightSize.Text = "1.0";
+            }
+
             this.RenderModeType.DataSource = Enum.GetNames(typeof(RenderMode));
             this.RenderModeType.DataBind();
 
@@ -2329,6 +2346,8 @@ namespace WatchersNET.DNN.Modules.TagCloud
             this.SaveSetting(modController, "FontFamily", this.FontFamily.Text);
 
             this.SaveSetting(modController, "WeightMode", this.CanvasWeightMode.SelectedValue);
+
+            this.SaveSetting(modController, "WeightSize", this.CanvasWeightSize.Text);
 
             this.SaveSetting(modController, "RenderMode", this.RenderModeType.SelectedValue);
 
