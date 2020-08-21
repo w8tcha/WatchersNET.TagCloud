@@ -440,7 +440,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             canvasScript.Append("outlineThickness : 1,");
             canvasScript.Append("weight : true,");
             canvasScript.Append("weightFrom : 'data-weight',");
-            canvasScript.AppendFormat("weightMode : '{0}'", this.settings.weightMode); 
+            canvasScript.AppendFormat("weightMode : '{0}',", this.settings.weightMode); 
             canvasScript.AppendFormat("weightSize : '{0}'", this.settings.WeightSize);
 
             canvasScript.Append("});");
