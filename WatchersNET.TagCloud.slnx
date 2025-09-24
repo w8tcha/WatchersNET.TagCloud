@@ -1,0 +1,13 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Deploy" />
+    <BuildType Name="Release" />
+  </Configurations>
+  <Folder Name="/Other/">
+    <File Path="BuildPackages.bat" />
+    <File Path="LICENSE.md" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="WatchersNET.TagCloud.csproj" Id="23dc1af7-c243-4518-ae0b-c12dcb051fd9" />
+</Solution>

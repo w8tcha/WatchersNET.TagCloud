@@ -4,8 +4,8 @@
 *   standard Web 2.0 Tag Cloud, or You can define your own Tags list.  The Tags are links which linked to the Portal Search to 
 *   show all Pages with that Tag.
 *
-*   The Tag Cloud will be rendered as 3D Cloud, and as alternative for Non Flash 
-*   Users as a list of hyperlinks in varying styles depending on a weight. 
+*   The Tag Cloud will be rendered as 3D Cloud, and 
+*    as a list of hyperlinks in varying styles depending on a weight. 
 *   This is similar to tag clouds in del.icio.us or Flickr.
 *
 *   Copyright(c) Ingo Herbote (thewatcher@watchersnet.de)
@@ -52,7 +52,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
     /// <summary>
     /// Helper Class
     /// </summary>
-    public class Utility
+    public static class Utility
     {
         /// <summary>
         /// Sort a List Ascending
@@ -106,8 +106,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         public static bool IsNumeric(object valueToCheck)
         {
             var inputValue = Convert.ToString(valueToCheck);
-
-            var numeric = double.TryParse(inputValue, System.Globalization.NumberStyles.Any, null, out var dummy);
+            var numeric = double.TryParse(inputValue, System.Globalization.NumberStyles.Any, null, out _);
 
             return numeric;
         }
@@ -115,43 +114,43 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// <summary>
         /// Remove some Characters from the Word otherwise Flash will be not rendered correctly
         /// </summary>
-        /// <param name="sString">the String to Check</param>
+        /// <param name="input">the String to Check</param>
         /// <returns>Cleaned String</returns>
-        public static string RemoveIllegalCharecters(string sString)
+        public static string RemoveIllegalCharacters(string input)
         {
-            var sNewComposed = sString;
+            var newComposed = input;
 
-            sNewComposed = sNewComposed.Replace("'", string.Empty);
-            sNewComposed = sNewComposed.Replace("\"", string.Empty);
-            sNewComposed = sNewComposed.Replace("%", string.Empty);
-            sNewComposed = sNewComposed.Replace(":", string.Empty);
-            sNewComposed = sNewComposed.Replace("/", string.Empty);
-            sNewComposed = sNewComposed.Replace("\\", string.Empty);
-            sNewComposed = sNewComposed.Replace("„", string.Empty);
-            sNewComposed = sNewComposed.Replace(",", string.Empty);
-            sNewComposed = sNewComposed.Replace("+", string.Empty);
-            sNewComposed = sNewComposed.Replace("=", string.Empty);
-            sNewComposed = sNewComposed.Replace("]", " ");
-            sNewComposed = sNewComposed.Replace("[", " ");
-            sNewComposed = sNewComposed.Replace("}", " ");
-            sNewComposed = sNewComposed.Replace("{", " ");
-            sNewComposed = sNewComposed.Replace(")", " ");
-            sNewComposed = sNewComposed.Replace("(", " ");
-            sNewComposed = sNewComposed.Replace("#", string.Empty);
-            sNewComposed = sNewComposed.Replace(">", string.Empty);
-            sNewComposed = sNewComposed.Replace("<", string.Empty);
+            newComposed = newComposed.Replace("'", string.Empty);
+            newComposed = newComposed.Replace("\"", string.Empty);
+            newComposed = newComposed.Replace("%", string.Empty);
+            newComposed = newComposed.Replace(":", string.Empty);
+            newComposed = newComposed.Replace("/", string.Empty);
+            newComposed = newComposed.Replace("\\", string.Empty);
+            newComposed = newComposed.Replace("„", string.Empty);
+            newComposed = newComposed.Replace(",", string.Empty);
+            newComposed = newComposed.Replace("+", string.Empty);
+            newComposed = newComposed.Replace("=", string.Empty);
+            newComposed = newComposed.Replace("]", " ");
+            newComposed = newComposed.Replace("[", " ");
+            newComposed = newComposed.Replace("}", " ");
+            newComposed = newComposed.Replace("{", " ");
+            newComposed = newComposed.Replace(")", " ");
+            newComposed = newComposed.Replace("(", " ");
+            newComposed = newComposed.Replace("#", string.Empty);
+            newComposed = newComposed.Replace(">", string.Empty);
+            newComposed = newComposed.Replace("<", string.Empty);
 
-            if (sNewComposed.Contains("&"))
+            if (newComposed.Contains("&"))
             {
-                sNewComposed = sNewComposed.Remove(sNewComposed.IndexOf("&", StringComparison.Ordinal));
+                newComposed = newComposed.Remove(newComposed.IndexOf("&", StringComparison.Ordinal));
             }
 
-            if (sNewComposed.EndsWith("."))
+            if (newComposed.EndsWith("."))
             {
-                sNewComposed = sNewComposed.Remove(sNewComposed.Length - 1);
+                newComposed = newComposed.Remove(newComposed.Length - 1);
             }
 
-            return sNewComposed;
+            return newComposed;
         }
 
         /// <summary>

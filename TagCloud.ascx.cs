@@ -4,8 +4,8 @@
 *   standard Web 2.0 Tag Cloud, or You can define your own Tags list.  The Tags are links which linked to the Portal Search to
 *   show all Pages with that Tag.
 *
-*   The Tag Cloud will be rendered as 3D Cloud, and as alternative for Non Flash
-*   Users as a list of hyperlinks in varying styles depending on a weight.
+*   The Tag Cloud will be rendered as 3D Cloud, and
+*    as a list of hyperlinks in varying styles depending on a weight.
 *   This is similar to tag clouds in del.icio.us or Flickr.
 *
 *   Copyright(c) Ingo Herbote (thewatcher@watchersnet.de)
@@ -44,8 +44,6 @@
 
 namespace WatchersNET.DNN.Modules.TagCloud
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Globalization;
@@ -56,7 +54,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
     using System.Web.UI;
     using System.Web.UI.HtmlControls;
 
-    using DotNetNuke.Common;
+    using DotNetNuke.Abstractions;
     using DotNetNuke.Common.Utilities;
     using DotNetNuke.Entities.Content.Common;
     using DotNetNuke.Entities.Content.Taxonomy;
@@ -71,6 +69,8 @@ namespace WatchersNET.DNN.Modules.TagCloud
     using DotNetNuke.Services.Localization;
     using DotNetNuke.Web.Client.ClientResourceManagement;
 
+    using Microsoft.Extensions.DependencyInjection;
+
     using VRK.Controls;
 
     using WatchersNET.DNN.Modules.TagCloud.Constants;
@@ -79,24 +79,15 @@ namespace WatchersNET.DNN.Modules.TagCloud
     using TagController = Ventrian.SimpleGallery.Entities.TagController;
     using TagInfo = Ventrian.SimpleGallery.Entities.TagInfo;
 
-    #endregion
-
     /// <summary>
     /// The tag cloud.
     /// </summary>
     public partial class TagCloud : ModuleSettingsBase, IActionable
     {
-        #region Constants and Fields
-
         /// <summary>
-        /// The font sizes.
+        /// The navigation manager.
         /// </summary>
-        private readonly string[] fontSizes = { "6.94", "8.3", "10", "12", "14.4", "17.3", "20.7" };
-
-        /// <summary>
-        /// The tag list items.
-        /// </summary>
-        private List<CloudItem> tagListItems = new List<CloudItem>();
+        private readonly INavigationManager navigationManager;
 
         /// <summary>
         /// The vocabularies.
@@ -109,13 +100,17 @@ namespace WatchersNET.DNN.Modules.TagCloud
         private TagCloudSettings settings;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="TagCloud"/> class.
+        /// </summary>
+        protected TagCloud()
+        {
+            this.navigationManager = this.DependencyProvider.GetRequiredService<INavigationManager>();
+        }
+
+        /// <summary>
         /// Gets or sets The tab module id.
         /// </summary>
-        public static int CurrentTabModuleId { get; set; }
-
-        #endregion
-
-        #region Properties
+        public static int CurrentTabModuleId { get; private set; }
 
         /// <summary>
         ///  Gets Add Menu Entries to Module Container
@@ -138,19 +133,16 @@ namespace WatchersNET.DNN.Modules.TagCloud
         }
 
         /// <summary>
-        /// Gets ItemWeights.
+        /// Raises the <see cref="E:System.Web.UI.Control.Init" /> event.
         /// </summary>
-        private IEnumerable<double> ItemWeights
+        /// <param name="e">An <see cref="T:System.EventArgs" /> object that contains the event data.</param>
+        protected override void OnInit(EventArgs e)
         {
-            get
-            {
-                return this.tagListItems.Select(item => item.Weight);
-            }
+            CurrentTabModuleId = this.TabModuleId;
+
+            this.InitializeComponent();
+            base.OnInit(e);
         }
-
-        #endregion
-
-        #region Public Methods
 
         /// <summary>
         /// Main Entry to load Tags
@@ -160,14 +152,14 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </returns>
         private List<CloudItem> GetItems()
         {
-            var sLogCacheKey = $"CloudItems{this.TabModuleId}";
+            var logCacheKey = $"CloudItems{this.TabModuleId}";
 
             List<CloudItem> itemList;
 
-            if (DataCache.GetCache(sLogCacheKey) != null)
+            if (DataCache.GetCache(logCacheKey) != null)
             {
                 // Get Items From Cache
-                itemList = (List<CloudItem>)DataCache.GetCache(sLogCacheKey);
+                itemList = (List<CloudItem>)DataCache.GetCache(logCacheKey);
 
                 if (itemList.Count == 0)
                 {
@@ -180,9 +172,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 itemList = this.GetItemsFromDb();
             }
 
-            switch (this.settings.renderMode)
+            switch (this.settings.RenderMode)
             {
-                case RenderMode.HTML5:
+                case RenderMode.Html5:
                     {
                         this.AddCanvasScript();
                     }
@@ -237,16 +229,16 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 list.AddRange(this.GetItemsFromSimpleGallery());
             }
 
-            if (this.settings.ModeActiveforums && Utility.IsActiveForumsInstalled())
+            if (this.settings.ModeActiveForums && Utility.IsActiveForumsInstalled())
             {
                 this.settings.TagsLinkChk = false;
                 list.AddRange(this.GetItemsFromActiveForums());
             }
 
             // Exclude Words
-            if (this.settings.exlusionWords.Count > 0)
+            if (this.settings.ExclusionWords.Count > 0)
             {
-                foreach (var exWord in this.settings.exlusionWords)
+                foreach (var exWord in this.settings.ExclusionWords)
                 {
                     var value = exWord.Word.ToLower();
 
@@ -324,53 +316,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
             return list;
         }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Raises the <see cref="E:System.Web.UI.Control.Init" /> event.
-        /// </summary>
-        /// <param name="e">An <see cref="T:System.EventArgs" /> object that contains the event data.</param>
-        protected override void OnInit(EventArgs e)
-        {
-            CurrentTabModuleId = this.TabModuleId;
-
-            this.InitializeComponent();
-            base.OnInit(e);
-        }
-
-        /// <summary>
-        /// The normalize weight.
-        /// </summary>
-        /// <param name="weight">
-        /// The weight.
-        /// </param>
-        /// <param name="mean">
-        /// The mean.
-        /// </param>
-        /// <param name="stdDev">
-        /// The std dev.
-        /// </param>
-        /// <returns>
-        /// Returns the normalized weight.
-        /// </returns>
-        private static int NormalizeWeight(double weight, double mean, double stdDev)
-        {
-            var factor = weight - mean;
-
-            if (factor != 0 && stdDev != 0)
-            {
-                factor /= stdDev;
-            }
-
-            return factor > 2
-                       ? 7
-                       : factor > 1
-                             ? 6
-                             : factor > 0.5 ? 5 : factor > -0.5 ? 4 : factor > -1 ? 3 : factor > -2 ? 2 : 1;
-        }
-
         /// <summary>
         /// Check if the User can see the Page
         /// </summary>
@@ -440,7 +385,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             canvasScript.Append("outlineThickness : 1,");
             canvasScript.Append("weight : true,");
             canvasScript.Append("weightFrom : 'data-weight',");
-            canvasScript.AppendFormat("weightMode : '{0}',", this.settings.weightMode); 
+            canvasScript.AppendFormat("weightMode : '{0}',", this.settings.WeightMode);
             canvasScript.AppendFormat("weightSize : '{0}'", this.settings.WeightSize);
 
             canvasScript.Append("});");
@@ -473,7 +418,10 @@ namespace WatchersNET.DNN.Modules.TagCloud
             if (HttpContext.Current.Items["wordcloudjs_registered"] == null)
             {
                 ScriptManager.RegisterClientScriptInclude(
-                    this, typeof(Page), "wordcloudjs", this.ResolveUrl("js/jquery.wordcloud.js"));
+                    this,
+                    typeof(Page),
+                    "wordcloudjs",
+                    this.ResolveUrl("js/jquery.wordcloud.js"));
 
                 HttpContext.Current.Items.Add("wordcloudjs_registered", "true");
             }
@@ -500,8 +448,8 @@ namespace WatchersNET.DNN.Modules.TagCloud
             canvasScript.AppendFormat("gridSize: {0},", this.settings.WordCloudSettings.GridSize);
             canvasScript.AppendFormat("ellipticity: {0},", this.settings.WordCloudSettings.Ellipticity);
             canvasScript.Append("center: false,");
-            //canvasScript.AppendFormat("wordColor: '{0}',", this.settings.Tcolor.Replace("0x", "#"));
 
+            // canvasScript.AppendFormat("wordColor: '{0}',", this.settings.Tcolor.Replace("0x", "#"));
             if (!this.settings.Bgcolor.Contains("transparent"))
             {
                 var backColor = this.settings.Bgcolor.Replace("0x", "#");
@@ -518,7 +466,8 @@ namespace WatchersNET.DNN.Modules.TagCloud
             canvasScript.Append("clearCanvas: true,");
             canvasScript.AppendFormat("fillBox: {0},", this.settings.WordCloudSettings.FillBox.ToString().ToLower());
             canvasScript.AppendFormat(
-                "shape: '{0}',", this.settings.WordCloudSettings.Shape.ToString().Replace("_", "-"));
+                "shape: '{0}',",
+                this.settings.WordCloudSettings.Shape.ToString().Replace("_", "-"));
 
             canvasScript.Append("wordList:  [");
 
@@ -528,7 +477,10 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             foreach (var item in enumerable)
             {
-                canvasScript.AppendFormat(currentItem.Equals(itemCount) ? "['{0}', {1}]" : "['{0}', {1}],", item.Text, item.Weight);
+                canvasScript.AppendFormat(
+                    currentItem.Equals(itemCount) ? "['{0}', {1}]" : "['{0}', {1}],",
+                    item.Text,
+                    item.Weight);
 
                 currentItem++;
             }
@@ -558,22 +510,22 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </returns>
         private string FormatUrl(string sInputUrl)
         {
-            var sNewUrl = sInputUrl;
+            var newUrl = sInputUrl;
 
-            if (string.IsNullOrEmpty(sNewUrl) || sNewUrl.StartsWith("http://"))
+            if (string.IsNullOrEmpty(newUrl) || newUrl.StartsWith("http://"))
             {
-                return sNewUrl;
+                return newUrl;
             }
 
-            var iTabId = int.Parse(sNewUrl);
+            var tabId = int.Parse(newUrl);
 
             var objTabController = new TabController();
 
-            var objTabInfo = objTabController.GetTab(iTabId, PortalSettings.PortalId, true);
+            var objTabInfo = objTabController.GetTab(tabId, this.PortalSettings.PortalId, true);
 
-            sNewUrl = objTabInfo.FullUrl;
+            newUrl = objTabInfo.FullUrl;
 
-            return sNewUrl;
+            return newUrl;
         }
 
         /// <summary>
@@ -590,7 +542,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             {
                 ////////////////////////
                 foreach (var tag in
-                    DataControl.TagCloudActiveForumsTags(PortalSettings.PortalId, this.settings.AfModule, this.settings.TagCount).Where(
+                    DataControl.TagCloudActiveForumsTags(this.PortalSettings.PortalId, this.settings.AfModule, this.settings.TagCount).Where(
                         tag => tag.Weight >= this.settings.OccurCount))
                 {
                     CloudItem entry;
@@ -598,14 +550,14 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     if (this.settings.TagsLink)
                     {
                         entry = new CloudItem(
-                            Utility.RemoveIllegalCharecters(tag.Text),
+                            Utility.RemoveIllegalCharacters(tag.Text),
                             tag.Weight,
-                            Globals.NavigateURL(this.settings.AfTab, string.Empty, "afv=search", $"aftg={tag.Text}"),
+                            this.navigationManager.NavigateURL(this.settings.AfTab, string.Empty, "afv=search", $"aftg={tag.Text}"),
                             tag.Text);
                     }
                     else
                     {
-                        entry = new CloudItem(Utility.RemoveIllegalCharecters(tag.Text), tag.Weight, null, tag.Text);
+                        entry = new CloudItem(Utility.RemoveIllegalCharacters(tag.Text), tag.Weight, null, tag.Text);
                     }
 
                     list.Add(entry);
@@ -632,17 +584,8 @@ namespace WatchersNET.DNN.Modules.TagCloud
             try
             {
                 ////////////////////////
-                foreach (var tag in
-                    DataControl.TagCloudItemsGetByModule(this.ModuleId).Where(tag => tag.Weight >= this.settings.OccurCount))
+                foreach (var tag in DataControl.TagCloudItemsGetByModule(this.ModuleId).Where(tag => tag.Weight >= this.settings.OccurCount).Where(tag => !Utility.IsNumeric(tag.Url) || !this.settings.TagsLinkChk || UserSeeTag(this.PortalSettings.PortalId, int.Parse(tag.Url))))
                 {
-                    if (Utility.IsNumeric(tag.Url) && this.settings.TagsLinkChk)
-                    {
-                        if (!UserSeeTag(PortalSettings.PortalId, int.Parse(tag.Url)))
-                        {
-                            continue;
-                        }
-                    }
-
                     CloudItem entry;
 
                     // Has Localized Value?
@@ -653,7 +596,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     string sTag = null, sTagUrl = null;
 
                     foreach (var locales in
-                        tag.LocalTags.Where(locales => locales.Locale.Equals(currentCulture.ToString())))
+                             tag.LocalTags.Where(locales => locales.Locale.Equals(currentCulture.ToString())))
                     {
                         sTag = locales.TagMl;
                         sTagUrl = locales.UrlMl;
@@ -674,11 +617,11 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     if (this.settings.TagsLink)
                     {
                         entry = new CloudItem(
-                            Utility.RemoveIllegalCharecters(sTag), tag.Weight, this.FormatUrl(sTagUrl), sTag);
+                            Utility.RemoveIllegalCharacters(sTag), tag.Weight, this.FormatUrl(sTagUrl), sTag);
                     }
                     else
                     {
-                        entry = new CloudItem(Utility.RemoveIllegalCharecters(sTag), tag.Weight, null, sTag);
+                        entry = new CloudItem(Utility.RemoveIllegalCharacters(sTag), tag.Weight, null, sTag);
                     }
 
                     list.Add(entry);
@@ -716,9 +659,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     if (this.settings.TagsLink)
                     {
                         entry = new CloudItem(
-                            Utility.RemoveIllegalCharecters(tag.Name),
+                            Utility.RemoveIllegalCharacters(tag.Name),
                             tag.Usages,
-                            Globals.NavigateURL(
+                            this.navigationManager.NavigateURL(
                                 this.settings.VentrianTabNews,
                                 string.Empty,
                                 $"articletype=tagview&tag={this.Server.UrlEncode(tag.NameLowered)}"),
@@ -726,7 +669,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     }
                     else
                     {
-                        entry = new CloudItem(Utility.RemoveIllegalCharecters(tag.Name), tag.Usages, null, tag.Name);
+                        entry = new CloudItem(Utility.RemoveIllegalCharacters(tag.Name), tag.Usages, null, tag.Name);
                     }
 
                     list.Add(entry);
@@ -766,9 +709,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     if (this.settings.TagsLink)
                     {
                         entry = new CloudItem(
-                            Utility.RemoveIllegalCharecters(tag.Name),
+                            Utility.RemoveIllegalCharacters(tag.Name),
                             tag.Usages,
-                            Globals.NavigateURL(
+                            this.navigationManager.NavigateURL(
                                 this.settings.VentrianTabSimple,
                                 string.Empty,
                                 $"Tag={tag.Name}",
@@ -777,7 +720,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     }
                     else
                     {
-                        entry = new CloudItem(Utility.RemoveIllegalCharecters(tag.Name), tag.Usages, null, tag.Name);
+                        entry = new CloudItem(Utility.RemoveIllegalCharacters(tag.Name), tag.Usages, null, tag.Name);
                     }
 
                     list.Add(entry);
@@ -812,24 +755,24 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     if (term.Weight > 0)
                     {
                         entry = new CloudItem(
-                            Utility.RemoveIllegalCharecters(term.Name),
+                            Utility.RemoveIllegalCharacters(term.Name),
                             term.Weight,
                             string.Format(
                                 "{0}?{2}{1}",
-                                Globals.NavigateURL(this.settings.searchTabId),
-                                Utility.RemoveIllegalCharecters(term.Name),
+                                this.navigationManager.NavigateURL(this.settings.SearchTabId),
+                                Utility.RemoveIllegalCharacters(term.Name),
                                 this.settings.SearchTaxQueryString),
                             term.Description);
                     }
                     else
                     {
                         entry = new CloudItem(
-                            Utility.RemoveIllegalCharecters(term.Name),
+                            Utility.RemoveIllegalCharacters(term.Name),
                             term.TermId,
                             string.Format(
                                 "{0}?{2}{1}",
-                                Globals.NavigateURL(this.settings.searchTabId),
-                                Utility.RemoveIllegalCharecters(term.Name),
+                                this.navigationManager.NavigateURL(this.settings.SearchTabId),
+                                Utility.RemoveIllegalCharacters(term.Name),
                                 this.settings.SearchTaxQueryString),
                             term.Description);
                     }
@@ -917,7 +860,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         {
             try
             {
-                this.LoadModulSettings();
+                this.LoadModuleSettings();
             }
             catch (Exception exception)
             {
@@ -942,42 +885,40 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// <summary>
         /// Load the Setting for this Module
         /// </summary>
-        private void LoadModulSettings()
+        private void LoadModuleSettings()
         {
-            var objModuleController = new ModuleController();
-
-            var moduleSettings = objModuleController.GetTabModuleSettings(this.TabModuleId);
+            var moduleSettings = this.TabModuleSettings;
 
             // Set Default Settings
             this.settings = new TagCloudSettings
-                                {
-                                    CacheItems = true,
-                                    StartDate = DateTime.Parse("01/01/1999", new CultureInfo("en-US")),
-                                    RenderUl = true,
-                                    TagsLink = true,
-                                    exlusionWords = new List<ExcludeWord>(),
-                                    ExcludeCommon = true,
-                                    AfModule = -1,
-                                    AfTab = -1,
-                                    DnnBlogTab = -1,
-                                    VentrianModuleNews = -1,
-                                    VentrianModuleSimple = -1,
-                                    VentrianTabNews = -1,
-                                    VentrianTabSimple = -1,
-                                    weightMode = WeightMode.size,
-                                    WeightSize = "1.0", 
-                                    FontFamily = "Georgia, Arial, sans-serif",
-                                    WordCloudSettings =
-                                        new WordCloudSettings
-                                            {
-                                                Ellipticity = 0.85,
-                                                GridSize = 8,
-                                                MinSize = 0,
-                                                Shape = WordCloudShape.circle,
-                                                WeightFactor = 2.1,
-                                                FillBox = false
-                                            }
-                                };
+            {
+                CacheItems = true,
+                StartDate = DateTime.Parse("01/01/1999", new CultureInfo("en-US")),
+                RenderUl = true,
+                TagsLink = true,
+                ExclusionWords = new List<ExcludeWord>(),
+                ExcludeCommon = true,
+                AfModule = -1,
+                AfTab = -1,
+                DnnBlogTab = -1,
+                VentrianModuleNews = -1,
+                VentrianModuleSimple = -1,
+                VentrianTabNews = -1,
+                VentrianTabSimple = -1,
+                WeightMode = WeightMode.size,
+                WeightSize = "1.0",
+                FontFamily = "Georgia, Arial, sans-serif",
+                WordCloudSettings = new WordCloudSettings
+                {
+                    Ellipticity = 0.85,
+                    GridSize = 8,
+                    MinSize = 0,
+                    Shape = WordCloudShape.circle,
+                    WeightFactor = 2.1,
+                    FillBox = false
+                }
+            };
+
             ////////////////////////
 
             // Setting Font Family
@@ -998,11 +939,13 @@ namespace WatchersNET.DNN.Modules.TagCloud
             {
                 try
                 {
-                    this.settings.weightMode = (WeightMode)Enum.Parse(typeof(WeightMode), (string)moduleSettings["WeightMode"]);
+                    this.settings.WeightMode = (WeightMode)Enum.Parse(
+                        typeof(WeightMode),
+                        (string)moduleSettings["WeightMode"]);
                 }
                 catch (Exception)
                 {
-                    this.settings.weightMode = WeightMode.size;
+                    this.settings.WeightMode = WeightMode.size;
                 }
             }
 
@@ -1024,16 +967,18 @@ namespace WatchersNET.DNN.Modules.TagCloud
             {
                 try
                 {
-                    this.settings.renderMode = (RenderMode)Enum.Parse(typeof(RenderMode), (string)moduleSettings["RenderMode"]);
+                    this.settings.RenderMode = (RenderMode)Enum.Parse(
+                        typeof(RenderMode),
+                        (string)moduleSettings["RenderMode"]);
                 }
                 catch (Exception)
                 {
-                    this.settings.renderMode = RenderMode.HTML5;
+                    this.settings.RenderMode = RenderMode.Html5;
                 }
             }
             else
             {
-                this.settings.renderMode = RenderMode.HTML5;
+                this.settings.RenderMode = RenderMode.Html5;
             }
 
             // Setting Render Item Weight
@@ -1047,13 +992,13 @@ namespace WatchersNET.DNN.Modules.TagCloud
             // Get Search Tab
             if (!string.IsNullOrEmpty((string)this.TabModuleSettings["CustomSearchPage"]))
             {
-                this.settings.searchTabId = Convert.ToInt32((string)this.TabModuleSettings["CustomSearchPage"]);
+                this.settings.SearchTabId = Convert.ToInt32((string)this.TabModuleSettings["CustomSearchPage"]);
             }
             else
             {
-                var portal = new PortalController().GetPortal(PortalSettings.PortalId);
+                var portal = PortalController.Instance.GetPortal(this.PortalSettings.PortalId);
 
-                this.settings.searchTabId = portal.SearchTabId;
+                this.settings.SearchTabId = portal.SearchTabId;
             }
 
             this.settings.SearchQueryString =
@@ -1062,9 +1007,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     : "Search=";
 
             this.settings.SearchTaxQueryString =
-               !string.IsNullOrEmpty((string)this.TabModuleSettings["SearchPageTaxQueryString"])
-                   ? (string)this.TabModuleSettings["SearchPageTaxQueryString"]
-                   : "Tag=";
+                !string.IsNullOrEmpty((string)this.TabModuleSettings["SearchPageTaxQueryString"])
+                    ? (string)this.TabModuleSettings["SearchPageTaxQueryString"]
+                    : "Tag=";
 
             if (!string.IsNullOrEmpty((string)moduleSettings["TagSeparator"]))
             {
@@ -1114,7 +1059,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             {
                 bool.TryParse((string)moduleSettings["ModeActiveforums"], out var modeactive);
 
-                this.settings.ModeActiveforums = modeactive;
+                this.settings.ModeActiveForums = modeactive;
             }
 
             // Load old Setting
@@ -1134,7 +1079,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                         this.settings.ModeSimplegallery = true;
                         break;
                     case "activeforums":
-                        this.settings.ModeActiveforums = true;
+                        this.settings.ModeActiveForums = true;
                         break;
                     case "tax":
                         this.settings.ModeTax = true;
@@ -1144,10 +1089,10 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             // Check if all false, set search
             if (!this.settings.ModeCustom && !this.settings.ModeTax && !this.settings.ModeNewsarticles &&
-                !this.settings.ModeSimplegallery && !this.settings.ModeActiveforums)
+                !this.settings.ModeSimplegallery && !this.settings.ModeActiveForums)
             {
-               // this.settings.ModeSearch = true;
-               // TODO
+                // this.settings.ModeSearch = true;
+                // TODO
             }
 
             // Load Ventrian Tab & Module from Settings and Set
@@ -1202,12 +1147,12 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
                     if (this.settings.AfTab.Equals(-1) || this.settings.AfModule.Equals(-1))
                     {
-                        this.settings.ModeActiveforums = false;
+                        this.settings.ModeActiveForums = false;
                     }
                 }
                 catch (Exception)
                 {
-                    this.settings.ModeActiveforums = false;
+                    this.settings.ModeActiveForums = false;
                 }
             }
 
@@ -1253,22 +1198,22 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             if (!this.settings.SkinName.Equals("None"))
             {
-                ClientResourceManager.RegisterStyleSheet(this.Page,
+                ClientResourceManager.RegisterStyleSheet(
+                    this.Page,
                     $"{this.ResolveUrl("Skins")}/{this.settings.SkinName}.css");
 
-                //PageBase.RegisterStyleSheet(Page,  string.Format("{0}/{1}.css", this.ResolveUrl("Skins"), this.settings.SkinName));
-
+                // PageBase.RegisterStyleSheet(Page,  string.Format("{0}/{1}.css", this.ResolveUrl("Skins"), this.settings.SkinName));
                 this.tagCloudDiv.CssClass += $"-{this.settings.SkinName}";
                 this.c1.ItemCssClassPrefix += $"-{this.settings.SkinName}";
             }
 
             this.settings.OccurCount = !string.IsNullOrEmpty((string)moduleSettings["occurcount"])
-                                   ? int.Parse((string)moduleSettings["occurcount"])
-                                   : 1;
+                ? int.Parse((string)moduleSettings["occurcount"])
+                : 1;
 
             this.settings.TagCount = !string.IsNullOrEmpty((string)moduleSettings["tagscount"])
-                                 ? int.Parse((string)moduleSettings["tagscount"])
-                                 : 30;
+                ? int.Parse((string)moduleSettings["tagscount"])
+                : 30;
 
             if (!string.IsNullOrEmpty((string)moduleSettings["ExcludeCommon"]))
             {
@@ -1288,7 +1233,8 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
                     foreach (var word in comnmonWordList)
                     {
-                        this.settings.exlusionWords.Add(new ExcludeWord { Word = word, ExcludeWordType = ExcludeType.Equals });
+                        this.settings.ExclusionWords.Add(
+                            new ExcludeWord { Word = word, ExcludeWordType = ExcludeType.Equals });
                     }
                 }
             }
@@ -1302,16 +1248,19 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
                 foreach (var word in oldList)
                 {
-                    this.settings.exlusionWords.Add(new ExcludeWord { Word = word, ExcludeWordType = ExcludeType.Equals });
+                    this.settings.ExclusionWords.Add(
+                        new ExcludeWord { Word = word, ExcludeWordType = ExcludeType.Equals });
                 }
             }
 
             // Load New Exclude Word List
-            this.settings.exlusionWords.AddRange(DataControl.TagCloudExcludeWordsGetByModule(this.TabModuleId));
+            this.settings.ExclusionWords.AddRange(DataControl.TagCloudExcludeWordsGetByModule(this.TabModuleId));
 
             try
             {
-                this.settings.CloudSortType = (SortType)Enum.Parse(typeof(SortType), (string)moduleSettings["SortType"]);
+                this.settings.CloudSortType = (SortType)Enum.Parse(
+                    typeof(SortType),
+                    (string)moduleSettings["SortType"]);
             }
             catch (Exception)
             {
@@ -1322,7 +1271,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             this.settings.RenderUl = !string.IsNullOrEmpty(sRenderUl) && bool.Parse(sRenderUl);
 
-            if (this.settings.renderMode.Equals(RenderMode.HTML5))
+            if (this.settings.RenderMode.Equals(RenderMode.Html5))
             {
                 this.settings.RenderUl = true;
                 this.c1.CanvasEnabled = true;
@@ -1441,7 +1390,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
             }
             finally
             {
-                this.settings.Tcolor = string.IsNullOrEmpty(this.settings.Tcolor) ? "0x000000" : $"0x{this.settings.Tcolor}";
+                this.settings.Tcolor = string.IsNullOrEmpty(this.settings.Tcolor)
+                    ? "0x000000"
+                    : $"0x{this.settings.Tcolor}";
             }
 
             try
@@ -1450,7 +1401,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
             }
             finally
             {
-                this.settings.Tcolor2 = string.IsNullOrEmpty(this.settings.Tcolor2) ? "0x000000" : $"0x{this.settings.Tcolor2}";
+                this.settings.Tcolor2 = string.IsNullOrEmpty(this.settings.Tcolor2)
+                    ? "0x000000"
+                    : $"0x{this.settings.Tcolor2}";
             }
 
             try
@@ -1459,7 +1412,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
             }
             finally
             {
-                this.settings.Hicolor = string.IsNullOrEmpty(this.settings.Hicolor) ? "0x42a5ff" : $"0x{this.settings.Hicolor}";
+                this.settings.Hicolor = string.IsNullOrEmpty(this.settings.Hicolor)
+                    ? "0x42a5ff"
+                    : $"0x{this.settings.Hicolor}";
             }
 
             try
@@ -1469,8 +1424,8 @@ namespace WatchersNET.DNN.Modules.TagCloud
             finally
             {
                 this.settings.Bgcolor = string.IsNullOrEmpty(this.settings.Bgcolor)
-                                    ? "transparent"
-                                    : $"#{this.settings.Bgcolor}";
+                    ? "transparent"
+                    : $"#{this.settings.Bgcolor}";
             }
 
             try
@@ -1486,14 +1441,16 @@ namespace WatchersNET.DNN.Modules.TagCloud
             }
 
             // Load World Cloud Settings only when needed
-            if (this.settings.renderMode.Equals(RenderMode.WordCloud))
+            if (this.settings.RenderMode.Equals(RenderMode.WordCloud))
             {
                 // Word Cloud Shape Setting
                 if (!string.IsNullOrEmpty((string)moduleSettings["Shape"]))
                 {
                     try
                     {
-                        this.settings.WordCloudSettings.Shape = (WordCloudShape)Enum.Parse(typeof(WordCloudShape), (string)moduleSettings["Shape"]);
+                        this.settings.WordCloudSettings.Shape = (WordCloudShape)Enum.Parse(
+                            typeof(WordCloudShape),
+                            (string)moduleSettings["Shape"]);
                     }
                     catch (Exception)
                     {
@@ -1507,8 +1464,8 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
                 // World Cloud GridSize Setting
                 this.settings.WordCloudSettings.GridSize = !string.IsNullOrEmpty((string)moduleSettings["GridSize"])
-                                                               ? Convert.ToInt32(moduleSettings["GridSize"])
-                                                               : 8;
+                    ? Convert.ToInt32(moduleSettings["GridSize"])
+                    : 8;
 
                 // World Cloud Ellipticity Setting
                 this.settings.WordCloudSettings.Ellipticity =
@@ -1523,7 +1480,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
                         : 2.1;
 
                 // World Cloud MinSize Setting
-                this.settings.WordCloudSettings.MinSize = !string.IsNullOrEmpty((string)moduleSettings["MinSize"]) ? Convert.ToInt32(moduleSettings["MinSize"]) : 0;
+                this.settings.WordCloudSettings.MinSize = !string.IsNullOrEmpty((string)moduleSettings["MinSize"])
+                    ? Convert.ToInt32(moduleSettings["MinSize"])
+                    : 0;
 
                 // World Cloud FillBox Setting
                 if (!string.IsNullOrEmpty((string)moduleSettings["FillBox"]))
@@ -1547,7 +1506,5 @@ namespace WatchersNET.DNN.Modules.TagCloud
             this.tagCloudDiv.Attributes["style"] =
                 $"width:{this.settings.TagCloudWidth}{this.settings.TagCloudWValue};height:auto;";
         }
-
-        #endregion
     }
 }

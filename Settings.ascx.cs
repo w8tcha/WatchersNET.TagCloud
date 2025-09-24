@@ -4,8 +4,8 @@
 *   standard Web 2.0 Tag Cloud, or You can define your own Tags list.  The Tags are links which linked to the Portal Search to
 *   show all Pages with that Tag.
 *
-*   The Tag Cloud will be rendered as 3D Cloud, and as alternative for Non Flash
-*   Users as a list of hyperlinks in varying styles depending on a weight.
+*   The Tag Cloud will be rendered as 3D Cloud, and
+*    as a list of hyperlinks in varying styles depending on a weight.
 *   This is similar to tag clouds in del.icio.us or Flickr.
 *
 *   Copyright(c) Ingo Herbote (thewatcher@watchersnet.de)
@@ -44,8 +44,6 @@
 
 namespace WatchersNET.DNN.Modules.TagCloud
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Data;
@@ -56,13 +54,14 @@ namespace WatchersNET.DNN.Modules.TagCloud
     using System.Web.UI.WebControls;
     using System.Xml.Serialization;
 
+    using DotNetNuke.Abstractions;
+    using DotNetNuke.Collections;
     using DotNetNuke.Common.Utilities;
     using DotNetNuke.Entities.Content.Common;
     using DotNetNuke.Entities.Modules;
     using DotNetNuke.Entities.Portals;
     using DotNetNuke.Entities.Tabs;
     using DotNetNuke.Entities.Users;
-    using DotNetNuke.Framework;
     using DotNetNuke.Framework.JavaScriptLibraries;
     using DotNetNuke.Services.Exceptions;
     using DotNetNuke.Services.FileSystem;
@@ -70,21 +69,18 @@ namespace WatchersNET.DNN.Modules.TagCloud
     using DotNetNuke.UI.UserControls;
     using DotNetNuke.Web.Client.ClientResourceManagement;
 
+    using Microsoft.Extensions.DependencyInjection;
+
     using WatchersNET.DNN.Modules.TagCloud.Constants;
     using WatchersNET.DNN.Modules.TagCloud.Objects;
 
     using DataCache = DotNetNuke.Common.Utilities.DataCache;
-    using Globals = DotNetNuke.Common.Globals;
-
-    #endregion
 
     /// <summary>
     /// The settings.
     /// </summary>
     public partial class Settings : PortalModuleBase
     {
-        #region Constants and Fields
-
         /// <summary>
         ///   The ctl import file.
         /// </summary>
@@ -116,52 +112,57 @@ namespace WatchersNET.DNN.Modules.TagCloud
         protected UpdatePanel upImport;
 
         /// <summary>
-        ///   The b mode activeforums.
+        ///   The mode active forums.
         /// </summary>
-        private bool bModeActiveforums;
+        private bool modeActiveForums;
 
         /// <summary>
         ///   The b mode custom.
         /// </summary>
-        private bool bModeCustom;
+        private bool modeCustom;
 
         /// <summary>
         ///   The b mode newsarticles.
         /// </summary>
-        private bool bModeNewsarticles;
+        private bool modeNewsarticles;
 
         /// <summary>
         ///   The b mode simplegallery.
         /// </summary>
-        private bool bModeSimplegallery;
+        private bool modeSimplegallery;
 
         /// <summary>
         ///   The b mode tax.
         /// </summary>
-        private bool bModeTax;
+        private bool modeTax;
 
         /// <summary>
-        ///   The exlusion words.
+        ///   The exclusion words.
         /// </summary>
-        private readonly List<ExcludeWord> exlusionWords = new List<ExcludeWord>();
+        private readonly List<ExcludeWord> exclusionWords = new List<ExcludeWord>();
 
         /// <summary>
         ///   The vocabularies.
         /// </summary>
         private string[] vocabularies;
 
-        #endregion
+        /// <summary>
+        /// The navigation manager.
+        /// </summary>
+        private readonly INavigationManager navigationManager;
 
-        #region Properties
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Settings"/> class.
+        /// </summary>
+        protected Settings()
+        {
+            this.navigationManager = this.DependencyProvider.GetRequiredService<INavigationManager>();
+        }
 
         /// <summary>
         ///   Gets ImportFile.
         /// </summary>
         private UrlControl ImportFile => this.ctlImportFile;
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Check if Height is a Numeric value
@@ -319,7 +320,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             {
                 this.SaveChanges();
 
-                this.Response.Redirect(Globals.NavigateURL(), true);
+                this.Response.Redirect(this.navigationManager.NavigateURL(), true);
             }
             catch (Exception exc)
             {
@@ -338,7 +339,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </param>
         private void CancelClick(object sender, EventArgs e)
         {
-            this.Response.Redirect(Globals.NavigateURL(), true);
+            this.Response.Redirect(this.navigationManager.NavigateURL(), true);
         }
 
         /// <summary>
@@ -483,8 +484,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 sbDialogJs.Append("});");
             }
 
-            /*if (this.bModeCustom)
-            {*/
             sbDialogJs.Append("$(document).ready(function() {");
 
             // Import Dialog
@@ -520,7 +519,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
             sbDialogJs.Append("function showDialog(id) {");
             sbDialogJs.Append("$('#' + id).dialog(\"open\");");
             sbDialogJs.Append("}");
-            //}
 
             ScriptManager.RegisterStartupScript(this, csType, "jqueryTabnDialogScript", sbDialogJs.ToString(), true);
         }
@@ -584,14 +582,12 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </param>
         private void DeleteAllLocales(int iTagId)
         {
-            foreach (var language in new LocaleController().GetLocales(this.PortalId).Values)
-            {
-                DataControl.TagCloudItemsDeleteMl(iTagId, this.ModuleId, language.Code);
-            }
+            new LocaleController().GetLocales(this.PortalId).Values.ForEach(
+                language => DataControl.TagCloudItemsDeleteMl(iTagId, this.ModuleId, language.Code));
         }
 
         /// <summary>
-        /// Export all Custom Tags as serialised Xml File
+        /// Export all Custom Tags as serialized Xml File
         /// </summary>
         /// <param name="sender">
         /// The source of the event.
@@ -616,7 +612,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 sXmlFile += ".xml";
             }
 
-            var exportFileStream = new FileStream(Path.GetTempFileName(), FileMode.Create);
+            var exportFileStream = new FileStream(Path.GetRandomFileName(), FileMode.Create);
 
             TextWriter tr = new StreamWriter(exportFileStream, Encoding.UTF8);
             serializer.Serialize(tr, DataControl.TagCloudItemsGetByModule(this.ModuleId));
@@ -669,7 +665,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </summary>
         private void FillExportFolders()
         {
-            // ArrayList folders = FileSystemUtils.GetFoldersByUser(this.PortalId, false, false, "READ, WRITE");
             var folders = FolderManager.Instance.GetFolders(UserController.Instance.GetCurrentUserInfo(), "READ, WRITE");
 
             foreach (var folderItem in from FolderInfo folder in folders
@@ -749,9 +744,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             var objTabController = new TabController();
 
-            //var objDesktopModuleInfo = DesktopModuleController.GetDesktopModuleByModuleName(sModuleName, this.PortalId);
-            var objDesktopModuleController = new DesktopModuleController();
-            var objDesktopModuleInfo = DesktopModuleController.GetDesktopModuleByModuleName(sModuleName, PortalId);
+            var objDesktopModuleInfo = DesktopModuleController.GetDesktopModuleByModuleName(sModuleName, this.PortalId);
 
             if (objDesktopModuleInfo == null)
             {
@@ -767,10 +760,8 @@ namespace WatchersNET.DNN.Modules.TagCloud
             {
                 var objModules = new ModuleController();
 
-                foreach (var pair in objModules.GetTabModules(objTab.TabID))
+                foreach (var objModule in objModules.GetTabModules(objTab.TabID).Select(pair => pair.Value))
                 {
-                    var objModule = pair.Value;
-
                     if (objModule.IsDeleted)
                     {
                         continue;
@@ -815,12 +806,12 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             var objDir = new DirectoryInfo(this.MapPath(this.ResolveUrl("Skins")));
 
-            foreach (var objFile in objDir.GetFiles("*.css"))
+            foreach (var fileName in objDir.GetFiles("*.css").Select(file => file.Name))
             {
-                var sName = objFile.Name;
-                sName = sName.Remove(objFile.Name.LastIndexOf(".", StringComparison.Ordinal));
+                var sName = fileName;
+                sName = sName.Remove(fileName.LastIndexOf(".", StringComparison.Ordinal));
 
-                var skinItem = new ListItem { Text = objFile.Name, Value = sName };
+                var skinItem = new ListItem { Text = fileName, Value = sName };
 
                 this.dDlSkins.Items.Add(skinItem);
             }
@@ -926,21 +917,19 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     {
                         this.FillModuleList("DnnForge - NewsArticles", objTabs, this.ddLTabsVentrianNews);
 
-                        if (this.ddLTabsVentrianNews.Items.Count > 0)
+                        if (this.ddLTabsVentrianNews.Items.Count > 0
+                            && !string.IsNullOrEmpty((string)this.Settings["NewsArticlesTab"])
+                            && !string.IsNullOrEmpty((string)this.Settings["NewsArticlesModule"]))
                         {
-                            if (!string.IsNullOrEmpty((string)this.Settings["NewsArticlesTab"])
-                                && !string.IsNullOrEmpty((string)this.Settings["NewsArticlesModule"]))
+                            if (this.ddLTabsVentrianNews.Items.FindByValue(
+                                    $"{this.Settings["NewsArticlesTab"]}-{this.Settings["NewsArticlesModule"]}")
+                                == null)
                             {
-                                if (this.ddLTabsVentrianNews.Items.FindByValue(
-                                        $"{this.Settings["NewsArticlesTab"]}-{this.Settings["NewsArticlesModule"]}")
-                                    == null)
-                                {
-                                    return;
-                                }
-
-                                this.ddLTabsVentrianNews.SelectedValue =
-                                    $"{this.Settings["NewsArticlesTab"]}-{this.Settings["NewsArticlesModule"]}";
+                                return;
                             }
+
+                            this.ddLTabsVentrianNews.SelectedValue =
+                                $"{this.Settings["NewsArticlesTab"]}-{this.Settings["NewsArticlesModule"]}";
                         }
                     }
 
@@ -949,21 +938,19 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     {
                         this.FillModuleList("SimpleGallery", objTabs, this.ddLTabsVentrianSimple);
 
-                        if (this.ddLTabsVentrianSimple.Items.Count > 0)
+                        if (this.ddLTabsVentrianSimple.Items.Count > 0
+                            && !string.IsNullOrEmpty((string)this.Settings["SimpleGalleryTab"])
+                            && !string.IsNullOrEmpty((string)this.Settings["SimpleGalleryModule"]))
                         {
-                            if (!string.IsNullOrEmpty((string)this.Settings["SimpleGalleryTab"])
-                                && !string.IsNullOrEmpty((string)this.Settings["SimpleGalleryModule"]))
+                            if (this.ddLTabsVentrianSimple.Items.FindByValue(
+                                    $"{this.Settings["SimpleGalleryTab"]}-{this.Settings["SimpleGalleryModule"]}")
+                                == null)
                             {
-                                if (this.ddLTabsVentrianSimple.Items.FindByValue(
-                                        $"{this.Settings["SimpleGalleryTab"]}-{this.Settings["SimpleGalleryModule"]}")
-                                    == null)
-                                {
-                                    return;
-                                }
-
-                                this.ddLTabsVentrianSimple.SelectedValue =
-                                    $"{this.Settings["SimpleGalleryTab"]}-{this.Settings["SimpleGalleryModule"]}";
+                                return;
                             }
+
+                            this.ddLTabsVentrianSimple.SelectedValue =
+                                $"{this.Settings["SimpleGalleryTab"]}-{this.Settings["SimpleGalleryModule"]}";
                         }
                     }
 
@@ -972,21 +959,19 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     {
                         this.FillModuleList("Active Forums", objTabs, this.ddLTabsActiveforums);
 
-                        if (this.ddLTabsActiveforums.Items.Count > 0)
+                        if (this.ddLTabsActiveforums.Items.Count > 0
+                            && !string.IsNullOrEmpty((string)this.Settings["ActiveForumsTab"])
+                            && !string.IsNullOrEmpty((string)this.Settings["ActiveForumsModule"]))
                         {
-                            if (!string.IsNullOrEmpty((string)this.Settings["ActiveForumsTab"])
-                                && !string.IsNullOrEmpty((string)this.Settings["ActiveForumsModule"]))
+                            if (this.ddLTabsVentrianSimple.Items.FindByValue(
+                                    $"{this.Settings["ActiveForumsTab"]}-{this.Settings["ActiveForumsModule"]}")
+                                == null)
                             {
-                                if (this.ddLTabsVentrianSimple.Items.FindByValue(
-                                        $"{this.Settings["ActiveForumsTab"]}-{this.Settings["ActiveForumsModule"]}")
-                                    == null)
-                                {
-                                    return;
-                                }
-
-                                this.ddLTabsActiveforums.SelectedValue =
-                                    $"{this.Settings["ActiveForumsTab"]}-{this.Settings["ActiveForumsModule"]}";
+                                return;
                             }
+
+                            this.ddLTabsActiveforums.SelectedValue =
+                                $"{this.Settings["ActiveForumsTab"]}-{this.Settings["ActiveForumsModule"]}";
                         }
                     }
 
@@ -1181,11 +1166,11 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
                             DataControl.TagCloudExcludeWordUpdate(updateItem);
 
-                            this.exlusionWords.AddRange(DataControl.TagCloudExcludeWordsGetByModule(this.TabModuleId));
+                            this.exclusionWords.AddRange(DataControl.TagCloudExcludeWordsGetByModule(this.TabModuleId));
 
                             this.lBExList.Items.Clear();
 
-                            foreach (var item in this.exlusionWords.Select(
+                            foreach (var item in this.exclusionWords.Select(
                                 wordItem => new ListItem { Text = wordItem.Word, Value = wordItem.WordID.ToString() }))
                             {
                                 this.lBExList.Items.Add(item);
@@ -1341,11 +1326,8 @@ namespace WatchersNET.DNN.Modules.TagCloud
             {
                 var iFileId = int.Parse(sXmlImport.Substring(7));
 
-                // var objFileController = new FileController();
                 var objFileInfo = FileManager.Instance.GetFile(iFileId);
 
-                /* DotNetNuke.Services.FileSystem.FileInfo objFileInfo = objFileController.GetFileById(
-                     iFileId, this.PortalSettings.PortalId);*/
                 sXmlImport = this.PortalSettings.HomeDirectoryMapPath + objFileInfo.Folder + objFileInfo.FileName;
 
                 var serializer = new XmlSerializer(typeof(List<CustomTags>));
@@ -1533,7 +1515,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             this.FillVocabularies();
 
             this.FillCustomTags();
-            
+
             this.FillExportFolders();
         }
 
@@ -1565,13 +1547,13 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 {
                     case "custom":
                         this.TagModes.Items.FindByValue("ModeCustom").Selected = true;
-                        this.bModeCustom = true;
+                        this.modeCustom = true;
                         break;
                     case "newsarticles":
                         if (Utility.IsNewsArticlesInstalled())
                         {
                             this.TagModes.Items.FindByValue("ModeNewsarticles").Selected = true;
-                            this.bModeNewsarticles = true;
+                            this.modeNewsarticles = true;
                         }
 
                         break;
@@ -1579,7 +1561,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                         if (Utility.IsSimplyGalleryInstalled())
                         {
                             this.TagModes.Items.FindByValue("ModeSimplegallery").Selected = true;
-                            this.bModeSimplegallery = true;
+                            this.modeSimplegallery = true;
                         }
 
                         break;
@@ -1587,13 +1569,13 @@ namespace WatchersNET.DNN.Modules.TagCloud
                         if (Utility.IsActiveForumsInstalled())
                         {
                             this.TagModes.Items.FindByValue("ModeActiveforums").Selected = true;
-                            this.bModeActiveforums = true;
+                            this.modeActiveForums = true;
                         }
 
                         break;
                     case "tax":
                         this.TagModes.Items.FindByValue("ModeTax").Selected = true;
-                        this.bModeTax = true;
+                        this.modeTax = true;
                         break;
                 }
 
@@ -1604,48 +1586,48 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             if (!string.IsNullOrEmpty((string)this.Settings["ModeCustom"]))
             {
-                bool.TryParse((string)this.Settings["ModeCustom"], out this.bModeCustom);
+                bool.TryParse((string)this.Settings["ModeCustom"], out this.modeCustom);
 
-                this.TagModes.Items.FindByValue("ModeCustom").Selected = this.bModeCustom;
+                this.TagModes.Items.FindByValue("ModeCustom").Selected = this.modeCustom;
             }
 
             if (!string.IsNullOrEmpty((string)this.Settings["ModeTax"]))
             {
-                bool.TryParse((string)this.Settings["ModeTax"], out this.bModeTax);
+                bool.TryParse((string)this.Settings["ModeTax"], out this.modeTax);
 
-                this.TagModes.Items.FindByValue("ModeTax").Selected = this.bModeTax;
+                this.TagModes.Items.FindByValue("ModeTax").Selected = this.modeTax;
             }
 
             if (!string.IsNullOrEmpty((string)this.Settings["ModeNewsarticles"]) && Utility.IsNewsArticlesInstalled())
             {
-                bool.TryParse((string)this.Settings["ModeNewsarticles"], out this.bModeNewsarticles);
+                bool.TryParse((string)this.Settings["ModeNewsarticles"], out this.modeNewsarticles);
 
-                this.TagModes.Items.FindByValue("ModeNewsarticles").Selected = this.bModeNewsarticles;
+                this.TagModes.Items.FindByValue("ModeNewsarticles").Selected = this.modeNewsarticles;
             }
 
             if (!string.IsNullOrEmpty((string)this.Settings["ModeSimplegallery"]) && Utility.IsSimplyGalleryInstalled())
             {
-                bool.TryParse((string)this.Settings["ModeSimplegallery"], out this.bModeSimplegallery);
+                bool.TryParse((string)this.Settings["ModeSimplegallery"], out this.modeSimplegallery);
 
-                this.TagModes.Items.FindByValue("ModeSimplegallery").Selected = this.bModeSimplegallery;
+                this.TagModes.Items.FindByValue("ModeSimplegallery").Selected = this.modeSimplegallery;
             }
 
             if (!string.IsNullOrEmpty((string)this.Settings["ModeActiveforums"]) && Utility.IsActiveForumsInstalled())
             {
-                bool.TryParse((string)this.Settings["ModeActiveforums"], out this.bModeActiveforums);
+                bool.TryParse((string)this.Settings["ModeActiveforums"], out this.modeActiveForums);
 
-                this.TagModes.Items.FindByValue("ModeActiveforums").Selected = this.bModeActiveforums;
+                this.TagModes.Items.FindByValue("ModeActiveforums").Selected = this.modeActiveForums;
             }
 
             // Check if all false, set search
-            if (!this.bModeCustom && !this.bModeTax && !this.bModeNewsarticles && !this.bModeSimplegallery
-                && !this.bModeActiveforums)
+            if (!this.modeCustom && !this.modeTax && !this.modeNewsarticles && !this.modeSimplegallery
+                && !this.modeActiveForums)
             {
-                //this.TagModes.Items.FindByValue("ModeSearch").Selected = true;
-                //this.bModeSearch = true;
+                // this.TagModes.Items.FindByValue("ModeSearch").Selected = true;
+                // this.bModeSearch = true;
             }
 
-            if (this.bModeCustom)
+            if (this.modeCustom)
             {
                 this.phCustom.Visible = true;
             }
@@ -1670,7 +1652,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             }
             else
             {
-                var portal = new PortalController().GetPortal(PortalSettings.PortalId);
+                var portal = PortalController.Instance.GetPortal(this.PortalSettings.PortalId);
 
                 var searchItem = this.CustomSearchPage.Items.FindByValue(portal.SearchTabId.ToString());
 
@@ -1698,28 +1680,28 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 this.SearchPageTaxQueryString.Text = "Tag=";
             }
 
-            if (this.bModeNewsarticles && Utility.IsNewsArticlesInstalled())
+            if (this.modeNewsarticles && Utility.IsNewsArticlesInstalled())
             {
                 this.phVentrianNews.Visible = true;
 
                 this.FillTabList("newsarticles", tabs);
             }
 
-            if (this.bModeSimplegallery && Utility.IsNewsArticlesInstalled())
+            if (this.modeSimplegallery && Utility.IsNewsArticlesInstalled())
             {
                 this.phVentrianSimple.Visible = true;
 
                 this.FillTabList("simplegallery", tabs);
             }
 
-            if (this.bModeActiveforums && Utility.IsActiveForumsInstalled())
+            if (this.modeActiveForums && Utility.IsActiveForumsInstalled())
             {
                 this.phActiveforums.Visible = true;
 
                 this.FillTabList("activeforums", tabs);
             }
 
-            if (this.bModeTax)
+            if (this.modeTax)
             {
                 this.phTax.Visible = true;
             }
@@ -1837,12 +1819,12 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 }
                 catch (Exception)
                 {
-                    this.CanvasWeightMode.SelectedValue = WeightMode.size.ToString();
+                    this.CanvasWeightMode.SelectedValue = nameof(WeightMode.size);
                 }
             }
             else
             {
-                this.CanvasWeightMode.SelectedValue = WeightMode.size.ToString();
+                this.CanvasWeightMode.SelectedValue = nameof(WeightMode.size);
             }
 
             // Setting Weight Size
@@ -1872,7 +1854,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             }
             catch (Exception)
             {
-                this.RenderModeType.SelectedValue = RenderMode.HTML5.ToString();
+                this.RenderModeType.SelectedValue = nameof(RenderMode.Html5);
             }
 
 
@@ -1913,9 +1895,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
             }
 
             // Setting Exclude Words
-            this.exlusionWords.AddRange(DataControl.TagCloudExcludeWordsGetByModule(this.TabModuleId));
+            this.exclusionWords.AddRange(DataControl.TagCloudExcludeWordsGetByModule(this.TabModuleId));
 
-            foreach (var item in this.exlusionWords.Select(
+            foreach (var item in this.exclusionWords.Select(
                 wordItem => new ListItem { Text = wordItem.Word, Value = wordItem.WordID.ToString() }))
             {
                 this.lBExList.Items.Add(item);
@@ -1938,12 +1920,12 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 }
                 catch (Exception)
                 {
-                    this.SortTags.SelectedValue = SortType.AlphabeticAsc.ToString();
+                    this.SortTags.SelectedValue = nameof(SortType.AlphabeticAsc);
                 }
             }
             else
             {
-                this.SortTags.SelectedValue = SortType.AlphabeticAsc.ToString();
+                this.SortTags.SelectedValue = nameof(SortType.AlphabeticAsc);
             }
 
             // Setting Render as Ul
@@ -2147,26 +2129,26 @@ namespace WatchersNET.DNN.Modules.TagCloud
             }
 
             // Word Cloud Shape Setting
-            if (!string.IsNullOrEmpty((string)Settings["Shape"]))
+            if (!string.IsNullOrEmpty((string)this.Settings["Shape"]))
             {
                 try
                 {
-                    this.Shape.SelectedValue = (string)Settings["Shape"];
+                    this.Shape.SelectedValue = (string)this.Settings["Shape"];
                 }
                 catch (Exception)
                 {
-                    this.Shape.SelectedValue = WordCloudShape.circle.ToString();
+                    this.Shape.SelectedValue = nameof(WordCloudShape.circle);
                 }
             }
             else
             {
-                this.Shape.SelectedValue = WordCloudShape.circle.ToString();
+                this.Shape.SelectedValue = nameof(WordCloudShape.circle);
             }
 
             // World Cloud GridSize Setting
-            if (!string.IsNullOrEmpty((string)Settings["GridSize"]))
+            if (!string.IsNullOrEmpty((string)this.Settings["GridSize"]))
             {
-                this.GridSize.Text = (string)Settings["GridSize"];
+                this.GridSize.Text = (string)this.Settings["GridSize"];
             }
             else
             {
@@ -2174,9 +2156,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
             }
 
             // World Cloud Ellipticity Setting
-            if (!string.IsNullOrEmpty((string)Settings["Ellipticity"]))
+            if (!string.IsNullOrEmpty((string)this.Settings["Ellipticity"]))
             {
-                this.Ellipticity.Text = (string)Settings["Ellipticity"];
+                this.Ellipticity.Text = (string)this.Settings["Ellipticity"];
             }
             else
             {
@@ -2184,9 +2166,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
             }
 
             // World Cloud WeightFactor Setting
-            if (!string.IsNullOrEmpty((string)Settings["WeightFactor"]))
+            if (!string.IsNullOrEmpty((string)this.Settings["WeightFactor"]))
             {
-                this.WeightFactor.Text = (string)Settings["WeightFactor"];
+                this.WeightFactor.Text = (string)this.Settings["WeightFactor"];
             }
             else
             {
@@ -2194,9 +2176,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
             }
 
             // World Cloud MinSize Setting
-            if (!string.IsNullOrEmpty((string)Settings["MinSize"]))
+            if (!string.IsNullOrEmpty((string)this.Settings["MinSize"]))
             {
-                this.MinSize.Text = (string)Settings["MinSize"];
+                this.MinSize.Text = (string)this.Settings["MinSize"];
             }
             else
             {
@@ -2204,11 +2186,11 @@ namespace WatchersNET.DNN.Modules.TagCloud
             }
 
             // World Cloud FillBox Setting
-            if (!string.IsNullOrEmpty((string)Settings["FillBox"]))
+            if (!string.IsNullOrEmpty((string)this.Settings["FillBox"]))
             {
                 try
                 {
-                    this.FillBox.Checked = bool.Parse((string)Settings["FillBox"]);
+                    this.FillBox.Checked = bool.Parse((string)this.Settings["FillBox"]);
                 }
                 catch (Exception)
                 {
@@ -2255,31 +2237,31 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 {
                     case "ModeCustom":
                         {
-                            this.bModeCustom = itemMode.Selected;
+                            this.modeCustom = itemMode.Selected;
                         }
 
                         break;
                     case "ModeNewsarticles":
                         {
-                            this.bModeNewsarticles = itemMode.Selected;
+                            this.modeNewsarticles = itemMode.Selected;
                         }
 
                         break;
                     case "ModeSimplegallery":
                         {
-                            this.bModeSimplegallery = itemMode.Selected;
+                            this.modeSimplegallery = itemMode.Selected;
                         }
 
                         break;
                     case "ModeActiveforums":
                         {
-                            this.bModeActiveforums = itemMode.Selected;
+                            this.modeActiveForums = itemMode.Selected;
                         }
 
                         break;
                     case "ModeTax":
                         {
-                            this.bModeTax = itemMode.Selected;
+                            this.modeTax = itemMode.Selected;
                         }
 
                         break;
@@ -2289,26 +2271,26 @@ namespace WatchersNET.DNN.Modules.TagCloud
             ////////////////
 
             // Setting TagMode
-            if (this.bModeNewsarticles && this.ddLTabsVentrianNews.Items.Count.Equals(0))
+            if (this.modeNewsarticles && this.ddLTabsVentrianNews.Items.Count.Equals(0))
             {
-                this.bModeNewsarticles = false;
+                this.modeNewsarticles = false;
             }
 
-            if (this.bModeSimplegallery && this.ddLTabsVentrianSimple.Items.Count.Equals(0))
+            if (this.modeSimplegallery && this.ddLTabsVentrianSimple.Items.Count.Equals(0))
             {
-                this.bModeSimplegallery = false;
+                this.modeSimplegallery = false;
             }
 
-            if (this.bModeActiveforums && this.ddLTabsActiveforums.Items.Count.Equals(0))
+            if (this.modeActiveForums && this.ddLTabsActiveforums.Items.Count.Equals(0))
             {
-                this.bModeActiveforums = false;
+                this.modeActiveForums = false;
             }
 
-            this.SaveSetting(modController, "ModeCustom", this.bModeCustom.ToString());
-            this.SaveSetting(modController, "ModeTax", this.bModeTax.ToString());
-            this.SaveSetting(modController, "ModeNewsarticles", this.bModeNewsarticles.ToString());
-            this.SaveSetting(modController, "ModeSimplegallery", this.bModeSimplegallery.ToString());
-            this.SaveSetting(modController, "ModeActiveforums", this.bModeActiveforums.ToString());
+            this.SaveSetting(modController, "ModeCustom", this.modeCustom.ToString());
+            this.SaveSetting(modController, "ModeTax", this.modeTax.ToString());
+            this.SaveSetting(modController, "ModeNewsarticles", this.modeNewsarticles.ToString());
+            this.SaveSetting(modController, "ModeSimplegallery", this.modeSimplegallery.ToString());
+            this.SaveSetting(modController, "ModeActiveforums", this.modeActiveForums.ToString());
 
             // Setting TaxMode
             this.SaveSetting(modController, "TaxMode", this.dDlTaxMode.SelectedValue);
@@ -2445,31 +2427,25 @@ namespace WatchersNET.DNN.Modules.TagCloud
             }
 
             // Save Ventrian Tab Setting
-            if (this.bModeNewsarticles)
+            if (this.modeNewsarticles && this.ddLTabsVentrianNews.Items.Count > 0)
             {
-                if (this.ddLTabsVentrianNews.Items.Count > 0)
-                {
-                    var values = this.ddLTabsVentrianNews.SelectedValue.Split(Convert.ToChar("-"));
+                var values = this.ddLTabsVentrianNews.SelectedValue.Split(Convert.ToChar("-"));
 
-                    if (values.Length == 2)
-                    {
-                        this.SaveSetting(modController, "NewsArticlesTab", values[0]);
-                        this.SaveSetting(modController, "NewsArticlesModule", values[1]);
-                    }
+                if (values.Length == 2)
+                {
+                    this.SaveSetting(modController, "NewsArticlesTab", values[0]);
+                    this.SaveSetting(modController, "NewsArticlesModule", values[1]);
                 }
             }
 
-            if (this.bModeSimplegallery)
+            if (this.modeSimplegallery && this.ddLTabsVentrianSimple.Items.Count > 0)
             {
-                if (this.ddLTabsVentrianSimple.Items.Count > 0)
-                {
-                    var values = this.ddLTabsVentrianSimple.SelectedValue.Split(Convert.ToChar("-"));
+                var values = this.ddLTabsVentrianSimple.SelectedValue.Split(Convert.ToChar("-"));
 
-                    if (values.Length == 2)
-                    {
-                        this.SaveSetting(modController, "SimpleGalleryTab", values[0]);
-                        this.SaveSetting(modController, "SimpleGalleryModule", values[1]);
-                    }
+                if (values.Length == 2)
+                {
+                    this.SaveSetting(modController, "SimpleGalleryTab", values[0]);
+                    this.SaveSetting(modController, "SimpleGalleryModule", values[1]);
                 }
             }
 
@@ -2480,7 +2456,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
             this.SaveSetting(modController, "MinSize", this.MinSize.Text);
             this.SaveSetting(modController, "FillBox", this.FillBox.Checked.ToString());
 
-            if (!this.bModeActiveforums)
+            if (!this.modeActiveForums)
             {
                 return;
             }
@@ -2515,7 +2491,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 // Check if Tag is only one word
                 if (sTagName.Contains(" "))
                 {
-                    sTagName.Remove(sTagName.IndexOf(" ", StringComparison.Ordinal));
+                    sTagName = sTagName.Remove(sTagName.IndexOf(" ", StringComparison.Ordinal));
                 }
 
                 var tag = new CustomTags
@@ -2597,7 +2573,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                         {
                             if (itemMode.Selected)
                             {
-                                this.bModeCustom = true;
+                                this.modeCustom = true;
                                 this.phCustom.Visible = true;
 
                                 // Expand Panel
@@ -2605,7 +2581,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                             }
                             else
                             {
-                                this.bModeCustom = false;
+                                this.modeCustom = false;
                                 this.phCustom.Visible = false;
                             }
                         }
@@ -2615,7 +2591,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                         {
                             if (itemMode.Selected)
                             {
-                                this.bModeNewsarticles = true;
+                                this.modeNewsarticles = true;
                                 this.phVentrianNews.Visible = true;
 
                                 this.FillTabList("newsarticles", tabs);
@@ -2625,7 +2601,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                             }
                             else
                             {
-                                this.bModeNewsarticles = false;
+                                this.modeNewsarticles = false;
                                 this.phVentrianNews.Visible = false;
                             }
                         }
@@ -2635,7 +2611,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                         {
                             if (itemMode.Selected)
                             {
-                                this.bModeSimplegallery = true;
+                                this.modeSimplegallery = true;
                                 this.phVentrianSimple.Visible = true;
 
                                 this.FillTabList("simplegallery", tabs);
@@ -2645,7 +2621,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                             }
                             else
                             {
-                                this.bModeSimplegallery = false;
+                                this.modeSimplegallery = false;
                                 this.phVentrianSimple.Visible = false;
                             }
                         }
@@ -2655,7 +2631,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                         {
                             if (itemMode.Selected)
                             {
-                                this.bModeActiveforums = true;
+                                this.modeActiveForums = true;
                                 this.phActiveforums.Visible = true;
 
                                 this.FillTabList("activeforums", tabs);
@@ -2665,7 +2641,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                             }
                             else
                             {
-                                this.bModeActiveforums = false;
+                                this.modeActiveForums = false;
                                 this.phActiveforums.Visible = false;
                             }
                         }
@@ -2675,7 +2651,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                         {
                             if (itemMode.Selected)
                             {
-                                this.bModeTax = true;
+                                this.modeTax = true;
                                 this.phTax.Visible = true;
 
                                 // Expand Panel
@@ -2683,7 +2659,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                             }
                             else
                             {
-                                this.bModeTax = false;
+                                this.modeTax = false;
                                 this.phTax.Visible = false;
                             }
                         }
@@ -2727,7 +2703,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 // Check if Tag is only one word
                 if (sTagName.Contains(" "))
                 {
-                    sTagName.Remove(sTagName.IndexOf(" ", StringComparison.Ordinal));
+                    sTagName = sTagName.Remove(sTagName.IndexOf(" ", StringComparison.Ordinal));
                 }
 
                 tag = new CustomTags
@@ -2807,7 +2783,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         {
             var selectedMode = (RenderMode)Enum.Parse(typeof(RenderMode), this.RenderModeType.SelectedValue);
 
-            if (selectedMode.Equals(RenderMode.BasicHTML))
+            if (selectedMode.Equals(RenderMode.BasicHtml))
             {
                 this.lblFlashWidth.Visible = false;
                 this.lblFlashHeight.Visible = false;
@@ -2834,7 +2810,5 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 this.dDlWidth.Visible = false;
             }
         }
-
-        #endregion
     }
 }

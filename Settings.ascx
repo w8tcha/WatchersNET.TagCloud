@@ -1,7 +1,6 @@
 <%@ Control Language="c#" AutoEventWireup="True" Codebehind="Settings.ascx.cs" Inherits="WatchersNET.DNN.Modules.TagCloud.Settings" %>
 <%@ Register TagPrefix="dnn" TagName="label" Src="~/controls/LabelControl.ascx" %>
 <%@ Register TagPrefix="dnn" TagName="URL" Src="~/controls/URLControl.ascx" %>
-<%@ Register TagPrefix="dnn" Assembly="DotNetNuke.Web" Namespace="DotNetNuke.Web.UI.WebControls" %>
 
 <asp:panel id="pnlSettings" runat="server">
   <div class="dnnForm " id="SettingTabs">
@@ -193,42 +192,42 @@
                 <tr>
                   <td colspan="2">
        <asp:DataGrid id="grdTagList" Width="100%" runat="server" AutoGenerateColumns="False" BorderColor="Gray" BorderWidth="1px">
-		<Columns>
-			<asp:BoundColumn Visible="False" DataField="TagID" SortExpression="TagID" ReadOnly="True" HeaderText="TagID"></asp:BoundColumn>
-			<asp:BoundColumn DataField="TagID" SortExpression="TagID" ReadOnly="True" HeaderText="TagID">
-				<HeaderStyle HorizontalAlign="left" Width="1%" CssClass="SubHead"></HeaderStyle>
-				<ItemStyle CssClass="Normal"></ItemStyle>
-			</asp:BoundColumn>
-			<asp:TemplateColumn>
-				<HeaderStyle HorizontalAlign="Center" Width="1%" CssClass="SubHead"></HeaderStyle>
-				<ItemStyle HorizontalAlign="left"></ItemStyle>
-				<ItemTemplate>
-					<asp:ImageButton id="btnEdit" AlternateText="Item bearbeiten" ImageUrl="~/images/edit.gif" CssClass="CommandButton"
-						runat="server"></asp:ImageButton>
-				</ItemTemplate>
-			</asp:TemplateColumn>
-			<asp:TemplateColumn>
-				<HeaderStyle HorizontalAlign="Center" Width="1%" CssClass="SubHead"></HeaderStyle>
-				<ItemStyle HorizontalAlign="left"></ItemStyle>
-				<ItemTemplate>
-					<asp:ImageButton id="btnDelete" AlternateText="Item löschen" ImageUrl="~/images/delete.gif" CssClass="CommandButton"
-						runat="server"></asp:ImageButton>
-				</ItemTemplate>
-			</asp:TemplateColumn>
-			<asp:BoundColumn DataField="Tag" SortExpression="Tag" ReadOnly="True" HeaderText="Tag">
-				<HeaderStyle HorizontalAlign="left" Width="10%" CssClass="SubHead"></HeaderStyle>
-				<ItemStyle CssClass="Normal"></ItemStyle>
-			</asp:BoundColumn>
-			<asp:BoundColumn DataField="TagUrl" SortExpression="TagUrl" ReadOnly="True" HeaderText="Tag URL">
-				<HeaderStyle HorizontalAlign="left" Width="10%" CssClass="SubHead"></HeaderStyle>
-				<ItemStyle CssClass="Normal"></ItemStyle>
-			</asp:BoundColumn>
-			<asp:BoundColumn DataField="Weight" SortExpression="Weight" ReadOnly="True" HeaderText="Weight">
-				<HeaderStyle HorizontalAlign="left" Width="10%" CssClass="SubHead"></HeaderStyle>
-				<ItemStyle CssClass="Normal"></ItemStyle>
-			</asp:BoundColumn>
-		</Columns>
-	</asp:DataGrid>
+        <Columns>
+            <asp:BoundColumn Visible="False" DataField="TagID" SortExpression="TagID" ReadOnly="True" HeaderText="TagID"></asp:BoundColumn>
+            <asp:BoundColumn DataField="TagID" SortExpression="TagID" ReadOnly="True" HeaderText="TagID">
+                <HeaderStyle HorizontalAlign="left" Width="1%" CssClass="SubHead"></HeaderStyle>
+                <ItemStyle CssClass="Normal"></ItemStyle>
+            </asp:BoundColumn>
+            <asp:TemplateColumn>
+                <HeaderStyle HorizontalAlign="Center" Width="1%" CssClass="SubHead"></HeaderStyle>
+                <ItemStyle HorizontalAlign="left"></ItemStyle>
+                <ItemTemplate>
+                    <asp:ImageButton id="btnEdit" AlternateText="Item bearbeiten" ImageUrl="~/images/edit.gif" CssClass="CommandButton"
+                        runat="server"></asp:ImageButton>
+                </ItemTemplate>
+            </asp:TemplateColumn>
+            <asp:TemplateColumn>
+                <HeaderStyle HorizontalAlign="Center" Width="1%" CssClass="SubHead"></HeaderStyle>
+                <ItemStyle HorizontalAlign="left"></ItemStyle>
+                <ItemTemplate>
+                    <asp:ImageButton id="btnDelete" AlternateText="Item löschen" ImageUrl="~/images/delete.gif" CssClass="CommandButton"
+                        runat="server"></asp:ImageButton>
+                </ItemTemplate>
+            </asp:TemplateColumn>
+            <asp:BoundColumn DataField="Tag" SortExpression="Tag" ReadOnly="True" HeaderText="Tag">
+                <HeaderStyle HorizontalAlign="left" Width="10%" CssClass="SubHead"></HeaderStyle>
+                <ItemStyle CssClass="Normal"></ItemStyle>
+            </asp:BoundColumn>
+            <asp:BoundColumn DataField="TagUrl" SortExpression="TagUrl" ReadOnly="True" HeaderText="Tag URL">
+                <HeaderStyle HorizontalAlign="left" Width="10%" CssClass="SubHead"></HeaderStyle>
+                <ItemStyle CssClass="Normal"></ItemStyle>
+            </asp:BoundColumn>
+            <asp:BoundColumn DataField="Weight" SortExpression="Weight" ReadOnly="True" HeaderText="Weight">
+                <HeaderStyle HorizontalAlign="left" Width="10%" CssClass="SubHead"></HeaderStyle>
+                <ItemStyle CssClass="Normal"></ItemStyle>
+            </asp:BoundColumn>
+        </Columns>
+    </asp:DataGrid>
       </td>
     </tr>
     <tr>
@@ -251,8 +250,8 @@
             <td style="vertical-align: top"><asp:Label ID="lTagUrl" runat="server" Text="Tag URL:"></asp:Label></td>
             <td style="vertical-align: top">
               <dnn:url id="ctlTagUrl" runat="server" width="300" showtabs="True" showfiles="False" showUrls="True"
-					urltype="F" showlog="False" shownewwindow="False" showtrack="False"></dnn:url>
-		    </td>
+                    urltype="F" showlog="False" shownewwindow="False" showtrack="False"></dnn:url>
+            </td>
           </tr>
           <tr>
             <td></td>
@@ -266,42 +265,42 @@
         </table>
         </fieldset>
         <asp:DataGrid id="grdTagLocales" Width="100%" runat="server" AutoGenerateColumns="False" BorderColor="Gray" BorderWidth="1px" style="margin-top:10px;">
-		<Columns>
-			<asp:BoundColumn Visible="False" DataField="TagID" SortExpression="TagID" ReadOnly="True" HeaderText="TagID"></asp:BoundColumn>
-			<asp:BoundColumn DataField="TagID" SortExpression="TagID" ReadOnly="True" HeaderText="TagID">
-				<HeaderStyle HorizontalAlign="left" Width="1%" CssClass="SubHead"></HeaderStyle>
-				<ItemStyle CssClass="Normal"></ItemStyle>
-			</asp:BoundColumn>
-			<asp:TemplateColumn>
-				<HeaderStyle HorizontalAlign="Center" Width="1%" CssClass="SubHead"></HeaderStyle>
-				<ItemStyle HorizontalAlign="left"></ItemStyle>
-				<ItemTemplate>
-					<asp:ImageButton id="btnEdit" AlternateText="Item bearbeiten" ImageUrl="~/images/edit.gif" CssClass="CommandButton"
-						runat="server"></asp:ImageButton>
-				</ItemTemplate>
-			</asp:TemplateColumn>
-			<asp:TemplateColumn>
-				<HeaderStyle HorizontalAlign="Center" Width="1%" CssClass="SubHead"></HeaderStyle>
-				<ItemStyle HorizontalAlign="left"></ItemStyle>
-				<ItemTemplate>
-					<asp:ImageButton id="btnDelete" AlternateText="Item löschen" ImageUrl="~/images/delete.gif" CssClass="CommandButton"
-						runat="server"></asp:ImageButton>
-				</ItemTemplate>
-			</asp:TemplateColumn>
+        <Columns>
+            <asp:BoundColumn Visible="False" DataField="TagID" SortExpression="TagID" ReadOnly="True" HeaderText="TagID"></asp:BoundColumn>
+            <asp:BoundColumn DataField="TagID" SortExpression="TagID" ReadOnly="True" HeaderText="TagID">
+                <HeaderStyle HorizontalAlign="left" Width="1%" CssClass="SubHead"></HeaderStyle>
+                <ItemStyle CssClass="Normal"></ItemStyle>
+            </asp:BoundColumn>
+            <asp:TemplateColumn>
+                <HeaderStyle HorizontalAlign="Center" Width="1%" CssClass="SubHead"></HeaderStyle>
+                <ItemStyle HorizontalAlign="left"></ItemStyle>
+                <ItemTemplate>
+                    <asp:ImageButton id="btnEdit" AlternateText="Item bearbeiten" ImageUrl="~/images/edit.gif" CssClass="CommandButton"
+                        runat="server"></asp:ImageButton>
+                </ItemTemplate>
+            </asp:TemplateColumn>
+            <asp:TemplateColumn>
+                <HeaderStyle HorizontalAlign="Center" Width="1%" CssClass="SubHead"></HeaderStyle>
+                <ItemStyle HorizontalAlign="left"></ItemStyle>
+                <ItemTemplate>
+                    <asp:ImageButton id="btnDelete" AlternateText="Item löschen" ImageUrl="~/images/delete.gif" CssClass="CommandButton"
+                        runat="server"></asp:ImageButton>
+                </ItemTemplate>
+            </asp:TemplateColumn>
             <asp:BoundColumn DataField="Locale" SortExpression="Locale" ReadOnly="True" HeaderText="Locale">
-				<HeaderStyle HorizontalAlign="left" Width="10%" CssClass="SubHead"></HeaderStyle>
-				<ItemStyle CssClass="Normal"></ItemStyle>
-			</asp:BoundColumn>
-			<asp:BoundColumn DataField="Tag" SortExpression="Tag" ReadOnly="True" HeaderText="Tag">
-				<HeaderStyle HorizontalAlign="left" Width="10%" CssClass="SubHead"></HeaderStyle>
-				<ItemStyle CssClass="Normal"></ItemStyle>
-			</asp:BoundColumn>
-			<asp:BoundColumn DataField="TagUrl" SortExpression="TagUrl" ReadOnly="True" HeaderText="Tag URL">
-				<HeaderStyle HorizontalAlign="left" Width="10%" CssClass="SubHead"></HeaderStyle>
-				<ItemStyle CssClass="Normal"></ItemStyle>
-			</asp:BoundColumn>
-		</Columns>
-	</asp:DataGrid>
+                <HeaderStyle HorizontalAlign="left" Width="10%" CssClass="SubHead"></HeaderStyle>
+                <ItemStyle CssClass="Normal"></ItemStyle>
+            </asp:BoundColumn>
+            <asp:BoundColumn DataField="Tag" SortExpression="Tag" ReadOnly="True" HeaderText="Tag">
+                <HeaderStyle HorizontalAlign="left" Width="10%" CssClass="SubHead"></HeaderStyle>
+                <ItemStyle CssClass="Normal"></ItemStyle>
+            </asp:BoundColumn>
+            <asp:BoundColumn DataField="TagUrl" SortExpression="TagUrl" ReadOnly="True" HeaderText="Tag URL">
+                <HeaderStyle HorizontalAlign="left" Width="10%" CssClass="SubHead"></HeaderStyle>
+                <ItemStyle CssClass="Normal"></ItemStyle>
+            </asp:BoundColumn>
+        </Columns>
+    </asp:DataGrid>
       </td>
     </tr>
     </table>
@@ -316,7 +315,7 @@
          <asp:UpdatePanel ID="upImport" UpdateMode="Conditional" ChildrenAsTriggers="true" runat="server">
             <ContentTemplate>
                <dnn:url id="ctlImportFile" runat="server" width="300" showtabs="False" Required="False" filefilter="xml" showfiles="True" showUrls="False"
-					urltype="F" showlog="False" shownewwindow="False" showtrack="False"></dnn:url>
+                    urltype="F" showlog="False" shownewwindow="False" showtrack="False"></dnn:url>
                       <asp:LinkButton id="cmdImport" runat="server" Visible="false"></asp:LinkButton>
             </ContentTemplate>
           </asp:UpdatePanel>

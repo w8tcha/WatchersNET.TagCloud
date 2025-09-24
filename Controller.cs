@@ -4,8 +4,8 @@
 *   standard Web 2.0 Tag Cloud, or You can define your own Tags list.  The Tags are links which linked to the Portal Search to 
 *   show all Pages with that Tag.
 *
-*   The Tag Cloud will be rendered as 3D Cloud, and as alternative for Non Flash 
-*   Users as a list of hyperlinks in varying styles depending on a weight. 
+*   The Tag Cloud will be rendered as 3D Cloud, and 
+*    as a list of hyperlinks in varying styles depending on a weight. 
 *   This is similar to tag clouds in del.icio.us or Flickr.
 *
 *   Copyright(c) Ingo Herbote (thewatcher@watchersnet.de)
@@ -44,8 +44,6 @@
 
 namespace WatchersNET.DNN.Modules.TagCloud
 {
-    #region
-
     using System;
     using System.Text;
     using System.Xml;
@@ -54,21 +52,14 @@ namespace WatchersNET.DNN.Modules.TagCloud
     using DotNetNuke.Common.Utilities;
     using DotNetNuke.Entities.Modules;
     using DotNetNuke.Services.Exceptions;
-    using DotNetNuke.Services.Search;
 
     using WatchersNET.DNN.Modules.TagCloud.Constants;
-
-    #endregion
 
     /// <summary>
     /// The controller.
     /// </summary>
-    public class Controller : ModuleSettingsBase, IPortable, ISearchable
+    public class Controller : ModuleSettingsBase, IPortable
     {
-        #region Implemented Interfaces
-
-        #region IPortable
-
         /// <summary>
         /// Export Module Settings
         /// </summary>
@@ -362,7 +353,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 }
                 catch (Exception)
                 {
-                    sExcludeType = ExcludeType.Equals.ToString();
+                    sExcludeType = nameof(ExcludeType.Equals);
                 }
 
                 try
@@ -380,7 +371,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 }
                 catch (Exception)
                 {
-                    sSortTags = SortType.AlphabeticAsc.ToString();
+                    sSortTags = nameof(SortType.AlphabeticAsc);
                 }
 
                 try
@@ -461,7 +452,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 }
                 catch (Exception)
                 {
-                    sWeightMode = WeightMode.size.ToString();
+                    sWeightMode = nameof(WeightMode.size);
                 }
 
                 try
@@ -479,7 +470,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 }
                 catch (Exception)
                 {
-                    sRenderMode = RenderMode.HTML5.ToString();
+                    sRenderMode = nameof(RenderMode.Html5);
                 }
 
                 try
@@ -887,27 +878,5 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 Exceptions.ProcessModuleLoadException(this, exc);
             }
         }
-
-        #endregion
-
-        #region ISearchable
-
-        /// <summary>
-        /// Included as a stub only so that the core knows this module Implements Entities.Modules.ISearchable
-        /// </summary>
-        /// <param name="modInfo">
-        /// The mod Info.
-        /// </param>
-        /// <returns>
-        /// Returns the Search Items
-        /// </returns>
-        public SearchItemInfoCollection GetSearchItems(ModuleInfo modInfo)
-        {
-            return null;
-        }
-
-        #endregion
-
-        #endregion
     }
 }

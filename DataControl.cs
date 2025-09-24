@@ -4,8 +4,8 @@
 *   standard Web 2.0 Tag Cloud, or You can define your own Tags list.  The Tags are links which linked to the Portal Search to
 *   show all Pages with that Tag.
 *
-*   The Tag Cloud will be rendered as 3D Cloud, and as alternative for Non Flash
-*   Users as a list of hyperlinks in varying styles depending on a weight.
+*   The Tag Cloud will be rendered as 3D Cloud, and
+*    as a list of hyperlinks in varying styles depending on a weight.
 *   This is similar to tag clouds in del.icio.us or Flickr.
 *
 *   Copyright(c) Ingo Herbote (thewatcher@watchersnet.de)
@@ -44,8 +44,6 @@
 
 namespace WatchersNET.DNN.Modules.TagCloud
 {
-    #region
-
     using System;
     using System.Collections.Generic;
 
@@ -60,22 +58,18 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
     using DataProvider = DotNetNuke.Data.DataProvider;
 
-    #endregion
-
     /// <summary>
     /// The data control.
     /// </summary>
     public class DataControl : PortalModuleBase
     {
-        #region Public Methods
-
         /// <summary>
         /// Get Tag Cloud Items From Active Forums SQL
         /// </summary>
-        /// <param name="iPortalId">
-        /// The PortalId of the Forums
+        /// <param name="portalId">
+        /// The portalId of the Forums
         /// </param>
-        /// <param name="iModuleId">
+        /// <param name="moduleId">
         /// The Module Instance of the Active Forums
         /// </param>
         /// <param name="tagCount">
@@ -84,19 +78,19 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// <returns>
         /// The Tags
         /// </returns>
-        public static List<CloudItem> TagCloudActiveForumsTags(int iPortalId, int iModuleId, int tagCount)
+        public static List<CloudItem> TagCloudActiveForumsTags(int portalId, int moduleId, int tagCount)
         {
             // Get Current Forum User
-            var forumUser = new UserController().GetUser(iPortalId, iModuleId);
+            var forumUser = new UserController().GetUser(portalId, moduleId);
 
             var forumIds = !string.IsNullOrEmpty(forumUser.UserForums)
                                   ? forumUser.UserForums
                                   : GetForumsForUser(
-                                      forumUser.UserRoles, iPortalId, iModuleId);
+                                      forumUser.UserRoles, portalId, moduleId);
 
-            var afTagsList = new List<CloudItem>();
+            var activeForumsTags = new List<CloudItem>();
 
-            using (var dr = new Common().TagCloud_Get(iPortalId, iModuleId, forumIds, tagCount))
+            using (var dr = new Common().TagCloud_Get(portalId, moduleId, forumIds, tagCount))
             {
                 while (dr.Read())
                 {
@@ -105,54 +99,11 @@ namespace WatchersNET.DNN.Modules.TagCloud
                            Weight = Convert.ToInt32(dr["Priority"]), Text = dr["TagName"].ToString()
                         };
 
-                    afTagsList.Add(item);
+                    activeForumsTags.Add(item);
                 }
             }
 
-            return afTagsList;
-        }
-
-        /// <summary>
-        /// Gets the forums for user.
-        /// </summary>
-        /// <param name="UserRoles">The user roles.</param>
-        /// <param name="PortalId">The portal id.</param>
-        /// <param name="ModuleId">The module id.</param>
-        /// <param name="PermissionType">Type of the permission.</param>
-        /// <returns></returns>
-        private static string GetForumsForUser(string UserRoles, int PortalId, int ModuleId, string PermissionType = "CanView")
-        {
-            var forumsDb = new ForumsDB();
-            var str = string.Empty;
-            foreach (Forum forum in forumsDb.Forums_List(PortalId, ModuleId))
-            {
-                string AuthorizedRoles;
-                switch (PermissionType)
-                {
-                    case "CanView":
-                        AuthorizedRoles = forum.Security.View;
-                        break;
-                    case "CanRead":
-                        AuthorizedRoles = forum.Security.Read;
-                        break;
-                    case "CanApprove":
-                        AuthorizedRoles = forum.Security.ModApprove;
-                        break;
-                    case "CanEdit":
-                        AuthorizedRoles = forum.Security.ModEdit;
-                        break;
-                    default:
-                        AuthorizedRoles = forum.Security.View;
-                        break;
-                }
-
-                if ((Permissions.HasPerm(AuthorizedRoles, UserRoles)
-                     || !forum.Hidden && (PermissionType == "CanView" || PermissionType == "CanRead")) && forum.Active)
-                {
-                    str = $"{str}{forum.ForumID};";
-                }
-            }
-            return str;
+            return activeForumsTags;
         }
 
         /// <summary>
@@ -167,82 +118,81 @@ namespace WatchersNET.DNN.Modules.TagCloud
         public static int TagCloudItemsAdd(CustomTags objTag)
         {
             return
-                Convert.ToInt32(
-                    DataProvider.Instance().ExecuteScalar(
-                        "TagCloudItemsAdd", objTag.TagId, objTag.Weight, objTag.Tag, objTag.ModuleId, objTag.Url));
+               DataProvider.Instance().ExecuteScalar<int>(
+                        "TagCloudItemsAdd", objTag.TagId, objTag.Weight, objTag.Tag, objTag.ModuleId, objTag.Url);
         }
 
         /// <summary>
         /// The tag cloud items add ml.
         /// </summary>
-        /// <param name="iTagId">
-        /// The i tag id.
+        /// <param name="tagId">
+        /// The tag id.
         /// </param>
-        /// <param name="sLocale">
-        /// The s locale.
+        /// <param name="locale">
+        /// The locale.
         /// </param>
-        /// <param name="sTag">
-        /// The s tag.
+        /// <param name="tag">
+        /// The tag.
         /// </param>
-        /// <param name="iModuleId">
-        /// The i module id.
+        /// <param name="moduleId">
+        /// The module id.
         /// </param>
-        /// <param name="sTagUrl">
-        /// The s tag url.
+        /// <param name="tagUrl">
+        /// The tag url.
         /// </param>
-        public static void TagCloudItemsAddMl(int iTagId, string sLocale, string sTag, int iModuleId, string sTagUrl)
+        public static void TagCloudItemsAddMl(int tagId, string locale, string tag, int moduleId, string tagUrl)
         {
-            DataProvider.Instance().ExecuteScalar("TagCloudItemsAddMl", iTagId, sLocale, sTag, iModuleId, sTagUrl);
+            DataProvider.Instance().ExecuteScalar<int>("TagCloudItemsAddMl", tagId, locale, tag, moduleId, tagUrl);
         }
 
         /// <summary>
         /// The tag cloud items delete.
         /// </summary>
-        /// <param name="iTagId">
-        /// The i tag id.
+        /// <param name="tagId">
+        /// The tag id.
         /// </param>
-        /// <param name="iModulId">
-        /// The i modul id.
+        /// <param name="moduleId">
+        /// The module id.
         /// </param>
-        public static void TagCloudItemsDelete(int iTagId, int iModulId)
+        public static void TagCloudItemsDelete(int tagId, int moduleId)
         {
-            DataProvider.Instance().ExecuteNonQuery("TagCloudItemsDelete", iTagId, iModulId);
+            DataProvider.Instance().ExecuteNonQuery("TagCloudItemsDelete", tagId, moduleId);
         }
 
         /// <summary>
         /// The tag cloud items delete ml.
         /// </summary>
-        /// <param name="iTagId">
-        /// The i tag id.
+        /// <param name="tagId">
+        /// The tag id.
         /// </param>
-        /// <param name="iModulId">
-        /// The i modul id.
+        /// <param name="moduleId">
+        /// The module id.
         /// </param>
-        /// <param name="sLocale">
-        /// The s locale.
+        /// <param name="locale">
+        /// The locale.
         /// </param>
-        public static void TagCloudItemsDeleteMl(int iTagId, int iModulId, string sLocale)
+        public static void TagCloudItemsDeleteMl(int tagId, int moduleId, string locale)
         {
-            DataProvider.Instance().ExecuteNonQuery("TagCloudItemsDeleteMl", iTagId, iModulId, sLocale);
+            DataProvider.Instance().ExecuteNonQuery("TagCloudItemsDeleteMl", tagId, moduleId, locale);
         }
 
         /// <summary>
-        ///  Get All Locales of the Tag by TagID and ModuleId
+        ///  Get All Locales of the Tag by TagID and moduleId
         /// </summary>
-        /// <param name="iModulId">
+        /// <param name="moduleId">
         ///  Module Id that is uses
         /// </param>
-        /// <param name="iTagId">
+        /// <param name="tagId">
         ///  the Tag id
         /// </param>
         /// <returns>
         /// All Locales of the Tag
         /// </returns>
-        public static List<Locales> TagCloudItemsGetByLocale(int iModulId, int iTagId)
+        public static List<Locales> TagCloudItemsGetByLocale(int moduleId, int tagId)
         {
             var localesList = new List<Locales>();
 
-            using (var dr = DataProvider.Instance().ExecuteReader("TagCloudItemsGetByLocale", iModulId, iTagId))
+            using (var dr = DataProvider.Instance().ExecuteReader("TagCloudItemsGetByLocale", moduleId, tagId))
             {
                 while (dr.Read())
                 {
@@ -263,17 +213,17 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// <summary>
         /// The tag cloud items get by module.
         /// </summary>
-        /// <param name="iModulId">
+        /// <param name="moduleId">
         /// The module id.
         /// </param>
         /// <returns>
         /// TagCloud Item List
         /// </returns>
-        public static List<CustomTags> TagCloudItemsGetByModule(int iModulId)
+        public static List<CustomTags> TagCloudItemsGetByModule(int moduleId)
         {
             var tagsList = new List<CustomTags>();
 
-            using (var dr = DataProvider.Instance().ExecuteReader("TagCloudItemsGetByModule", iModulId))
+            using (var dr = DataProvider.Instance().ExecuteReader("TagCloudItemsGetByModule", moduleId))
             {
                 while (dr.Read())
                 {
@@ -305,26 +255,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
         }
 
         /// <summary>
-        /// Get the Occurrence Count for the selected Words Id
-        /// </summary>
-        /// <param name="searchWordsId">the Id of the Word</param>
-        /// <returns>
-        /// The Count of Occurrences
-        /// </returns>
-        public static int TagCloudSearchWordsOccur(int searchWordsId)
-        {
-            using (var dr = DataProvider.Instance().ExecuteReader("TagCloud_SearchWords", searchWordsId))
-            {
-                while (dr.Read())
-                {
-                    searchWordsId = Convert.ToInt32(dr["Occurrences"]);
-                }
-            }
-
-            return searchWordsId;
-        }
-
-        /// <summary>
         /// Add ne Exclude Word
         /// </summary>
         /// <param name="addWord">
@@ -336,9 +266,8 @@ namespace WatchersNET.DNN.Modules.TagCloud
         public static int TagCloudExcludeWordAdd(ExcludeWord addWord)
         {
             return
-                Convert.ToInt32(
-                    DataProvider.Instance().ExecuteScalar(
-                        "TagCloudExcludeWordAdd", addWord.Word, addWord.ExcludeWordType, addWord.ModuleID, addWord.WordID));
+                DataProvider.Instance().ExecuteScalar<int>(
+                        "TagCloudExcludeWordAdd", addWord.Word, addWord.ExcludeWordType, addWord.ModuleID, addWord.WordID);
         }
 
         /// <summary>
@@ -434,6 +363,58 @@ namespace WatchersNET.DNN.Modules.TagCloud
             return word;
         }
 
-        #endregion
+        /// <summary>
+        /// Gets the forums for user.
+        /// </summary>
+        /// <param name="userRoles">
+        /// The user roles.
+        /// </param>
+        /// <param name="portalId">
+        /// The portal id.
+        /// </param>
+        /// <param name="moduleId">
+        /// The module id.
+        /// </param>
+        /// <param name="permissionType">
+        /// Type of the permission.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        private static string GetForumsForUser(string userRoles, int portalId, int moduleId, string permissionType = "CanView")
+        {
+            var forumsDb = new ForumsDB();
+            var str = string.Empty;
+            foreach (Forum forum in forumsDb.Forums_List(portalId, moduleId))
+            {
+                string authorizedRoles;
+                switch (permissionType)
+                {
+                    case "CanView":
+                        authorizedRoles = forum.Security.View;
+                        break;
+                    case "CanRead":
+                        authorizedRoles = forum.Security.Read;
+                        break;
+                    case "CanApprove":
+                        authorizedRoles = forum.Security.ModApprove;
+                        break;
+                    case "CanEdit":
+                        authorizedRoles = forum.Security.ModEdit;
+                        break;
+                    default:
+                        authorizedRoles = forum.Security.View;
+                        break;
+                }
+
+                if ((Permissions.HasPerm(authorizedRoles, userRoles)
+                     || !forum.Hidden && (permissionType == "CanView" || permissionType == "CanRead")) && forum.Active)
+                {
+                    str = $"{str}{forum.ForumID};";
+                }
+            }
+
+            return str;
+        }
     }
 }

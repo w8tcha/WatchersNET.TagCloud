@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WatchersNET.DNN.Modules.TagCloud {
-    
-    
-    public partial class TagCloud {
-        
+namespace WatchersNET.DNN.Modules.TagCloud
+{
+
+
+    public partial class TagCloud
+    {
+
         /// <summary>
         /// tagCloudDiv control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace WatchersNET.DNN.Modules.TagCloud {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel tagCloudDiv;
-        
+
         /// <summary>
         /// c1 control.
         /// </summary>
