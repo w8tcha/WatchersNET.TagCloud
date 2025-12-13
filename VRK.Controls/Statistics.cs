@@ -15,20 +15,14 @@
 
 namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
 {
-    #region
-
     using System;
     using System.Collections.Generic;
-
-    #endregion
 
     /// <summary>
     /// Statistical functions
     /// </summary>
     public static class Statistics
     {
-        #region Public Methods
-
         /// <summary>
         /// The mean.
         /// </summary>
@@ -79,21 +73,5 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
 
             return Math.Sqrt(sumOfDiffSquares / count);
         }
-
-        /// <summary>
-        /// The std dev.
-        /// </summary>
-        /// <param name="values">
-        /// The values.
-        /// </param>
-        /// <returns>
-        /// The std dev.
-        /// </returns>
-        public static double StdDev(IEnumerable<double> values)
-        {
-            return StdDev(values, out var mean);
-        }
-
-        #endregion
     }
 }

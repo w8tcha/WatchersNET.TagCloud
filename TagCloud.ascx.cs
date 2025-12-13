@@ -90,6 +90,11 @@ namespace WatchersNET.DNN.Modules.TagCloud
         private readonly INavigationManager navigationManager;
 
         /// <summary>
+        /// The java script helper.
+        /// </summary>
+        private readonly IJavaScriptLibraryHelper javaScript;
+
+        /// <summary>
         /// The vocabularies.
         /// </summary>
         private string[] vocabularies;
@@ -105,6 +110,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         protected TagCloud()
         {
             this.navigationManager = this.DependencyProvider.GetRequiredService<INavigationManager>();
+            this.javaScript = this.DependencyProvider.GetRequiredService<IJavaScriptLibraryHelper>();
         }
 
         /// <summary>
@@ -348,7 +354,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </summary>
         private void AddCanvasScript()
         {
-            JavaScript.RequestRegistration(CommonJs.jQuery);
+            javaScript.RequestRegistration(CommonJs.jQuery);
 
             if (HttpContext.Current.Items["tagcanvas_registered"] == null)
             {
@@ -413,7 +419,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// <param name="cloudItems">The item list.</param>
         private void AddWordCloudScript(IEnumerable<CloudItem> cloudItems)
         {
-            JavaScript.RequestRegistration(CommonJs.jQuery);
+            javaScript.RequestRegistration(CommonJs.jQuery);
 
             if (HttpContext.Current.Items["wordcloudjs_registered"] == null)
             {

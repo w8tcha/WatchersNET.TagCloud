@@ -152,11 +152,17 @@ namespace WatchersNET.DNN.Modules.TagCloud
         private readonly INavigationManager navigationManager;
 
         /// <summary>
+        /// The java script helper.
+        /// </summary>
+        private readonly IJavaScriptLibraryHelper javaScript;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Settings"/> class.
         /// </summary>
         protected Settings()
         {
             this.navigationManager = this.DependencyProvider.GetRequiredService<INavigationManager>();
+            this.javaScript = this.DependencyProvider.GetRequiredService<IJavaScriptLibraryHelper>();
         }
 
         /// <summary>
@@ -430,9 +436,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             var csType = typeof(Page);
 
-            JavaScript.RequestRegistration(CommonJs.jQuery);
+            javaScript.RequestRegistration(CommonJs.jQuery);
 
-            JavaScript.RequestRegistration(CommonJs.DnnPlugins);
+            javaScript.RequestRegistration(CommonJs.DnnPlugins);
 
             ScriptManager.RegisterClientScriptInclude(
                 this,
@@ -582,7 +588,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// </param>
         private void DeleteAllLocales(int iTagId)
         {
-            new LocaleController().GetLocales(this.PortalId).Values.ForEach(
+            LocaleController.Instance.GetLocales(this.PortalId).Values.ForEach(
                 language => DataControl.TagCloudItemsDeleteMl(iTagId, this.ModuleId, language.Code));
         }
 
@@ -698,7 +704,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
             var localesList = DataControl.TagCloudItemsGetByLocale(this.ModuleId, int.Parse(this.lTagId.Text));
 
-            foreach (var language in new LocaleController().GetLocales(this.PortalId).Values)
+            foreach (var language in LocaleController.Instance.GetLocales(this.PortalId).Values)
             {
                 var drNewRow = dtLocales.NewRow();
 

@@ -4,8 +4,8 @@
 *   standard Web 2.0 Tag Cloud, or You can define your own Tags list.  The Tags are links which linked to the Portal Search to
 *   show all Pages with that Tag.
 *
-*   The Tag Cloud will be rendered as 3D Flash Cloud, and as alternative for Non Flash
-*   Users as a list of hyperlinks in varying styles depending on a weight.
+*   The Tag Cloud will be rendered as 3D Cloud, and
+*    as a list of hyperlinks in varying styles depending on a weight.
 *   This is similar to tag clouds in del.icio.us or Flickr.
 *
 *   Copyright(c) Ingo Herbote (thewatcher@watchersnet.de)
@@ -60,14 +60,9 @@ namespace WatchersNET.DNN.Modules.TagCloud.Objects
         public bool CacheItems { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether blogs all.
-        /// </summary>
-        public bool DnnBlogsAll { get; set; }
-
-        /// <summary>
         /// Gets or sets The Render Mode
         /// </summary>
-        public RenderMode renderMode { get; set; }
+        public RenderMode RenderMode { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether Render the Item Weight
@@ -75,19 +70,14 @@ namespace WatchersNET.DNN.Modules.TagCloud.Objects
         public bool RenderItemWeight { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether mode activeforums.
+        /// Gets or sets a value indicating whether mode activeForums.
         /// </summary>
-        public bool ModeActiveforums { get; set; }
+        public bool ModeActiveForums { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether mode custom.
         /// </summary>
         public bool ModeCustom { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether  dnnblog.
-        /// </summary>
-        public bool ModeDnnblog { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether mode newsarticles.
@@ -132,7 +122,7 @@ namespace WatchersNET.DNN.Modules.TagCloud.Objects
         /// <summary>
         /// Gets or sets The exclusion words.
         /// </summary>
-        public List<ExcludeWord> exlusionWords { get; set; }
+        public List<ExcludeWord> ExclusionWords { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether Exclude Common Words.
@@ -188,11 +178,6 @@ namespace WatchersNET.DNN.Modules.TagCloud.Objects
         /// Gets or sets The bgcolor.
         /// </summary>
         public string Bgcolor { get; set; }
-
-        /// <summary>
-        /// Gets or sets The dnn blog blogs.
-        /// </summary>
-        public string[] DnnBlogBlog { get; set; }
 
         /// <summary>
         /// Gets or sets The flash height.
@@ -252,7 +237,7 @@ namespace WatchersNET.DNN.Modules.TagCloud.Objects
         /// <summary>
         /// Gets or sets The search tab id.
         /// </summary>
-        public int searchTabId { get; set; }
+        public int SearchTabId { get; set; }
 
         /// <summary>
         /// Gets or sets the search query string.
@@ -273,7 +258,7 @@ namespace WatchersNET.DNN.Modules.TagCloud.Objects
         /// <summary>
         /// Gets or sets weightMode for the Canvas Cloud
         /// </summary>
-        public WeightMode weightMode { get; set; }
+        public WeightMode WeightMode { get; set; }
 
         /// <summary>
         /// Gets or sets weightSize for the Canvas Cloud

@@ -4,8 +4,8 @@
 *   standard Web 2.0 Tag Cloud, or You can define your own Tags list.  The Tags are links which linked to the Portal Search to 
 *   show all Pages with that Tag.
 *
-*   The Tag Cloud will be rendered as 3D Cloud, and as alternative for Non Flash 
-*   Users as a list of hyperlinks in varying styles depending on a weight. 
+*   The Tag Cloud will be rendered as 3D Cloud, and 
+*    as a list of hyperlinks in varying styles depending on a weight. 
 *   This is similar to tag clouds in del.icio.us or Flickr.
 *
 *   Copyright(c) Ingo Herbote (thewatcher@watchersnet.de)
@@ -45,7 +45,7 @@
 namespace WatchersNET.DNN.Modules.TagCloud.Constants
 {
     /// <summary>
-    /// Enumeration for Method to use for displaying tag weights 
+    /// Enumeration for Method to use for displaying tag weights
     /// in the Canvas Tag Cloud. Should be one of size, color or both.
     /// </summary>
     public enum WeightMode

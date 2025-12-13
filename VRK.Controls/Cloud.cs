@@ -15,8 +15,6 @@
 
 namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
 {
-    #region
-
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -29,15 +27,11 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
     using System.Web.UI.HtmlControls;
     using System.Web.UI.WebControls;
 
-    #endregion
-
     /// <summary>
     /// The cloud.
     /// </summary>
     public class Cloud : CompositeDataBoundControl, IPostBackEventHandler
     {
-        #region Constants and Fields
-
         /// <summary>
         /// The font sizes.
         /// </summary>
@@ -46,19 +40,10 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
             "xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large"
         };
 
-        #endregion
-
-        #region Events
-
         /// <summary>
         /// The item click.
         /// </summary>
         public event EventHandler<CloudItemClickEventArgs> ItemClick;
-
-        #endregion
-
-        // static readonly string[] FontColors = new[] { "Black", "Blue", "Fuchsia", "Green", "Maroon", "Navy", "Purple" };
-        #region Properties
 
         /// <summary>
         ///   Gets or sets the data field which is bound to the Href property of an item.
@@ -368,12 +353,6 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
             }
         }
 
-        #endregion
-
-        #region Implemented Interfaces
-
-        #region IPostBackEventHandler
-
         /// <summary>
         /// The raise post back event.
         /// </summary>
@@ -395,12 +374,6 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
                 this.OnItemClick(new CloudItemClickEventArgs(this.Items[selectedIndex]));
             }
         }
-
-        #endregion
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// The create child controls.
@@ -465,26 +438,23 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
                 {
                     if (this.RenderAsUl)
                     {
-                        // li.Attributes["class"] = string.Format("{0}_{1}", ItemCssClassPrefix, rnd.Next(7));
                         li.Attributes["class"] = $"{this.ItemCssClassPrefix}_{normalWeight - 1}";
 
                         if (this.CanvasEnabled)
                         {
                             a.Attributes.Add(
                                 "data-weight",
-                                normalWeight < 10 ? (item.Weight + 15).ToString(CultureInfo.InvariantCulture) : item.Weight.ToString());
+                                normalWeight < 10 ? (item.Weight + 15).ToString(CultureInfo.InvariantCulture) : item.Weight.ToString(CultureInfo.InvariantCulture));
                         }
                     }
                     else
                     {
-                        // a.Attributes["class"] = string.Format("{0}_{1}", ItemCssClassPrefix, rnd.Next(7));
                         a.Attributes["class"] = $"{this.ItemCssClassPrefix}_{normalWeight - 1}";
                     }
                 }
 
                 a.Style.Add(HtmlTextWriterStyle.FontSize, FontSizes[normalWeight - 1]);
 
-                // a.Style.Add("color", FontColors[rnd.Next(7)]);
                 if (this.RenderAsUl)
                 {
                     li.Controls.Add(a);
@@ -496,7 +466,6 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
                 }
 
                 // TAG Separator
-                // Controls.Add(new LiteralControl(" "));
                 if (index != this.Items.Count - 1)
                 {
                     if (index == index2)
@@ -510,8 +479,7 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
                             this.Controls.Add(new LiteralControl($"&nbsp;{this.ItemSeparator}"));
                         }
 
-                        // Controls.Add(new LiteralControl(string.Format("&nbsp;{0}<br />", ItemSeparator)));
-                        index2 = index2 + 10;
+                        index2 += 10;
                     }
                     else
                     {
@@ -594,14 +562,7 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
 
                 if (string.IsNullOrEmpty(this.DataHrefField))
                 {
-                    if (string.IsNullOrEmpty(this.DataHrefFormatString))
-                    {
-                        item.Href = string.Empty;
-                    }
-                    else
-                    {
-                        string.Format(CultureInfo.CurrentCulture, this.DataHrefFormatString, new[] { data });
-                    }
+                    item.Href = string.IsNullOrEmpty(this.DataHrefFormatString) ? string.Empty : string.Format(CultureInfo.CurrentCulture, this.DataHrefFormatString, new[] { data });
                 }
                 else
                 {
@@ -725,7 +686,5 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
         {
             return this.RenderAsUl;
         }
-
-        #endregion
     }
 }
