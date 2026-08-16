@@ -299,7 +299,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="Installation\02.02.03.SqlDataProvider" />
-    <None Include="packages.config" />
     <None Include="VRK.Controls\cloud.cd" />
     <Content Include="web.config" />
     <None Include="web.Debug.config">
@@ -323,7 +322,7 @@
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
-    <VisualStudioVersion>17.0</VisualStudioVersion>
+    <VisualStudioVersion>18.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
