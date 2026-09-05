@@ -63,13 +63,13 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// <summary>
         /// Export Module Settings
         /// </summary>
-        /// <param name="moduleId">
+        /// <param name="moduleID">
         ///  Current Module Instance id
         /// </param>
         /// <returns>
         /// The export module.
         /// </returns>
-        public string ExportModule(int moduleId)
+        public string ExportModule(int moduleID)
         {
             var moduleSettings = this.TabModuleSettings;
 
@@ -509,14 +509,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     sTagCloudWidth = "500px";
                 }
 
-                /*try
-                {
-                    sTagCloudHeight = ((string)moduleSettings["tagcloudheight"]);
-                }
-                catch (Exception)
-                {
-                    sTagCloudHeight = "300px";
-                }*/
                 try
                 {
                     sTcolor = $"0x{moduleSettings["tcolor"]}";
@@ -559,16 +551,9 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 }
                 finally
                 {
-                    if (string.IsNullOrEmpty(sBgcolor))
+                    if (string.IsNullOrEmpty(sBgcolor) || sBgcolor.Equals("#transparent"))
                     {
                         sBgcolor = "transparent";
-                    }
-                    else
-                    {
-                        if (sBgcolor.Equals("#transparent"))
-                        {
-                            sBgcolor = "transparent";
-                        }
                     }
                 }
 
@@ -701,7 +686,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 sBXml.AppendFormat("<flashheight>{0}</flashheight>", XmlUtils.XMLEncode(sFlashHeight));
                 sBXml.AppendFormat("<tagcloudwidth>{0}</tagcloudwidth>", XmlUtils.XMLEncode(sTagCloudWidth));
 
-                // sBXml.AppendLine("<tagcloudheight>" + DotNetNuke.Common.Utilities.XmlUtils.XMLEncode(sTagCloudHeight) + "</tagcloudheight>");
                 sBXml.AppendFormat("<excludeType>{0}</excludeType>", XmlUtils.XMLEncode(sExcludeType));
                 sBXml.AppendFormat("<ExcludeCommon>{0}</ExcludeCommon>", XmlUtils.XMLEncode(sExcludeCommon));
                 sBXml.AppendFormat("<tcolor>{0}</tcolor>", XmlUtils.XMLEncode(sTcolor));
@@ -733,7 +717,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// <summary>
         /// Import Module Settings
         /// </summary>
-        /// <param name="moduleId">
+        /// <param name="moduleID">
         ///  The Module Id
         /// </param>
         /// <param name="content">
@@ -742,10 +726,10 @@ namespace WatchersNET.DNN.Modules.TagCloud
         /// <param name="version">
         ///  The Version
         /// </param>
-        /// <param name="userId">
+        /// <param name="userID">
         ///  The User ID
         /// </param>
-        public void ImportModule(int moduleId, string content, string version, int userId)
+        public void ImportModule(int moduleID, string content, string version, int userID)
         {
             try
             {
@@ -837,9 +821,7 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     objModules.UpdateTabModuleSetting(
                         TagCloud.CurrentTabModuleId, "tagcloudwidth", xmlContent["tagcloudwidth"].InnerText);
 
-                    /*objModules.UpdateTabModuleSetting(TagCloud.tabModuleId, "tagcloudheight",
-                                                      xmlContent["tagcloudheight"].InnerText);*/
-                    objModules.UpdateTabModuleSetting(
+                   objModules.UpdateTabModuleSetting(
                         TagCloud.CurrentTabModuleId, "ExcludeType", xmlContent["excludeType"].InnerText);
                     objModules.UpdateTabModuleSetting(
                         TagCloud.CurrentTabModuleId, "ExcludeCommon", xmlContent["ExcludeCommon"].InnerText);

@@ -402,18 +402,6 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
 
             foreach (var item in this.Items)
             {
-                /*HtmlAnchor a = new HtmlAnchor
-                                   {
-                                      HRef = string.IsNullOrEmpty(item.Href)
-                                                  ?
-                                                      Page.ClientScript.GetPostBackClientHyperlink(this, index.ToString())
-                                                  :
-
-                                                      item.Href,
-                                       InnerText = item.Text,
-                                       Title = item.Title
-                                   };*/
-
                 // UL Wrapper
                 var li = new HtmlGenericControl("li");
 

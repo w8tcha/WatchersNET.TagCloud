@@ -100,49 +100,5 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
         ///   Gets or sets the weight of the item.
         /// </summary>
         public double Weight { get; set; }
-
-        /// <summary>
-        /// The should serialize href.
-        /// </summary>
-        /// <returns>
-        /// The should serialize href.
-        /// </returns>
-        private bool ShouldSerializeHref()
-        {
-            return !string.IsNullOrEmpty(this.Href);
-        }
-
-        /// <summary>
-        /// The should serialize text.
-        /// </summary>
-        /// <returns>
-        /// The should serialize text.
-        /// </returns>
-        private bool ShouldSerializeText()
-        {
-            return !string.IsNullOrEmpty(this.Text);
-        }
-
-        /// <summary>
-        /// The should serialize title.
-        /// </summary>
-        /// <returns>
-        /// The should serialize title.
-        /// </returns>
-        private bool ShouldSerializeTitle()
-        {
-            return !string.IsNullOrEmpty(this.Title);
-        }
-
-        /// <summary>
-        /// The should serialize weight.
-        /// </summary>
-        /// <returns>
-        /// The should serialize weight.
-        /// </returns>
-        private bool ShouldSerializeWeight()
-        {
-            return this.Weight != 0;
-        }
     }
 }

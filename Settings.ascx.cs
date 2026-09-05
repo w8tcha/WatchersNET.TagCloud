@@ -1625,14 +1625,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 this.TagModes.Items.FindByValue("ModeActiveforums").Selected = this.modeActiveForums;
             }
 
-            // Check if all false, set search
-            if (!this.modeCustom && !this.modeTax && !this.modeNewsarticles && !this.modeSimplegallery
-                && !this.modeActiveForums)
-            {
-                // this.TagModes.Items.FindByValue("ModeSearch").Selected = true;
-                // this.bModeSearch = true;
-            }
-
             if (this.modeCustom)
             {
                 this.phCustom.Visible = true;
@@ -2048,27 +2040,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     string.Empty);
             }
 
-            // Setting Tags Cloud Height
-            /*if (!string.IsNullOrEmpty(((string)TabModuleSettings["tagcloudheight"])))
-            {
-                tbTagsCloudHeight.Text = (string)TabModuleSettings["tagcloudheight"];
-            }
-            else
-            {
-                tbTagsCloudHeight.Text = "300";
-                dDlHeight.SelectedValue = "pixel";
-            }
-
-            if (tbTagsCloudHeight.Text.EndsWith("px"))
-            {
-                dDlHeight.SelectedValue = "pixel";
-                tbTagsCloudHeight.Text = tbTagsCloudHeight.Text.Replace(tbTagsCloudHeight.Text.Substring(tbTagsCloudHeight.Text.IndexOf("px")), "");
-            }
-            else if (tbTagsCloudHeight.Text.EndsWith("%"))
-            {
-                dDlHeight.SelectedValue = "percent";
-                tbTagsCloudHeight.Text = tbTagsCloudHeight.Text.Replace(tbTagsCloudHeight.Text.Substring(tbTagsCloudHeight.Text.IndexOf("%")), "");
-            }*/
             if (!string.IsNullOrEmpty((string)this.Settings["tcolor"]))
             {
                 this.tbTcolor.Text = (string)this.Settings["tcolor"];
@@ -2382,17 +2353,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 }
             }
 
-            /*if (!string.IsNullOrEmpty(tbTagsCloudHeight.Text))
-            {
-                if (dDlHeight.SelectedValue == "pixel")
-                {
-                    objModules.UpdateTabModuleSetting(TabModuleId, "tagcloudheight", string.Format("{0}px", tbTagsCloudHeight.Text));
-                }
-                else if (dDlWidth.SelectedValue == "percent")
-                {
-                    objModules.UpdateTabModuleSetting(TabModuleId, "tagcloudheight", string.Format("{0}%", tbTagsCloudHeight.Text));
-                }
-            }*/
             var sLogCacheKey = $"CloudItems{this.TabModuleId}";
 
             if (DataCache.GetCache(sLogCacheKey) != null)
