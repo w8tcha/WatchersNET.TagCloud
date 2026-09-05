@@ -54,31 +54,27 @@ The Color Settings can be easily changed with an Color Picker
 ### IPortable Support 
 Easy Import and Export of all Module Settings
 
-*Demos*
-* [Demo 1 (Without Flash)](http://www.watchersnet.de/DNN/Module/TagCloud.aspx?Module1014_SelectById=1017)
-* [Demo 2 (wordle Word Cloud)](http://www.watchersnet.de/DNN/Module/TagCloud.aspx?Module1014_SelectById=1074)
-
 *Screenshots*
-![wordle" - Word Cloud](http://www.watchersnet.de/Portals/0/screenshots/dnn/dnnTagCloudWordle.png)
+![wordle" - Word Cloud](https://github.com/w8tcha/WatchersNET.TagCloud/blob/master/screenshots/dnnTagCloudWordle.png?raw=true)
 
-![The 3D HTML Tag Cloud](http://www.watchersnet.de/Portals/0/screenshots/dnn/TagCloudCanvas.jpg)
+![The 3D HTML Tag Cloud](https://github.com/w8tcha/WatchersNET.TagCloud/blob/master/screenshots/TagCloudCanvas.jpg?raw=true)
 
-![Sliding-Green Skin](http://www.watchersnet.de/Portals/0/screenshots/dnn/Sliding-Green.png)
+![Sliding-Green Skin](https://github.com/w8tcha/WatchersNET.TagCloud/blob/master/screenshots/Sliding-Green.png?raw=true)
 
-![Rotated Skin](http://www.watchersnet.de/Portals/0/screenshots/dnn/TagCloudSkinRotated.jpg)
+![Rotated Skin](https://github.com/w8tcha/WatchersNET.TagCloud/blob/master/screenshots/TagCloudSkinRotated.jpg?raw=true)
 
-![TagTastic Skin](http://www.watchersnet.de/Portals/0/screenshots/dnn/TagCloud-TagTastic-Skin.jpg)
+![TagTastic Skin](https://github.com/w8tcha/WatchersNET.TagCloud/blob/master/screenshots/TagCloud-TagTastic-Skin.jpg?raw=true)
 
-![RoundedButton Skin](http://www.watchersnet.de/Portals/0/screenshots/dnn/TagCloud-RoundedButton-Skin.jpg)
+![RoundedButton Skin](https://github.com/w8tcha/WatchersNET.TagCloud/blob/master/screenshots/TagCloud-RoundedButton-Skin.jpg?raw=true)
 
-![Html Skin Orange](http://www.watchersnet.de/Portals/0/screenshots/dnn/TagCloudSkinOrange.jpg)
+![Html Skin Orange](https://github.com/w8tcha/WatchersNET.TagCloud/blob/master/screenshots/TagCloudSkinOrange.jpg?raw=true)
 
-![Html Skin Purple](http://www.watchersnet.de/Portals/0/screenshots/dnn/TagCloudSkinPurple.jpg)
+![Html Skin Purple](https://github.com/w8tcha/WatchersNET.TagCloud/blob/master/screenshots/TagCloudSkinPurple.jpg?raw=true)
 
-![Basic Settings](http://www.watchersnet.de/Portals/0/screenshots/dnn/TagCloudBasicSettings.jpg)
+![Basic Settings](https://github.com/w8tcha/WatchersNET.TagCloud/blob/master/screenshots/TagCloudBasicSettings.jpg?raw=true)
 
-![Source Settings](http://www.watchersnet.de/Portals/0/screenshots/dnn/TagCloudSourceSettings.jpg)
+![Source Settings](https://github.com/w8tcha/WatchersNET.TagCloud/blob/master/screenshots/TagCloudSourceSettings.jpg?raw=true)
 
-![Exclude Settings](http://www.watchersnet.de/Portals/0/screenshots/dnn/TagCloudExludes.jpg)
+![Exclude Settings](https://github.com/w8tcha/WatchersNET.TagCloud/blob/master/screenshots/TagCloudExludes.jpg?raw=true)
 
-![Custom Tags Export Dialog](http://www.watchersnet.de/Portals/0/screenshots/dnn/TagCloudExportDialog.jpg)
+![Custom Tags Export Dialog](https://github.com/w8tcha/WatchersNET.TagCloud/blob/master/screenshots/TagCloudExportDialog.jpg?raw=true)
