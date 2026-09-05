@@ -455,7 +455,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
             canvasScript.AppendFormat("ellipticity: {0},", this.settings.WordCloudSettings.Ellipticity);
             canvasScript.Append("center: false,");
 
-            // canvasScript.AppendFormat("wordColor: '{0}',", this.settings.Tcolor.Replace("0x", "#"));
             if (!this.settings.Bgcolor.Contains("transparent"))
             {
                 var backColor = this.settings.Bgcolor.Replace("0x", "#");
@@ -601,13 +600,12 @@ namespace WatchersNET.DNN.Modules.TagCloud
 
                     string sTag = null, sTagUrl = null;
 
-                    foreach (var locales in
-                             tag.LocalTags.Where(locales => locales.Locale.Equals(currentCulture.ToString())))
-                    {
-                        sTag = locales.TagMl;
-                        sTagUrl = locales.UrlMl;
+                    var localizedTag = tag.LocalTags.FirstOrDefault(locales => locales.Locale.Equals(currentCulture.ToString()));
 
-                        break;
+                    if (localizedTag != null)
+                    {
+                        sTag = localizedTag.TagMl;
+                        sTagUrl = localizedTag.UrlMl;
                     }
 
                     if (string.IsNullOrEmpty(sTag))
@@ -755,7 +753,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 ////////////////////////
                 foreach (var term in this.GetTerms())
                 {
-                    // if (term.ParentTermId != -1) continue;
                     CloudItem entry;
 
                     if (term.Weight > 0)
@@ -1093,14 +1090,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 }
             }
 
-            // Check if all false, set search
-            if (!this.settings.ModeCustom && !this.settings.ModeTax && !this.settings.ModeNewsarticles &&
-                !this.settings.ModeSimplegallery && !this.settings.ModeActiveForums)
-            {
-                // this.settings.ModeSearch = true;
-                // TODO
-            }
-
             // Load Ventrian Tab & Module from Settings and Set
             if (!string.IsNullOrEmpty((string)moduleSettings["NewsArticlesTab"]) &&
                 !string.IsNullOrEmpty((string)moduleSettings["NewsArticlesModule"]))
@@ -1208,7 +1197,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
                     this.Page,
                     $"{this.ResolveUrl("Skins")}/{this.settings.SkinName}.css");
 
-                // PageBase.RegisterStyleSheet(Page,  string.Format("{0}/{1}.css", this.ResolveUrl("Skins"), this.settings.SkinName));
                 this.tagCloudDiv.CssClass += $"-{this.settings.SkinName}";
                 this.c1.ItemCssClassPrefix += $"-{this.settings.SkinName}";
             }
@@ -1354,36 +1342,6 @@ namespace WatchersNET.DNN.Modules.TagCloud
                 }
             }
 
-            /*try
-            {
-                sTagCloudHeight = ((string)moduleSettings["tagcloudheight"]);
-            }
-            finally
-            {
-                if (string.IsNullOrEmpty(sTagCloudHeight))
-                {
-                    sTagCloudHeight = "300";
-                    sTagCloudHValue = "px";
-                }
-
-                if (sTagCloudHeight.Contains("px"))
-                {
-                    sTagCloudHeight = sTagCloudHeight.Replace("px", "");
-                    sTagCloudHValue = "px";
-                }
-
-                if (sTagCloudHeight.Contains("%"))
-                {
-                    sTagCloudHeight = sTagCloudHeight.Replace("%", "");
-                    sTagCloudHValue = "%";
-                }
-            }
-
-            if (sTagCloudHeight.Equals("-1"))
-            {
-                sTagCloudHeight = "auto";
-                sTagCloudHValue = "";
-            }*/
             if (this.settings.TagCloudWidth.Equals("-1"))
             {
                 this.settings.TagCloudWidth = "auto";

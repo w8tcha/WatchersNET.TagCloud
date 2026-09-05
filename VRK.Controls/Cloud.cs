@@ -405,18 +405,23 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
                 // UL Wrapper
                 var li = new HtmlGenericControl("li");
 
+                string innerHtml;
+                if (this.RenderItemWeight)
+                {
+                    var weightFormat = this.Skin.Contains("Sliding")
+                                            ? "{0}&nbsp;<span>{1}</span>"
+                                            : "{0}&nbsp;<span>({1})</span>";
+                    innerHtml = string.Format(weightFormat, item.Text, item.Weight);
+                }
+                else
+                {
+                    innerHtml = item.Text;
+                }
+
                 var a = new HtmlAnchor
                                    {
                                        HRef = item.Href,
-                                       InnerHtml =
-                                           this.RenderItemWeight
-                                               ? string.Format(
-                                                   this.Skin.Contains("Sliding")
-                                                       ? "{0}&nbsp;<span>{1}</span>"
-                                                       : "{0}&nbsp;<span>({1})</span>",
-                                                   item.Text,
-                                                   item.Weight)
-                                               : item.Text,
+                                       InnerHtml = innerHtml,
                                        Title = item.Title
                                    };
 
@@ -524,16 +529,37 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
         {
             var factor = weight - mean;
 
-            if (factor != 0 && stdDev != 0)
+            if (Math.Abs(stdDev) > double.Epsilon)
             {
                 factor /= stdDev;
             }
 
-            return factor > 2
-                       ? 7
-                       : factor > 1
-                             ? 6
-                             : factor > 0.5 ? 5 : factor > -0.5 ? 4 : factor > -1 ? 3 : factor > -2 ? 2 : 1;
+            if (factor > 2)
+            {
+                return 7;
+            }
+
+            if (factor > 1)
+            {
+                return 6;
+            }
+
+            if (factor > 0.5)
+            {
+                return 5;
+            }
+
+            if (factor > -0.5)
+            {
+                return 4;
+            }
+
+            if (factor > -1)
+            {
+                return 3;
+            }
+
+            return factor > -2 ? 2 : 1;
         }
 
         /// <summary>
@@ -574,105 +600,6 @@ namespace WatchersNET.DNN.Modules.TagCloud.VRK.Controls
 
                 this.Items.Add(item);
             }
-        }
-
-        /// <summary>
-        /// The should serialize data href field.
-        /// </summary>
-        /// <returns>
-        /// The should serialize data href field.
-        /// </returns>
-        private bool ShouldSerializeDataHrefField()
-        {
-            return !string.IsNullOrEmpty(this.DataHrefField);
-        }
-
-        /// <summary>
-        /// The should serialize data href format string.
-        /// </summary>
-        /// <returns>
-        /// The should serialize data href format string.
-        /// </returns>
-        private bool ShouldSerializeDataHrefFormatString()
-        {
-            return !string.IsNullOrEmpty(this.DataHrefFormatString);
-        }
-
-        /// <summary>
-        /// The should serialize data text format string.
-        /// </summary>
-        /// <returns>
-        /// The should serialize data text format string.
-        /// </returns>
-        private bool ShouldSerializeDataTextFormatString()
-        {
-            return !string.IsNullOrEmpty(this.DataTextFormatString);
-        }
-
-        /// <summary>
-        /// The should serialize data title field.
-        /// </summary>
-        /// <returns>
-        /// The should serialize data title field.
-        /// </returns>
-        private bool ShouldSerializeDataTitleField()
-        {
-            return !string.IsNullOrEmpty(this.DataTitleField);
-        }
-
-        /// <summary>
-        /// The should serialize data title format string.
-        /// </summary>
-        /// <returns>
-        /// The should serialize data title format string.
-        /// </returns>
-        private bool ShouldSerializeDataTitleFormatString()
-        {
-            return !string.IsNullOrEmpty(this.DataTitleFormatString);
-        }
-
-        /// <summary>
-        /// The should serialize data weight field.
-        /// </summary>
-        /// <returns>
-        /// The should serialize data weight field.
-        /// </returns>
-        private bool ShouldSerializeDataWeightField()
-        {
-            return !string.IsNullOrEmpty(this.DataWeightField);
-        }
-
-        /// <summary>
-        /// The should serialize item css class prefix.
-        /// </summary>
-        /// <returns>
-        /// The should serialize item css class prefix.
-        /// </returns>
-        private bool ShouldSerializeItemCssClassPrefix()
-        {
-            return !string.IsNullOrEmpty(this.ItemCssClassPrefix);
-        }
-
-        /// <summary>
-        /// The should serialize item separator.
-        /// </summary>
-        /// <returns>
-        /// The should serialize item separator.
-        /// </returns>
-        private bool ShouldSerializeItemSeparator()
-        {
-            return !string.IsNullOrEmpty(this.ItemSeparator);
-        }
-
-        /// <summary>
-        /// The should serialize render as ul.
-        /// </summary>
-        /// <returns>
-        /// The should serialize render as ul.
-        /// </returns>
-        private bool ShouldSerializeRenderAsUl()
-        {
-            return this.RenderAsUl;
         }
     }
 }
